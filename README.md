@@ -25,9 +25,6 @@ TP Final de Introduccion al Desarrollo Software
     Eventos: id, contenido, id_comentario, titulo, id_usuario, fecha, hora, alumnos_anotados, imagen, fecha, hora.
     Noticias importantes: id, titulo, contenido, etiqueta, id_comentario, imagen, fecha, hora.
     Comentarios: id, id_usuario, id_comentario, contenido, fecha, hora.
-
-
-  ------------------------------------
     
     
     
