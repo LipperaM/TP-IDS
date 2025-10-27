@@ -1,5 +1,5 @@
 # TP-IDS
-TP Final de Introduccion al Desarrollo Software
+TP Final de Introduccion al Desarrollo Software.
 
 --FORO DE FUTBOL
   *PAGINAS: HOME, POST, USUARIO; CATEGORIA
