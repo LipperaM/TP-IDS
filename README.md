@@ -3,15 +3,19 @@
 
 ### FORO DE FUTBOL
   * *PAGINAS*: 
-    HOME, POST, USUARIO; CATEGORIA
+    HOME, TABLA, USUARIO 
   
   * *ENTIDADES*:
 
-    *USUARIOS*: id, nombre, mail, contraseña, hincha, pais, id_post, id_like, id_comentario.
+    *USUARIOS*: id, foto, usuario, nombre, apellido, mail, hincha, pais, fecha, hora.
 
-    *POST*: id, texto, usuario_id, categoria_id, id_like_usuario, id_comentario, id_like_post, etiqueta, fecha, hora.
+    *POST*: id, id_foto_usuario; texto, id_usuario, id_categoria, id_comentario, id_like_post, fecha, hora.
 
-    *LIKES*: id, id_usuario.
+    *LIKES*: id, id_post, id_usuario.
+
+    *PUNTAJES*: id, id_equipo, partidos_ganados, pratidos_empatados, partidos_perdidos.
+
+    *EQUIPOS*: id, nombre.
 
     *CATEGORIA*: id, nombre.
 

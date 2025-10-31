@@ -38,7 +38,6 @@
   font-weight: bold;
   display: flex;
   flex-direction: column;
-  max-width: 40rem;
   align-items: center;
   justify-content: flex-start;
 }
