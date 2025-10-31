@@ -42,3 +42,30 @@
   align-items: center;
   justify-content: flex-start;
 }
+
+.post-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.buttons{
+    display: flex;
+    gap: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+.date-time{
+    margin: 0;
+    font-size: 1rem;
+    color: #555;
+    padding-right: 10px;
+}
