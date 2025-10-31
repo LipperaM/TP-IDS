@@ -1,7 +1,8 @@
 .navbar{
     background-color: #b1b1b193;
     padding: 10px 20px;
-}
+    border-radius: 10px;
+    margin: 4px; }
 
 .navbar-links{
     display: flex;
@@ -20,4 +21,24 @@
 
 .navbar-brand:hover{
     text-decoration: underline;
+}
+
+.user-form{
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.title-leaderboard{
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+  align-items: center;
+  justify-content: flex-start;
 }
