@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title></title>
+    <title>Perfil</title>
     <link href="/css/styles.css" rel="stylesheet" />
     <link href="/css/perfil/perfil.css" rel="stylesheet" />
     <link
@@ -14,66 +14,106 @@
     />
   </head> 
   <body>
+
+  <input type="checkbox" id="toggle-login" hidden>
+
   <nav class="perfil-navbar">
-  <a class="perfil-navbar-brand" href="./index.html">Home</a>
+    <a class="perfil-navbar-brand" href="./index.html">Home</a>
 
-  <form class="d-flex" role="search">
-    <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
-    <button class="btn btn-primary" type="submit">Buscar</button>
-  </form>
+    <form class="d-flex" role="search">
+      <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
+      <button class="btn btn-primary" type="submit">Buscar</button>
+    </form>
 
-  <a class="perfil-navbar-brand" href="#">Sign in</a>
-</nav>
+    <label for="toggle-login" class="perfil-navbar-brand">Sign in</label>
+  </nav>
 
+  <label for="toggle-login" class="overlay"></label>
 
-
-    <div class="datos-usuario">
-      <img
-        class="foto-perfil"
-        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F360%2F247%2Foriginal%2Fdefault-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg&f=1&ipt=29b6572ccc8f6a9df4143312e9e00445fbf08fd153011442ebd1006f80e403cf"
-        alt="foto perfil"
-        width="150px"
-      />
-      <div class="datos">
-        <h5 class="usuario">Nombre de Usuario</h5>
-        <div class="info-extra">
-          <h5>Equipo</h5>
-          <h5>País</h5>
-        </div>
-      </div>
-    </div>
-
-    <div class="post-usuario">
-      <h1>Tus posts</h1>
-    </div>
-    
-
-    <div class="card w-75 mb-3">
+  <div class="login-card">
+    <div class="card" style="width: 25rem;">
       <div class="card-body">
-        <h5 class="card-title">@nombredeusuario</h5>
-        <p class="card-text">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum quam
-          veniam a fuga, non doloremque eum, nisi fugit consequuntur autem
-          doloribus voluptas commodi aut iusto rem porro excepturi maiores
-          quasi.
-        </p>
-      </div>
-
-      <div class="post-actions">
-        <div class="buttons">
-          <a href="#" class="btn btn-primary">Like</a>
-          <a href="#" class="btn btn-primary">Comentar</a>
-          <a href="#" class="btn btn-primary">#Categoría</a>
-        </div>
-
-        <p class="date-time">Junio 20 14:30</p>
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Apellido</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Mail</label>
+            <input type="email" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Pais</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Equipo</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nombre de Usuario</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Registrarse</button>
+        </form>
       </div>
     </div>
+  </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+  <div class="datos-usuario">
+    <img
+      class="foto-perfil"
+      src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F360%2F247%2Foriginal%2Fdefault-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg&f=1&ipt=29b6572ccc8f6a9df4143312e9e00445fbf08fd153011442ebd1006f80e403cf"
+      alt="foto perfil"
+      width="150px"
+    />
+    <div class="datos">
+      <h5 class="usuario">Nombre de Usuario</h5>
+      <div class="info-extra">
+        <h5>Equipo</h5>
+        <h5>País</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-usuario">
+    <h1>Tus posts</h1>
+  </div>
+
+  <div class="card w-75 mb-3">
+    <div class="card-body">
+      <h5 class="card-title">@nombredeusuario</h5>
+      <p class="card-text">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum quam
+        veniam a fuga, non doloremque eum, nisi fugit consequuntur autem
+        doloribus voluptas commodi aut iusto rem porro excepturi maiores
+        quasi.
+      </p>
+    </div>
+
+    <div class="post-actions">
+      <div class="buttons">
+        <a href="#" class="btn btn-primary">Like</a>
+        <a href="#" class="btn btn-primary">Comentar</a>
+        <a href="#" class="btn btn-primary">#Categoría</a>
+      </div>
+
+      <p class="date-time">Junio 20 14:30</p>
+    </div>
+  </div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"
+  ></script>
+</body>
 </html>
