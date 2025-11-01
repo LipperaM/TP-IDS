@@ -1,0 +1,33 @@
+.datos-usuario {
+  display: flex;              
+  align-items: center;        
+  gap: 32px;                  
+  padding-left: 32px;         
+}
+
+.foto-perfil {
+  border-radius: 50%;         
+}
+
+.datos {
+  display: flex;
+  flex-direction: column;     
+}
+
+.usuario {
+  margin-bottom: 8px;
+}
+
+.info-extra {
+  display: flex;
+  gap: 24px;               
+}
+
+.info-extra h5 {
+  margin: 0;
+  font-weight: normal;
+}
+
+
+
+
