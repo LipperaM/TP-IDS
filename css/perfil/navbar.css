@@ -1,0 +1,29 @@
+.perfil-navbar-brand {
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    font-size: 25px;
+}
+
+.perfil-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #b1b1b193;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin: 4px;
+}
+
+
+.perfil-navbar-brand:hover {
+    text-decoration: underline;
+}
+
+.perfil-navbar form {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto; 
+    display: flex;
+    gap: 8px; 
+}
