@@ -1,3 +1,4 @@
+@import url("../variables.css");
 .datos-usuario {
   display: flex;              
   align-items: center;        
@@ -72,7 +73,7 @@
 .login-card button {
   width: 100%;
   padding: 0.5rem;
-  background-color: #007bff;
+  background-color: var(--color-pricipal);
   color: white;
   border: none;
   border-radius: 5px;
@@ -80,7 +81,7 @@
 }
 
 .login-card button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-primario-osc);
 }
 
 
