@@ -1,3 +1,49 @@
+.user-form{
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.title-leaderboard{
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.post-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.buttons{
+    display: flex;
+    gap: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+.date-time{
+    margin: 0;
+    font-size: 1rem;
+    color: #555;
+    padding-right: 10px;
+}
+
 .category-label {
   align-self: center;
   margin: 4px;
