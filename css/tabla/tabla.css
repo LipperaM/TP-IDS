@@ -8,23 +8,25 @@
   font-family: 'Arial', sans-serif;
   font-weight: bold;
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
+
+.title-leaderboard h5 {
+  font-family: 'Arial', sans-serif;  
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: #507498;
+  text-align: center;
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
 
 .leaderboard {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;
-}
-
-.leaderboard h2 {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-align: left;
-  font-size: 1.5rem;
-  font-weight: 600;
-  padding-left: 15px;
 }
 
 .leaderboard .table-responsive {
@@ -34,6 +36,7 @@
   background-color: white; 
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 .table {
   border: 1px solid #dee2e6;          
@@ -46,41 +49,43 @@
 
 .table th, .table td {
   vertical-align: middle;
-  text-align: center;
   border: none;          
+  padding: 8px 10px;
+  text-align: center; 
 }
 
-
-.table td:nth-child(2) {
+.table td:nth-child(2), .table th:nth-child(2) {
   display: flex;
   align-items: center;
-  gap: 4px;
-  max-width: 300px;        
-  white-space: nowrap;      
-  overflow: hidden;         
-  text-overflow: ellipsis;  
+  justify-content: flex-start;
+  gap: 5px;
+  padding-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
 }
+
 
 .table td img {
   width: 30px;
   height: auto;
-}
-
-.table-hover tbody tr:hover {
-  background-color: #f4eeee;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: inline-block;
+  vertical-align: middle;
 }
 
 
-.leaderboard .table-responsive {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.table-hover tbody tr {
+  transition: background-color 0.3s;
+}
+
+.table-hover tbody tr:hover, .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #a8dbf7 !important;
+  color: white !important;
 }
 
 
-.table td:nth-child(2),.table th:nth-child(2) {
-  padding-right: 5px; 
+.table td:nth-child(3), .table th:nth-child(3) {
+  padding-left: 5px;
 }
 
-.table td:nth-child(3),.table th:nth-child(3) {
-  padding-left: 5px;   
-}
