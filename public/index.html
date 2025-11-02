@@ -31,7 +31,33 @@
       </div>
     </nav>
 
+    <!--CREAR POST-->
+    <button class="post-btn" id="openModal">+ Post</button>
+    <div class="crear-post">
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span id="closeModal" class="close">&times;</span>
+          <h2>Nueva publicación</h2>
+          <textarea id="postText" placeholder="Escribí algo..." rows="5"></textarea>
+          <div class="botones-modal">
+            <button id="postBtn">Postear</button>
+            <div class="dropdown-center">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="categoria-btn">
+                Categoria
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item categoria-opcion" href="#">Libertadores</a></li>
+                <li><a class="dropdown-item categoria-opcion" href="#">Liga profesional de futbol</a></li>
+                <li><a class="dropdown-item categoria-opcion" href="#">Champions</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!--POSTS-->
+
     <div class="post-container">
       <div class="card w-75 mb-3">
         <div class="card-body">
@@ -166,5 +192,45 @@
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script>
+      // Modal-Funcionalidad
+      const modal = document.getElementById("modal");
+      const openModal = document.getElementById("openModal");
+      const closeModal = document.getElementById("closeModal");
+      const postBtn = document.getElementById("postBtn");
+      const postText = document.getElementById("card-text");
+      const posts = document.getElementById("card");
+
+      openModal.onclick = () => {
+        modal.style.display = "flex";
+      };
+
+      closeModal.onclick = () => {
+        modal.style.display = "none";
+        postText.value = "";
+      };
+
+      postBtn.onclick = () => {
+        const text = postText.value.trim();
+        if (text !== "") {
+          const newPost = document.createElement("div");
+          newPost.classList.add("post");
+          newPost.textContent = text;
+          posts.prepend(newPost);
+          postText.value = "";
+          modal.style.display = "none";
+        }
+      };
+      //Modal-categoria-dropdown
+      const categoriaBtn = document.getElementById("categoria-btn");
+      const opciones = document.querySelectorAll(".categoria-opcion");
+
+      opciones.forEach(option => {
+        option.addEventListener("click", function(e) {
+          e.preventDefault(); // evita que navegue
+          categoriaBtn.textContent = this.textContent; // cambia el texto del botón
+        });
+      });
+    </script>
   </body>
 </html>

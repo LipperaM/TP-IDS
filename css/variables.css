@@ -1,0 +1,9 @@
+:root{
+    --color-pricipal: #0074aa;
+    --color-secundario: #b1b1b193;
+    --color-fondos-box: #fff;
+<<<<<<< HEAD
+    --color-primario-osc: #0056b3;
+=======
+>>>>>>> 4259d2b (Cree un archivo variables.css donde almacenaremos las variables a utilizar para el diseño de la pagina web. Se acomodo el boton de crear post como se queria y en el modal box se implemento un dropdown para seleccionar las categorias donde se van a subir los post.)
+}
