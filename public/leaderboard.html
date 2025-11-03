@@ -25,11 +25,21 @@
 
     <div class="title-leaderboard">
         <h1>Posiciones de la Liga Profesional de Fútbol</h1>
+        <h5 class="text-center mt-2">Torneo Apertura 2025</h5>
     </div>
 
     <div class="leaderboard">
-      <div class="table-responsive">
-        <h2>Grupo A</h2>
+      <ul class="nav nav-tabs" id="grupotabla" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="grupoA-tabla" data-bs-toggle="tab" data-bs-target="#grupoA" type="button" role="tab">Grupo A</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="grupoB-tabla" data-bs-toggle="tab" data-bs-target="#grupoB" type="button" role="tab">Grupo B</button>
+        </li>
+      </ul>
+      <div class="tab-content mt-3" id="grupotablacontenido">
+        <div class="tab-pane fade show active" id="grupoA" role="tabpanel">
+          <div class="table-responsive">
             <table class="table table-hover">
               <thead>
                   <tr>
@@ -178,12 +188,164 @@
                   <td>8</td>
                   <td>14</td>
                 </tr>
-
-
-
               </tbody>
-
             </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="grupoB" role="tabpanel">
+          <div class="table-responsive">
+                        <table class="table table-hover">
+              <thead>
+                  <tr>
+                        <th>Posición</th>
+                        <th>Equipo</th>
+                        <th>Jugados</th>
+                        <th>Ganados</th>
+                        <th>Empatados</th>
+                        <th>Perdidos</th>
+                        <th>Puntos</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/2/22/RosarioCentral.png" width="30" style="margin-right: 5px;">Rosario Central</td>
+                  <td>16</td>
+                  <td>10</td>
+                  <td>5</td>
+                  <td>1</td>
+                  <td>35</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Escudo_del_C_A_River_Plate.svg/1653px-Escudo_del_C_A_River_Plate.svg.png" width="30" style="margin-right: 5px;">River Plate</td>
+                  <td>16</td>
+                  <td>8</td>
+                  <td>7</td>
+                  <td>1</td>
+                  <td>31</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Escudo_del_Club_Atl%C3%A9tico_Independiente.svg/1945px-Escudo_del_Club_Atl%C3%A9tico_Independiente.svg.png"width="30" style="margin-right: 5px;">Independiente</td>         
+                  <td>16</td>
+                  <td>8</td>
+                  <td>5</td>
+                  <td>3</td>
+                  <td>29</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/6/62/Escudo_del_Club_Atl%C3%A9tico_San_Lorenzo_de_Almagro.png" width="30" style="margin-right: 5px;">San Lorenzo</td>
+                  <td>16</td>
+                  <td>7</td>
+                  <td>6</td>
+                  <td>3</td>
+                  <td>27</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Escudo_del_Club_Deportivo_Riestra.svg/1772px-Escudo_del_Club_Deportivo_Riestra.svg.png"  width="30" style="margin-right: 5px;">Deportivo Riestra</td>
+                  <td>16</td>
+                  <td>5</td>
+                  <td>9</td>
+                  <td>2</td>
+                  <td>24</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Escudo_platense.png" width="30" style="margin-right: 5px;">Platense</td>
+                  <td>16</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>5</td>
+                  <td>23</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td><img src="https://i.pinimg.com/originals/2f/20/3a/2f203a027a20ccb98370b679300d8984.png" width="30" style="margin-right: 5px;">Lanus</td>
+                  <td>16</td>
+                  <td>4</td>
+                  <td>8</td>
+                  <td>4</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Instituto_Atletico_Central_Cordoba.svg/929px-Instituto_Atletico_Central_Cordoba.svg.png" width="30" style="margin-right: 5px;">Instituto Córdoba</td>
+                  <td>16</td>
+                  <td>5</td>
+                  <td>3</td>
+                  <td>8</td>
+                  <td>18</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Logo_of_CD_Godoy_Cruz_Antonio_Tomba.png" width="30" style="margin-right: 5px;">Godoy Cruz (AT)</td>
+                  <td>16</td>
+                  <td>3</td>
+                  <td>8</td>
+                  <td>5</td>
+                  <td>17</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Escudo_del_Club_Atletico_Tucuman.svg/1746px-Escudo_del_Club_Atletico_Tucuman.svg.png" width="30" style="margin-right: 5px;">Atletico Tucuman</td>
+                  <td>16</td>
+                  <td>5</td>
+                  <td>1</td>
+                  <td>10</td>
+                  <td>16</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td><img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9.png" width="30" style="margin-right: 5px;">Gimnasia La Plata</td>
+                  <td>16</td>
+                  <td>4</td>
+                  <td>4</td>
+                  <td>8</td>
+                  <td>16</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Escudo_del_Club_Atl%C3%A9tico_Sarmiento_de_Jun%C3%ADn.svg/250px-Escudo_del_Club_Atl%C3%A9tico_Sarmiento_de_Jun%C3%ADn.svg.png" width="30" style="margin-right: 5px;">Sarmiento Junin</td>
+                  <td>16</td>
+                  <td>2</td>
+                  <td>9</td>
+                  <td>5</td>
+                  <td>15</td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/3/36/Escudo_V%C3%A9lez_Sarsfield.png" width="30" style="margin-right: 5px;">Velez Sarfield</td>
+                  <td>16</td>
+                  <td>4</td>
+                  <td>2</td>
+                  <td>10</td>
+                  <td>14</td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Escudo_Talleres_2015.svg/250px-Escudo_Talleres_2015.svg.png" width="30" style="margin-right: 5px;">Talleres (Córdoba)</td>
+                  <td>16</td>
+                  <td>2</td>
+                  <td>7</td>
+                  <td>7</td>
+                  <td>13</td>
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/San_Mart%C3%ADn_de_San_Juan.png/250px-San_Mart%C3%ADn_de_San_Juan.png" width="30" style="margin-right: 5px;">San Martín (San Juan)</td>
+                  <td>16</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>11</td>
+                  <td>9</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
     <script
