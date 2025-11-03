@@ -22,13 +22,15 @@
         <a class="navbar-brand" href="./profile.html">Mi perfil</a>
       </div>
 
-      <div class="search-bar">
-        <form class="d-flex" role="search">
-          <input
-            class="form-control me-2" type="search" placeholder="Buscar por categoría" aria-label="Search"/>
-          <button class="btn btn-outline-success" type="submit">Buscar</button>
-        </form>
-      </div>
+      <form class="d-flex" role="search">
+        <input
+          class="form-control"
+          type="search"
+          placeholder="Buscar en tus post"
+          aria-label="Search"
+        />
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </form>
     </nav>
 
     <!--CREAR POST-->
@@ -38,17 +40,39 @@
         <div class="modal-content">
           <span id="closeModal" class="close">&times;</span>
           <h2>Nueva publicación</h2>
-          <textarea id="postText" placeholder="Escribí algo..." rows="5"></textarea>
+          <textarea
+            id="postText"
+            placeholder="Escribí algo..."
+            rows="5"
+          ></textarea>
           <div class="botones-modal">
             <button id="postBtn">Postear</button>
             <div class="dropdown-center">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="categoria-btn">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                id="categoria-btn"
+              >
                 Categoria
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item categoria-opcion" href="#">Libertadores</a></li>
-                <li><a class="dropdown-item categoria-opcion" href="#">Liga profesional de futbol</a></li>
-                <li><a class="dropdown-item categoria-opcion" href="#">Champions</a></li>
+                <li>
+                  <a class="dropdown-item categoria-opcion" href="#"
+                    >Libertadores</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item categoria-opcion" href="#"
+                    >Liga profesional de futbol</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item categoria-opcion" href="#"
+                    >Champions</a
+                  >
+                </li>
               </ul>
             </div>
           </div>
@@ -225,8 +249,8 @@
       const categoriaBtn = document.getElementById("categoria-btn");
       const opciones = document.querySelectorAll(".categoria-opcion");
 
-      opciones.forEach(option => {
-        option.addEventListener("click", function(e) {
+      opciones.forEach((option) => {
+        option.addEventListener("click", function (e) {
           e.preventDefault(); // evita que navegue
           categoriaBtn.textContent = this.textContent; // cambia el texto del botón
         });
