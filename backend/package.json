@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/FacuReale/TP-IDS#readme",
+  "bugs": {
+    "url": "https://github.com/FacuReale/TP-IDS/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FacuReale/TP-IDS.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "esm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
