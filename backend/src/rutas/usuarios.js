@@ -39,11 +39,14 @@ router.post("/", (req, res) => {
   res.status(201).json(usuario);
 });
 
-/*
-Mostrar usuario por id
-body:
-{"id": id}
-*/
+//Traigo todos los usuarios
+
+router.get("/", (req, res) => {
+  res.json(usuarios);
+});
+
+
+//Mostrar usuario por id
 
 router.get("/:id", (req, res) => {
   const id = req.params.id;
@@ -58,25 +61,57 @@ router.get("/:id", (req, res) => {
   res.json(usuario);
 });
 
-// Traigo todos los usuarios
-router.get("/", (req, res) => {
-  res.json(usuarios);
-});
-
 /*
-Borrar usuario
+Editar usuario por id
 body:
-{"nombreUsuario": nombreUsuario,   
- "contrasenia": contrasenia,
+{"nombre": nombre,   
+ "apellido": apellido,
+ "mail": mail,
+ "pais": pais,
+ "nombreUsuario": nombreUsuario,
+ "contrasenia": contasenia
 }
 */
-router.delete("/:nombreUsuario", (req, res) => {
-  const nombreUsuario = req.params.nombreUsuario;
+
+router.put("/:id", (req, res) => {
+  const id = req.params.id;
+  const nuevoNombre = req.body.nombre;
+  const nuevoApellido = req.body.apellido;
+  const nuevoMail = req.body.mail;
+  const nuevoPais = req.body.pais;
+  const nuevoNombreUsuario = req.body.nombreUsuario;
+  const nuevaContrasenia = req.body.contrasenia;
+  let user_index = undefined;
+
+  for (let i = 0; i < usuarios.length; i++) {
+    if (usuarios[i].id == id) {
+      user_index = i;
+      if(nuevoNombre != undefined) usuarios[i].nombre = nuevoNombre;
+      if(nuevoApellido != undefined) usuarios[i].apellido = nuevoApellido;
+      if(nuevoMail != undefined) usuarios[i].mail = nuevoMail;
+      if(nuevoPais != undefined) usuarios[i].pais = nuevoPais;
+      if(nuevoNombreUsuario != undefined) usuarios[i].nombreUsuario = nuevoNombreUsuario;
+      if(nuevaContrasenia != undefined) usuarios[i].contrasenia = nuevaContrasenia;
+    }
+  }
+
+  if (user_index === undefined) {
+    return res.status(404).send("");
+  }
+
+  res.json(usuarios[user_index]);
+});
+
+
+//Borrar usuario por id
+
+router.delete("/:id", (req, res) => {
+  const id = req.params.id;
   const usuario = usuarios.find((usuario) => {
-    return usuario.nombreUsuario == nombreUsuario;
+    return usuario.id == id;
   });
   usuarios = usuarios.filter((usuario) => {
-    return usuario.nombreUsuario != nombreUsuario;
+    return usuario.id != id;
   });
 
   if (usuario === undefined) {
