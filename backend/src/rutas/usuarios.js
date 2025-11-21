@@ -102,14 +102,26 @@ router.put("/:id", (req, res) => {
   res.json(usuarios[user_index]);
 });
 
+/*
+Borrar usuario por id
 
-//Borrar usuario por id
+body:
+{
+ "contrasenia": contasenia
+}
+*/
 
 router.delete("/:id", (req, res) => {
   const id = req.params.id;
+  const contasenia = req.body.contasenia
+
   const usuario = usuarios.find((usuario) => {
-    return usuario.id == id;
+    if(usuario.contasenia == contasenia){
+      return usuario.id == id;
+    }
+
   });
+
   usuarios = usuarios.filter((usuario) => {
     return usuario.id != id;
   });
