@@ -16,7 +16,8 @@
 .overlay-login,
 .overlay-borrar {
   position: fixed;
-  top: 0; left: 0;
+  top: 0; 
+  left: 0;
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.4);
   backdrop-filter: blur(4px);
@@ -42,13 +43,13 @@
 .registrarse-card select {
   display: block;
   width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
+  margin-bottom: 8px;
+  padding: 8px;
 }
 .registrarse-card button,
 .iniciarSesion-card button {
   width: 100%;
-  padding: 0.5rem;
+  padding: 8px;
   background-color: var(--color-pricipal, #0d6efd);
   color: white;
   border: none;
@@ -86,36 +87,27 @@
   display: none;
 }
 
-.editarPerfil-card {
+.editarPerfil-card,
+.borrarPerfil-card {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   z-index: 100;
   display: none; 
-  width: 28rem;
-  max-width: 92%; 
-}
-
-.borrarPerfil-card{
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100;
-  display: none; 
-  width: 28rem;
+  width: 448px;
   max-width: 92%; 
 }
 
 .editarPerfil-card input {
   display: block;
   width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
+  margin-bottom: 8px;
+  padding: 8px;
 }
 
 .btnBorrar {
   width: 100%;
-  padding: 0.5rem;
+  padding: 8px;
   background-color: #dc3545; 
   color: #fff;
   border: none;
@@ -130,7 +122,7 @@
 
 .editarPerfil-card .btnEditar {
   width: 100%;
-  padding: 0.5rem;
+  padding: 8px;
   background-color: var(--color-pricipal, #0d6efd);
   color: white;
   border: none;
@@ -164,5 +156,5 @@
 .usuario-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 16px;
 }
