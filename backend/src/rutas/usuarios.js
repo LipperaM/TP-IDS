@@ -5,7 +5,7 @@ const router = express.Router();
 let usuarios = [];
 
 /*
-Crear nuevo usuario
+Registrarse
 body:
 {"nombre": nombre,   
  "apellido": apellido,
@@ -46,12 +46,15 @@ router.get("/", (req, res) => {
 });
 
 
-//Mostrar usuario por id
+//Login
+router.get("/:nombreUsuario/:contrasenia", (req, res) => {
+  const nombreUsuario = req.params.nombreUsuario;
+  const contrasenia = req.params.contrasenia;
 
-router.get("/:id", (req, res) => {
-  const id = req.params.id;
   const usuario = usuarios.find((usuario) => {
-    return usuario.id == id;
+    if(usuario.nombreUsuario == nombreUsuario && usuario.contrasenia == contrasenia){
+      return usuario.nombreUsuario == nombreUsuario;
+    }
   });
 
   if (usuario === undefined) {
@@ -62,7 +65,7 @@ router.get("/:id", (req, res) => {
 });
 
 /*
-Editar usuario por id
+Editar perfil
 body:
 {"nombre": nombre,   
  "apellido": apellido,
@@ -103,8 +106,7 @@ router.put("/:id", (req, res) => {
 });
 
 /*
-Borrar usuario por id
-
+Borrar perfil
 body:
 {
  "contrasenia": contasenia
