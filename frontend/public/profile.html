@@ -18,6 +18,7 @@
 
     <input type="checkbox" id="toggle-registrarse" hidden>
     <input type="checkbox" id="toggle-iniciarSesion" hidden>
+    <input type="checkbox" id="toggle-borrarPerfil" hidden>
 
     <nav class="navbar">
       <a class="navbar-brand" href="./index.html">Home</a>
@@ -26,7 +27,8 @@
         <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
         <button class="btn btn-primary" type="submit">Buscar</button>
       </form>
-
+      
+      <label for="toggle-borrarPerfil" class="navbar-brand">Eliminar Perfil</label>
       <label for="toggle-registrarse" class="navbar-brand">Registrarse</label>
       <label for="toggle-iniciarSesion" class="navbar-brand">Iniciar Sesion</label>
     </nav>
@@ -114,7 +116,58 @@
               <label class="form-label">Contraseña</label>
               <input type="password" class="form-control">
             </div>
-            <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+            <button type="submit">Iniciar Sesion</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <input type="checkbox" id="toggle-editarPerfil" hidden>
+    <label for="toggle-editarPerfil" class="overlay-editar"></label>
+    <div class="editarPerfil-card">
+      <div class="card" style="width: 28rem;">
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Editar nombre</label>
+              <input type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Editar apellido</label>
+              <input type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Editar mail</label>
+              <input type="email" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Editar País</label>
+              <input type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Editar Nombre de Usuario</label>
+              <input type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Editar Contraseña</label>
+              <input type="password" class="form-control" />
+            </div>
+            <button type="submit" class="btnEditar">Aplicar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <label for="toggle-borrarPerfil" class="overlay overlay-borrar"></label>
+    <div class="borrarPerfil-card">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Confirmar borrado</h5>
+          <p class="card-text">Ingrese su contraseña para confirmar que desea eliminar el perfil.</p>
+          <form>
+            <div class="mb-3"><label class="form-label">Contraseña</label><input type="password" class="form-control"></div>
+            <div class="mb-3"><label class="form-label">Reingrese Contraseña</label><input type="password" class="form-control"></div>
+            <button type="submit" class="btnBorrar">BORRAR</button>
           </form>
         </div>
       </div>
@@ -132,10 +185,11 @@
         <div class="info-extra">
           <h5>Equipo</h5>
           <h5>País</h5>
+          <label for="toggle-editarPerfil" class="navbar-brand">Editar perfil</label>
         </div>
       </div>
     </div>
-
+    
     <div class="post-usuario">
       <h1>Tus posts</h1>
     </div>
@@ -157,5 +211,6 @@
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+
   </body>
 </html>

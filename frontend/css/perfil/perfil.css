@@ -13,9 +13,11 @@
 .post-usuario { padding: 10px; }
 
 .overlay-registrarse,
-.overlay-login {
+.overlay-login,
+.overlay-borrar {
   position: fixed;
-  top: 0; left: 0;
+  top: 0; 
+  left: 0;
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.4);
   backdrop-filter: blur(4px);
@@ -25,7 +27,8 @@
 }
 
 .registrarse-card,
-.iniciarSesion-card {
+.iniciarSesion-card,
+.borrarPerfil-card {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
@@ -36,16 +39,17 @@
 
 .registrarse-card input,
 .iniciarSesion-card input,
+.borrarPerfil-card input,
 .registrarse-card select {
   display: block;
   width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
+  margin-bottom: 8px;
+  padding: 8px;
 }
 .registrarse-card button,
 .iniciarSesion-card button {
   width: 100%;
-  padding: 0.5rem;
+  padding: 8px;
   background-color: var(--color-pricipal, #0d6efd);
   color: white;
   border: none;
@@ -67,6 +71,75 @@
   display: block;
 }
 
+#toggle-borrarPerfil:checked ~ .overlay-borrar,
+#toggle-borrarPerfil:checked ~ .borrarPerfil-card {
+  display: block;
+}
+
+.overlay-editar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  cursor: pointer;
+  display: none;
+}
+
+.editarPerfil-card,
+.borrarPerfil-card {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  display: none; 
+  width: 448px;
+  max-width: 92%; 
+}
+
+.editarPerfil-card input {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 8px;
+}
+
+.btnBorrar {
+  width: 100%;
+  padding: 8px;
+  background-color: #dc3545; 
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btnBorrar:hover {
+  background-color: red;
+}
+
+.editarPerfil-card .btnEditar {
+  width: 100%;
+  padding: 8px;
+  background-color: var(--color-pricipal, #0d6efd);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.editarPerfil-card .btnEditar:hover {
+  background-color: var(--color-primario-osc, #084298);
+}
+
+#toggle-editarPerfil:checked ~ .overlay-editar,
+#toggle-editarPerfil:checked ~ .editarPerfil-card {
+  display: block;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -79,3 +152,9 @@
 .navbar-brand { color: white; text-decoration: none; font-weight: bold; }
 .navbar-brand:hover { text-decoration: underline; }
 .d-flex form { max-width: 400px; width: 100%; }
+
+.usuario-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
