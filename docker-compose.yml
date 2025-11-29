@@ -1,0 +1,26 @@
+services:
+  cloudflared:
+    extends:
+      file: ./cloudflared/docker-compose.yml
+      service: cloudflared
+
+  api:
+    extends:
+      file: ./backend/docker-compose.yml
+      service: api
+
+  nginx:
+    extends:
+      file: ./frontend/docker-compose.yml
+      service: nginx
+
+  postgres:
+    extends:
+      file: ./db/docker-compose.yml
+      service: postgres
+    env_file:
+      - ./db/.env
+
+networks:
+  fydem:
+    name: fydem
