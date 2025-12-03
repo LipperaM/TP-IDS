@@ -16,28 +16,25 @@
   </head> 
   <body>
 
-    <input type="checkbox" id="toggle-registrarse" hidden>
-    <input type="checkbox" id="toggle-iniciarSesion" hidden>
-    <input type="checkbox" id="toggle-borrarPerfil" hidden>
-
     <nav class="navbar">
       <a class="navbar-brand" href="./index.html">Home</a>
 
       <form class="d-flex" role="search">
         <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
-        <button class="btn btn-primary" type="submit">Buscar</button>
+        <button class="boton" type="submit">Buscar</button>
       </form>
 
       <div class="nav-buttons">
-      <button class="boton" id="openModal">Registrarse</button>
-      <button class="boton">Eliminar Perfil</button>
-      <button class="boton">Iniciar Sesion</button>
+      <button class="boton" id="openModalRegistro">Registrarse</button>
+      <button class="boton" id="openModalEliminar">Eliminar Perfil</button>
+      <button class="boton" id="openModalLogin">Iniciar Sesion</button>
       </div>
     </nav>
 
-      <div class="registrarse-card">
-        <div id="modal" class="modal">
-          <div class="card">
+      
+        <div id="modalRegistro" class="modal">
+          <div class="modal-content">
+            <span id="closeRegsitro" class="close">&times;</span>
             <div class="card-body">
               <form>
                 <div class="mb-3">
@@ -99,16 +96,15 @@
                   <label class="form-label">Contraseña</label>
                   <input type="password" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-primary">Registrarse</button>
+                <button class="boton" class="btn btn-primary">Registrarse</button>
               </form>
             </div>
           </div>
         </div>
-      </div>
-
-    <label for="toggle-iniciarSesion" class="overlay overlay-login"></label>
-    <div class="iniciarSesion-card">
-      <div class="card">
+      
+    <div id="modalLogin" class="modal"> 
+    <div class="modal-content">
+      <span id="closeLogin" class="close">&times;</span>
         <div class="card-body">
           <form>
             <div class="mb-3">
@@ -119,12 +115,13 @@
               <label class="form-label">Contraseña</label>
               <input type="password" class="form-control">
             </div>
-            <button type="submit">Iniciar Sesion</button>
+            <button class="boton">Iniciar Sesion</button>
           </form>
         </div>
       </div>
     </div>
 
+<!--
     <input type="checkbox" id="toggle-editarPerfil" hidden>
     <label for="toggle-editarPerfil" class="overlay-editar"></label>
     <div class="editarPerfil-card">
@@ -159,20 +156,20 @@
           </form>
         </div>
       </div>
-    </div>
+    </div>-->
 
-    <label for="toggle-borrarPerfil" class="overlay overlay-borrar"></label>
-    <div class="borrarPerfil-card">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Confirmar borrado</h5>
-          <p class="card-text">Ingrese su contraseña para confirmar que desea eliminar el perfil.</p>
-          <form>
-            <div class="mb-3"><label class="form-label">Contraseña</label><input type="password" class="form-control"></div>
-            <div class="mb-3"><label class="form-label">Reingrese Contraseña</label><input type="password" class="form-control"></div>
-            <button type="submit" class="btnBorrar">BORRAR</button>
-          </form>
-        </div>
+    <div id="modalEliminar" class="modal"> 
+      <div class="modal-content">
+        <span id="closeEliminar" class="close">&times;</span>
+          <div class="card-body">
+            <h5 class="card-title">Confirmar borrado</h5>
+            <p class="card-text">Ingrese su contraseña para confirmar que desea eliminar el perfil.</p>
+            <form>
+              <div class="mb-3"><label class="form-label">Contraseña</label><input type="password" class="form-control"></div>
+              <div class="mb-3"><label class="form-label">Reingrese Contraseña</label><input type="password" class="form-control"></div>
+              <button type="submit" class="boton">BORRAR</button>
+            </form>
+          </div>
       </div>
     </div>
 
@@ -215,44 +212,36 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      // Modal-Funcionalidad
-      const modal = document.getElementById("modal");
-      const openModal = document.getElementById("openModal");
-      const closeModal = document.getElementById("closeModal");
-      const postBtn = document.getElementById("postBtn");
-      const postText = document.getElementById("card-text");
-      const posts = document.getElementById("card");
+        const modalRegistro = document.getElementById("modalRegistro");
+        const modalLogin = document.getElementById("modalLogin");
+        const modalEliminar = document.getElementById("modalEliminar");
 
-      openModal.onclick = () => {
-        modal.style.display = "flex";
-      };
 
-      closeModal.onclick = () => {
-        modal.style.display = "none";
-        postText.value = "";
-      };
+        const openModalRegistro = document.getElementById("openModalRegistro");
+        const openModalLogin = document.getElementById("openModalLogin");
+        const openModalEliminar = document.getElementById("openModalEliminar");
 
-      postBtn.onclick = () => {
-        const text = postText.value.trim();
-        if (text !== "") {
-          const newPost = document.createElement("div");
-          newPost.classList.add("post");
-          newPost.textContent = text;
-          posts.prepend(newPost);
-          postText.value = "";
-          modal.style.display = "none";
+
+        const closeRegistro = document.getElementById("closeRegistro");
+        const closeLogin = document.getElementById("closeLogin");
+        const closeEliminar = document.getElementById("closeEliminar");
+
+
+        if (openModalRegistro && modalRegistro) {
+          openModalRegistro.onclick = () => { modalRegistro.style.display = "flex"; };
         }
-      };
-      //Modal-categoria-dropdown
-      const categoriaBtn = document.getElementById("categoria-btn");
-      const opciones = document.querySelectorAll(".categoria-opcion");
+        if (openModalLogin && modalLogin) {
+          openModalLogin.onclick = () => { modalLogin.style.display = "flex"; };
+        }
+        if (openModalEliminar && modalEliminar) {
+          openModalEliminar.onclick = () => { modalEliminar.style.display = "flex"; };
+        }
 
-      opciones.forEach((option) => {
-        option.addEventListener("click", function (e) {
-          e.preventDefault(); // evita que navegue
-          categoriaBtn.textContent = this.textContent; // cambia el texto del botón
-        });
-      });
+        window.onclick = (e) => {
+          if (modalRegistro && e.target === modalRegistro) modalRegistro.style.display = "none";
+          if (modalLogin && e.target === modalLogin) modalLogin.style.display = "none";
+          if (modalEliminar && e.target === modalEliminar) modalEliminar.style.display = "none";
+        };
     </script>
   </body>
 </html>
