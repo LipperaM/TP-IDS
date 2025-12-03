@@ -27,81 +27,84 @@
         <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
         <button class="btn btn-primary" type="submit">Buscar</button>
       </form>
-      
-      <label for="toggle-borrarPerfil" class="navbar-brand">Eliminar Perfil</label>
-      <label for="toggle-registrarse" class="navbar-brand">Registrarse</label>
-      <label for="toggle-iniciarSesion" class="navbar-brand">Iniciar Sesion</label>
+
+      <div class="nav-buttons">
+      <button class="boton" id="openModal">Registrarse</button>
+      <button class="boton">Eliminar Perfil</button>
+      <button class="boton">Iniciar Sesion</button>
+      </div>
     </nav>
 
-    <label for="toggle-registrarse" class="overlay overlay-registrarse"></label>
-    <div class="registrarse-card">
-      <div class="card">
-        <div class="card-body">
-          <form>
-            <div class="mb-3">
-              <label class="form-label">Nombre</label>
-              <input type="text" class="form-control">
+      <div class="registrarse-card">
+        <div id="modal" class="modal">
+          <div class="card">
+            <div class="card-body">
+              <form>
+                <div class="mb-3">
+                  <label class="form-label">Nombre</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Apellido</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Mail</label>
+                  <input type="email" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Pais</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Equipo</label>
+                  <select class="form-control">
+                    <option value="">Selecciona tu equipo</option>
+                    <option value="boca">Aldosivi</option>
+                    <option value="river">Argentinos Juniors</option>
+                    <option value="platense">Atletico Tucuman</option>
+                    <option value="platense">Banfield</option>
+                    <option value="platense">Barracas Central</option>
+                    <option value="platense">Belgrano</option>
+                    <option value="platense">Boca Juniors</option>
+                    <option value="platense">Central Cordoba</option>
+                    <option value="platense">Defensa y Justicia</option>
+                    <option value="platense">Deportivo Riestra</option>
+                    <option value="platense">Estudiantes de La Plata</option>
+                    <option value="platense">Gimnasia y Esgrima de La PLata</option>
+                    <option value="platense">Godoy Cruz</option>
+                    <option value="platense">Huracan</option>
+                    <option value="platense">Independiente</option>
+                    <option value="platense">Independiente Rivadavia</option>
+                    <option value="platense">Instituto</option>
+                    <option value="platense">Lanus</option>
+                    <option value="platense">Newell's Old Boys</option>
+                    <option value="platense">Platense</option>
+                    <option value="platense">Racing Club</option>
+                    <option value="platense">River Plate</option>
+                    <option value="platense">Rosario Central</option>
+                    <option value="platense">San Lorenzo de Almagro</option>
+                    <option value="platense">San Martin de San Juan</option>
+                    <option value="platense">Sarmiento de Junin</option>
+                    <option value="platense">Tigre</option>
+                    <option value="platense">Union</option>
+                    <option value="platense">Velez Sarfield</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Nombre de Usuario</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Contraseña</label>
+                  <input type="password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+              </form>
             </div>
-            <div class="mb-3">
-              <label class="form-label">Apellido</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Mail</label>
-              <input type="email" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Pais</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Equipo</label>
-              <select class="form-control">
-                <option value="">Selecciona tu equipo</option>
-                <option value="boca">Aldosivi</option>
-                <option value="river">Argentinos Juniors</option>
-                <option value="platense">Atletico Tucuman</option>
-                <option value="platense">Banfield</option>
-                <option value="platense">Barracas Central</option>
-                <option value="platense">Belgrano</option>
-                <option value="platense">Boca Juniors</option>
-                <option value="platense">Central Cordoba</option>
-                <option value="platense">Defensa y Justicia</option>
-                <option value="platense">Deportivo Riestra</option>
-                <option value="platense">Estudiantes de La Plata</option>
-                <option value="platense">Gimnasia y Esgrima de La PLata</option>
-                <option value="platense">Godoy Cruz</option>
-                <option value="platense">Huracan</option>
-                <option value="platense">Independiente</option>
-                <option value="platense">Independiente Rivadavia</option>
-                <option value="platense">Instituto</option>
-                <option value="platense">Lanus</option>
-                <option value="platense">Newell's Old Boys</option>
-                <option value="platense">Platense</option>
-                <option value="platense">Racing Club</option>
-                <option value="platense">River Plate</option>
-                <option value="platense">Rosario Central</option>
-                <option value="platense">San Lorenzo de Almagro</option>
-                <option value="platense">San Martin de San Juan</option>
-                <option value="platense">Sarmiento de Junin</option>
-                <option value="platense">Tigre</option>
-                <option value="platense">Union</option>
-                <option value="platense">Velez Sarfield</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Nombre de Usuario</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Contraseña</label>
-              <input type="password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary">Registrarse</button>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
 
     <label for="toggle-iniciarSesion" class="overlay overlay-login"></label>
     <div class="iniciarSesion-card">
@@ -211,6 +214,45 @@
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script>
+      // Modal-Funcionalidad
+      const modal = document.getElementById("modal");
+      const openModal = document.getElementById("openModal");
+      const closeModal = document.getElementById("closeModal");
+      const postBtn = document.getElementById("postBtn");
+      const postText = document.getElementById("card-text");
+      const posts = document.getElementById("card");
 
+      openModal.onclick = () => {
+        modal.style.display = "flex";
+      };
+
+      closeModal.onclick = () => {
+        modal.style.display = "none";
+        postText.value = "";
+      };
+
+      postBtn.onclick = () => {
+        const text = postText.value.trim();
+        if (text !== "") {
+          const newPost = document.createElement("div");
+          newPost.classList.add("post");
+          newPost.textContent = text;
+          posts.prepend(newPost);
+          postText.value = "";
+          modal.style.display = "none";
+        }
+      };
+      //Modal-categoria-dropdown
+      const categoriaBtn = document.getElementById("categoria-btn");
+      const opciones = document.querySelectorAll(".categoria-opcion");
+
+      opciones.forEach((option) => {
+        option.addEventListener("click", function (e) {
+          e.preventDefault(); // evita que navegue
+          categoriaBtn.textContent = this.textContent; // cambia el texto del botón
+        });
+      });
+    </script>
   </body>
 </html>
