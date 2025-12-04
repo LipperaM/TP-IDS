@@ -1,75 +1,38 @@
-.PHONY: up down restart logs build ps local local-down local-restart backend frontend db cloudflared
-
-# Variables
-
-# El flag -f permite especificar el archivo compose exacto.
-
-ROOT_COMPOSE = docker compose -f docker-compose.yml
-BACKEND_COMPOSE = docker compose -f ./backend/docker-compose.yml
-FRONTEND_COMPOSE = docker compose -f ./frontend/docker-compose.yml
-DB_COMPOSE = docker compose -f ./db/docker-compose.yml
-CLOUDFLARED_COMPOSE = docker compose -f ./cloudflared/docker-compose.yml
+.PHONY: up down restart logs build ps local prod
 
 
-# Compose general ROOT
-
-up:
-	$(ROOT_COMPOSE) up -d
-
-down:
-	$(ROOT_COMPOSE) down
-
-restart:
-	$(ROOT_COMPOSE) down
-	$(ROOT_COMPOSE) up -d
-
-logs:
-	$(ROOT_COMPOSE) logs -f
-
-build:
-	$(ROOT_COMPOSE) build
-
-ps:
-	$(ROOT_COMPOSE) ps
-
-
-# Compose general sin Cloudflare Tunnel (local)
-
+# Levantar entorno local sin tunel Cloudflare para desarrollo
 local:
-	$(BACKEND_COMPOSE) up -d 
-	$(FRONTEND_COMPOSE) up -d
-	$(DB_COMPOSE) up -d
+	docker compose --profile dev up -d
 
 local-down:
-	$(BACKEND_COMPOSE) down 
-	$(FRONTEND_COMPOSE) down
-	$(DB_COMPOSE) down
-	
-local-restart: local-down local	
+	docker compose down
 
-# Sub composes hijos
+local-restart:
+	docker compose --profile dev restart
 
 
-backend:
-	$(BACKEND_COMPOSE) up -d
+# Levantar entorno para produccion con tunel Cloudflare
+prod:
+	docker compose --profile prod up -d
 
-backend-down:
-	$(BACKEND_COMPOSE) down
+prod-down:
+	docker compose --profile prod down
 
-frontend:
-	$(FRONTEND_COMPOSE) up -d
 
-frontend-down:
-	$(FRONTEND_COMPOSE) down
+# Comandos generales
+logs:
+	docker compose logs -f
 
-db:
-	$(DB_COMPOSE) up -d
+build:
+	docker compose build
 
-db-down:
-	$(DB_COMPOSE) down
+ps:
+	docker compose ps 
 
-cloudflared:
-	$(CLOUDFLARED_COMPOSE) up -d
+# Servicios individuales
+nginx:
+	docker compose up -d nginx
 
-cloudflared-down:
-	$(CLOUDFLARED_COMPOSE) down
+postgres:
+	docker compose up -d postgres
