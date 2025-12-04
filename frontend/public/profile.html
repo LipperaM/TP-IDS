@@ -121,12 +121,9 @@
       </div>
     </div>
 
-<!--
-    <input type="checkbox" id="toggle-editarPerfil" hidden>
-    <label for="toggle-editarPerfil" class="overlay-editar"></label>
-    <div class="editarPerfil-card">
-      <div class="card" style="width: 28rem;">
-        <div class="card-body">
+    <div id="modalEditar" class="modal"> 
+      <div class="modal-content">
+        <span id="closeEliminar" class="close">&times;</span>
           <form>
             <div class="mb-3">
               <label class="form-label">Editar nombre</label>
@@ -152,11 +149,11 @@
               <label class="form-label">Editar Contraseña</label>
               <input type="password" class="form-control" />
             </div>
-            <button type="submit" class="btnEditar">Aplicar</button>
+            <button type="submit" class="boton">Aplicar</button>
           </form>
-        </div>
       </div>
-    </div>-->
+    </div>
+  
 
     <div id="modalEliminar" class="modal"> 
       <div class="modal-content">
@@ -185,7 +182,7 @@
         <div class="info-extra">
           <h5>Equipo</h5>
           <h5>País</h5>
-          <label for="toggle-editarPerfil" class="navbar-brand">Editar perfil</label>
+          <button class="boton" id="openModalEditar">Editar Perfil</button>
         </div>
       </div>
     </div>
@@ -215,16 +212,17 @@
         const modalRegistro = document.getElementById("modalRegistro");
         const modalLogin = document.getElementById("modalLogin");
         const modalEliminar = document.getElementById("modalEliminar");
-
+        const modalEditar = document.getElementById("modalEditar");
 
         const openModalRegistro = document.getElementById("openModalRegistro");
         const openModalLogin = document.getElementById("openModalLogin");
         const openModalEliminar = document.getElementById("openModalEliminar");
-
+        const openModalEditar = document.getElementById("openModalEditar");
 
         const closeRegistro = document.getElementById("closeRegistro");
         const closeLogin = document.getElementById("closeLogin");
         const closeEliminar = document.getElementById("closeEliminar");
+        const closeEditar = document.getElementById("closeEditar");
 
 
         if (openModalRegistro && modalRegistro) {
@@ -236,11 +234,15 @@
         if (openModalEliminar && modalEliminar) {
           openModalEliminar.onclick = () => { modalEliminar.style.display = "flex"; };
         }
+        if (openModalEditar && modalEditar) {
+          openModalEditar.onclick = () => { modalEditar.style.display = "flex"; };
+        }
 
         window.onclick = (e) => {
           if (modalRegistro && e.target === modalRegistro) modalRegistro.style.display = "none";
           if (modalLogin && e.target === modalLogin) modalLogin.style.display = "none";
           if (modalEliminar && e.target === modalEliminar) modalEliminar.style.display = "none";
+          if (modalEditar && e.target === modalEditar) modalEditar.style.display = "none";
         };
     </script>
   </body>
