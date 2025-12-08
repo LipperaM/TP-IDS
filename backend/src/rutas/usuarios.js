@@ -33,29 +33,34 @@ router.post("/", async(req, res) => {
   }
 });
 
-//Traigo todos los usuarios
+/*
+Login
+body:
+{"nombreUsuario": nombreUsuario,   
+ "contrasenia": contasenia
+}
+*/
+router.get("/", async(req, res) => {
+  try{
+    const contrasenia = `select contrasenia from usuarios
+                         where usuario = '${req.body.nombreUsuario}'`;
+    await pool.query(contrasenia);
 
-router.get("/", (req, res) => {
-  res.json(usuarios);
-});
+    if(contrasenia == req.body.contrasenia){
 
-
-//Login
-router.get("/:nombreUsuario/:contrasenia", (req, res) => {
-  const nombreUsuario = req.params.nombreUsuario;
-  const contrasenia = req.params.contrasenia;
-
-  const usuario = usuarios.find((usuario) => {
-    if(usuario.nombreUsuario == nombreUsuario && usuario.contrasenia == contrasenia){
-      return usuario.nombreUsuario == nombreUsuario;
+      const query = `select usuario, equipo, pais from usuarios
+                           where usuario = '${req.body.nombreUsuario}'`;
+      
+      await pool.query(query);
+      res.json("Login exitoso");
     }
-  });
-
-  if (usuario === undefined) {
-    return res.status(404).send("");
+    else{
+      res.json("Contrasenia incorrecta");
+    }
+  }catch (err){
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
   }
-
-  res.json(usuario);
 });
 
 /*
