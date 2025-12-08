@@ -107,26 +107,28 @@ body:
 }
 */
 
-router.delete("/:id", (req, res) => {
-  const id = req.params.id;
-  const contasenia = req.body.contasenia
+router.delete("/:id", async(req, res) => {
+  try{
 
-  const usuario = usuarios.find((usuario) => {
-    if(usuario.contasenia == contasenia){
-      return usuario.id == id;
+    const contrasenia_para_borrar = `select contrasenia from usuarios
+                               where id = '${req.params.id}'`;
+
+    if(contrasenia_para_borrar == req.body.contrasenia){
+      const query = `delete from usuarios
+                    where id = '${req.params.id}'`;
+
+      await pool.query(query);
+      res.json("Usuario borrado");
+    }
+    else {
+    res.json("Contrasenia incorrecta");
     }
 
-  });
-
-  usuarios = usuarios.filter((usuario) => {
-    return usuario.id != id;
-  });
-
-  if (usuario === undefined) {
-    return res.status(404).send("");
+  }catch (err){
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
   }
 
-  res.json(usuario);
 });
 
 module.exports = router;
