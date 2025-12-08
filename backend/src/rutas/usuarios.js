@@ -17,26 +17,20 @@ body:
 }
 */
 
-router.post("/", (req, res) => {
-  const nombre = req.body.nombre;
-  const apellido = req.body.apellido;
-  const mail = req.body.mail;
-  const pais = req.body.pais;
-  const equipo = req.body.equipo;
-  const nombreUsuario = req.body.nombreUsuario;
-  const contrasenia = req.body.contrasenia;
+router.post("/", async(req, res) => {
+  try{
+    //Validacion de datos despues lo agrego
+    const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) 
+                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', '', '${req.body.pais}', '${req.body.equipo}')`;
 
-  const ultimoUsuario = usuarios[usuarios.length - 1];
-  let id = 1;
-  if (ultimoUsuario !== undefined) {
-    id = ultimoUsuario.id + 1;
+    await pool.query(query);
+    
+    res.json();
+
+  }catch(err){
+    console.error(err);
+    res.status(500).json({ error: "DB error"});
   }
-
-  const usuario = { id: id, nombre: nombre, apellido: apellido, mail: mail, pais: pais, equipo: equipo, nombreUsuario: nombreUsuario, contrasenia: contrasenia};
-
-  usuarios.push(usuario);
-
-  res.status(201).json(usuario);
 });
 
 //Traigo todos los usuarios
