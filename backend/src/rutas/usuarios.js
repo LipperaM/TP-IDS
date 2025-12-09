@@ -1,8 +1,9 @@
-const express = require("express");
+import express from "express";
+import { pool } from "../../db.js";
 
 const router = express.Router();
 
-let usuarios = [];
+console.log("=> cargando router /usuarios");
 
 /*
 Registrarse
@@ -12,7 +13,7 @@ body:
  "mail": mail,
  "pais": pais,
  "equipo": equipo,
- "nombreUsuario": nombreUsuario,
+ "usuario": usuario,
  "contrasenia": contasenia
 }
 */
@@ -21,16 +22,27 @@ router.post("/", async(req, res) => {
   try{
     //Validacion de datos despues lo agrego
     const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) 
-                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', '', '${req.body.pais}', '${req.body.equipo}')`;
+                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', 'b', '${req.body.pais}', '${req.body.equipo}')`;
 
     await pool.query(query);
     
     res.json();
 
   }catch(err){
-    console.error(err);
-    res.status(500).json({ error: "DB error"});
+    console.error("SQL ERROR:", err);
+    res.status(500).json({ error: "DB error", details: err.message });
   }
+});
+
+router.get("/:nombreUsuario", async(req, res) => {
+  try {
+        const result = await pool.query(`select id, usuario, equipo, pais from usuarios where usuario = '${req.params.nombreUsuario}'`);
+        console.log("=> GET /usuarios/:nombreUsuario :", req.params.nombreUsuario);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "DB error" });
+    }
 });
 
 /*
@@ -39,16 +51,16 @@ body:
 {"nombreUsuario": nombreUsuario,   
  "contrasenia": contasenia
 }
-*/
+
 router.get("/", async(req, res) => {
   try{
-    const contrasenia = `select contrasenia from usuarios
+    const contrasenia_login = `select contrasenia from usuarios
                          where usuario = '${req.body.nombreUsuario}'`;
-    await pool.query(contrasenia);
+    const constrasenia = await pool.query(contrasenia_login);
 
     if(contrasenia == req.body.contrasenia){
 
-      const query = `select usuario, equipo, pais from usuarios
+      const query = `select id, usuario, equipo, pais from usuarios
                            where usuario = '${req.body.nombreUsuario}'`;
       
       await pool.query(query);
@@ -73,35 +85,10 @@ body:
  "nombreUsuario": nombreUsuario,
  "contrasenia": contasenia
 }
-*/
+
 
 router.put("/:id", (req, res) => {
-  const id = req.params.id;
-  const nuevoNombre = req.body.nombre;
-  const nuevoApellido = req.body.apellido;
-  const nuevoMail = req.body.mail;
-  const nuevoPais = req.body.pais;
-  const nuevoNombreUsuario = req.body.nombreUsuario;
-  const nuevaContrasenia = req.body.contrasenia;
-  let user_index = undefined;
-
-  for (let i = 0; i < usuarios.length; i++) {
-    if (usuarios[i].id == id) {
-      user_index = i;
-      if(nuevoNombre != undefined) usuarios[i].nombre = nuevoNombre;
-      if(nuevoApellido != undefined) usuarios[i].apellido = nuevoApellido;
-      if(nuevoMail != undefined) usuarios[i].mail = nuevoMail;
-      if(nuevoPais != undefined) usuarios[i].pais = nuevoPais;
-      if(nuevoNombreUsuario != undefined) usuarios[i].nombreUsuario = nuevoNombreUsuario;
-      if(nuevaContrasenia != undefined) usuarios[i].contrasenia = nuevaContrasenia;
-    }
-  }
-
-  if (user_index === undefined) {
-    return res.status(404).send("");
-  }
-
-  res.json(usuarios[user_index]);
+  
 });
 
 /*
@@ -110,7 +97,7 @@ body:
 {
  "contrasenia": contasenia
 }
-*/
+
 
 router.delete("/:id", async(req, res) => {
   try{
@@ -118,7 +105,9 @@ router.delete("/:id", async(req, res) => {
     const contrasenia_para_borrar = `select contrasenia from usuarios
                                where id = '${req.params.id}'`;
 
-    if(contrasenia_para_borrar == req.body.contrasenia){
+    const contrasenia = await pool.query(contrasenia_para_borrar);
+    
+    if(contrasenia == req.body.contrasenia){
       const query = `delete from usuarios
                     where id = '${req.params.id}'`;
 
@@ -135,5 +124,6 @@ router.delete("/:id", async(req, res) => {
   }
 
 });
+*/
 
-module.exports = router;
+export default router;
