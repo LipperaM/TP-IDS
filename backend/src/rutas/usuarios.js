@@ -1,8 +1,9 @@
-const express = require("express");
+import express from "express";
+import { pool } from "../../db.js";
 
 const router = express.Router();
 
-let usuarios = [];
+console.log("=> cargando router /usuarios");
 
 /*
 Registrarse
@@ -12,56 +13,66 @@ body:
  "mail": mail,
  "pais": pais,
  "equipo": equipo,
- "nombreUsuario": nombreUsuario,
+ "usuario": usuario,
  "contrasenia": contasenia
 }
 */
 
-router.post("/", (req, res) => {
-  const nombre = req.body.nombre;
-  const apellido = req.body.apellido;
-  const mail = req.body.mail;
-  const pais = req.body.pais;
-  const equipo = req.body.equipo;
-  const nombreUsuario = req.body.nombreUsuario;
-  const contrasenia = req.body.contrasenia;
+router.post("/", async(req, res) => {
+  try{
+    //Validacion de datos despues lo agrego
+    const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) 
+                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', 'a', '${req.body.pais}', '${req.body.equipo}')`;
 
-  const ultimoUsuario = usuarios[usuarios.length - 1];
-  let id = 1;
-  if (ultimoUsuario !== undefined) {
-    id = ultimoUsuario.id + 1;
+    await pool.query(query);
+    
+    return res.status(201).json({ ok: true });
+
+  }catch(err){
+    console.error("SQL ERROR:", err);
+    res.status(500).json({ error: "DB error", details: err.message });
   }
-
-  const usuario = { id: id, nombre: nombre, apellido: apellido, mail: mail, pais: pais, equipo: equipo, nombreUsuario: nombreUsuario, contrasenia: contrasenia};
-
-  usuarios.push(usuario);
-
-  res.status(201).json(usuario);
 });
 
-//Traigo todos los usuarios
-
-router.get("/", (req, res) => {
-  res.json(usuarios);
-});
-
-
-//Login
-router.get("/:nombreUsuario/:contrasenia", (req, res) => {
-  const nombreUsuario = req.params.nombreUsuario;
-  const contrasenia = req.params.contrasenia;
-
-  const usuario = usuarios.find((usuario) => {
-    if(usuario.nombreUsuario == nombreUsuario && usuario.contrasenia == contrasenia){
-      return usuario.nombreUsuario == nombreUsuario;
+router.get("/:nombreUsuario", async(req, res) => {
+  try {
+        const result = await pool.query(`select id, usuario, equipo, pais from usuarios where usuario = '${req.params.nombreUsuario}'`);
+        console.log("=> GET /usuarios/:nombreUsuario :", req.params.nombreUsuario);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "DB error" });
     }
-  });
+});
 
-  if (usuario === undefined) {
-    return res.status(404).send("");
+/*
+Login
+body:
+{"nombreUsuario": nombreUsuario,   
+ "contrasenia": contasenia
+}
+*/
+
+router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
+  try{
+    const queryContrasenia = await pool.query(`select contrasenia from usuarios
+                                    where usuario = '${req.params.nombreUsuario}'`);
+    const contrasenia_login = queryContrasenia.rows[0].contrasenia;
+
+    if(contrasenia_login === req.params.contrasenia){
+
+      const queryDatos = await pool.query(`select id, usuario, equipo, pais from usuarios
+                           where usuario = '${req.params.nombreUsuario}'`);
+      
+      return res.json(queryDatos.rows[0]); 
+    }
+    else{
+      res.json("Contrasenia incorrecta");
+    }
+  }catch (err){
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
   }
-
-  res.json(usuario);
 });
 
 /*
@@ -74,35 +85,10 @@ body:
  "nombreUsuario": nombreUsuario,
  "contrasenia": contasenia
 }
-*/
+
 
 router.put("/:id", (req, res) => {
-  const id = req.params.id;
-  const nuevoNombre = req.body.nombre;
-  const nuevoApellido = req.body.apellido;
-  const nuevoMail = req.body.mail;
-  const nuevoPais = req.body.pais;
-  const nuevoNombreUsuario = req.body.nombreUsuario;
-  const nuevaContrasenia = req.body.contrasenia;
-  let user_index = undefined;
-
-  for (let i = 0; i < usuarios.length; i++) {
-    if (usuarios[i].id == id) {
-      user_index = i;
-      if(nuevoNombre != undefined) usuarios[i].nombre = nuevoNombre;
-      if(nuevoApellido != undefined) usuarios[i].apellido = nuevoApellido;
-      if(nuevoMail != undefined) usuarios[i].mail = nuevoMail;
-      if(nuevoPais != undefined) usuarios[i].pais = nuevoPais;
-      if(nuevoNombreUsuario != undefined) usuarios[i].nombreUsuario = nuevoNombreUsuario;
-      if(nuevaContrasenia != undefined) usuarios[i].contrasenia = nuevaContrasenia;
-    }
-  }
-
-  if (user_index === undefined) {
-    return res.status(404).send("");
-  }
-
-  res.json(usuarios[user_index]);
+  
 });
 
 /*
@@ -111,28 +97,33 @@ body:
 {
  "contrasenia": contasenia
 }
-*/
 
-router.delete("/:id", (req, res) => {
-  const id = req.params.id;
-  const contasenia = req.body.contasenia
 
-  const usuario = usuarios.find((usuario) => {
-    if(usuario.contasenia == contasenia){
-      return usuario.id == id;
+router.delete("/:id", async(req, res) => {
+  try{
+
+    const contrasenia_para_borrar = `select contrasenia from usuarios
+                               where id = '${req.params.id}'`;
+
+    const contrasenia = await pool.query(contrasenia_para_borrar);
+    
+    if(contrasenia == req.body.contrasenia){
+      const query = `delete from usuarios
+                    where id = '${req.params.id}'`;
+
+      await pool.query(query);
+      res.json("Usuario borrado");
+    }
+    else {
+    res.json("Contrasenia incorrecta");
     }
 
-  });
-
-  usuarios = usuarios.filter((usuario) => {
-    return usuario.id != id;
-  });
-
-  if (usuario === undefined) {
-    return res.status(404).send("");
+  }catch (err){
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
   }
 
-  res.json(usuario);
 });
+*/
 
-module.exports = router;
+export default router;
