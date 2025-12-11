@@ -22,11 +22,11 @@ router.post("/", async(req, res) => {
   try{
     //Validacion de datos despues lo agrego
     const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) 
-                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', 'b', '${req.body.pais}', '${req.body.equipo}')`;
+                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', 'a', '${req.body.pais}', '${req.body.equipo}')`;
 
     await pool.query(query);
     
-    res.json();
+    return res.status(201).json({ ok: true });
 
   }catch(err){
     console.error("SQL ERROR:", err);
@@ -51,20 +51,20 @@ body:
 {"nombreUsuario": nombreUsuario,   
  "contrasenia": contasenia
 }
+*/
 
-router.get("/", async(req, res) => {
+router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
   try{
-    const contrasenia_login = `select contrasenia from usuarios
-                         where usuario = '${req.body.nombreUsuario}'`;
-    const constrasenia = await pool.query(contrasenia_login);
+    const queryContrasenia = await pool.query(`select contrasenia from usuarios
+                                    where usuario = '${req.params.nombreUsuario}'`);
+    const contrasenia_login = queryContrasenia.rows[0].contrasenia;
 
-    if(contrasenia == req.body.contrasenia){
+    if(contrasenia_login === req.params.contrasenia){
 
-      const query = `select id, usuario, equipo, pais from usuarios
-                           where usuario = '${req.body.nombreUsuario}'`;
+      const queryDatos = await pool.query(`select id, usuario, equipo, pais from usuarios
+                           where usuario = '${req.params.nombreUsuario}'`);
       
-      await pool.query(query);
-      res.json("Login exitoso");
+      return res.json(queryDatos.rows[0]); 
     }
     else{
       res.json("Contrasenia incorrecta");

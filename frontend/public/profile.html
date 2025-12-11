@@ -23,7 +23,7 @@
         <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
         <button class="boton" type="submit">Buscar</button>
       </form>
-
+      
       <div class="nav-buttons">
       <button class="boton" id="openModalRegistro">Registrarse</button>
       <button class="boton" id="openModalEliminar">Eliminar Perfil</button>
@@ -34,9 +34,8 @@
       
         <div id="modalRegistro" class="modal">
           <div class="modal-content">
-            <span id="closeRegsitro" class="close">&times;</span>
+            <span id="closeRegistro" class="close">&times;</span>
             <div class="card-body">
-              
                 <div class="mb-3">
                   <label class="form-label">Nombre</label>
                   <input id = "nombre" type="text" class="form-control">
@@ -97,7 +96,6 @@
                   <input id = "contrasenia" type="password" class="form-control">
                 </div>
                 <button type="button" class="boton" onclick="registrarse()">Registrarse</button>
-              
             </div>
           </div>
         </div>
@@ -123,7 +121,7 @@
 
     <div id="modalEditar" class="modal"> 
       <div class="modal-content">
-        <span id="closeEliminar" class="close">&times;</span>
+        <span id="closeEditar" class="close">&times;</span>
           <form>
             <div class="mb-3">
               <label class="form-label">Editar nombre</label>
@@ -170,7 +168,7 @@
       </div>
     </div>
 
-    <div class="datos-usuario">
+    <div class="datos-usuario" id="datosUsuario">
       <img
         class="foto-perfil"
         src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F360%2F247%2Foriginal%2Fdefault-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg&f=1&ipt=29b6572ccc8f6a9df4143312e9e00445fbf08fd153011442ebd1006f80e403cf"
