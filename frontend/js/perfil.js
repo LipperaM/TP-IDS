@@ -142,7 +142,8 @@ async function login(){
     hPais.textContent = data.pais;
 
     const hid = document.createElement("h5");
-    hid.textContent = `ID: ${data.id}`;
+    hid.id = "idUsuario"
+    hid.textContent = `${data.id}`;
     hid.style.display = "none";
 
     const btnEditar = document.createElement("button");
@@ -162,4 +163,30 @@ async function login(){
     modalLogin.style.display = "none";
     openModalLogin.style.display = "none";
     openModalRegistro.style.display = "none";
+}
+
+async function eliminarUsuario(){
+    console.log("entre");
+    try{
+        const contrasenia = document.getElementById("contraElim");
+        const id = document.getElementById("idUsuario");
+        console.log(id.textContent);
+        const response = await fetch("http://localhost:3000/usuarios", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id: id.textContent,
+                contrasenia: contrasenia.value
+            })
+        });
+
+        const borrar = await response.json();
+        console.log(borrar);
+        
+        window.location.reload();
+
+    }catch(err){
+        console.log("Error:", err);
+    }
+    
 }

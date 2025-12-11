@@ -157,11 +157,14 @@
           <div class="card-body">
             <h5 class="card-title">Confirmar borrado</h5>
             <p class="card-text">Ingrese su contraseña para confirmar que desea eliminar el perfil.</p>
-            <form>
-              <div class="mb-3"><label class="form-label">Contraseña</label><input type="password" class="form-control"></div>
-              <div class="mb-3"><label class="form-label">Reingrese Contraseña</label><input type="password" class="form-control"></div>
-              <button type="submit" class="boton">BORRAR</button>
-            </form>
+              <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input type="password" class="form-control"></div>
+              <div class="mb-3">
+                <label class="form-label">Reingrese Contraseña</label>
+                <input type="password" id="contraElim" class="form-control">
+              </div>
+              <button type="button" class="boton" onclick="eliminarUsuario()">BORRAR</button>
           </div>
       </div>
     </div>
