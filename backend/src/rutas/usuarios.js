@@ -34,17 +34,6 @@ router.post("/", async(req, res) => {
   }
 });
 
-router.get("/:nombreUsuario", async(req, res) => {
-  try {
-        const result = await pool.query(`select id, usuario, equipo, pais from usuarios where usuario = '${req.params.nombreUsuario}'`);
-        console.log("=> GET /usuarios/:nombreUsuario :", req.params.nombreUsuario);
-        res.json(result.rows[0]);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "DB error" });
-    }
-});
-
 /*
 Login
 body:
@@ -61,7 +50,7 @@ router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
     if (queryContrasenia.rows.length === 0) {
       return res.json("Usuario no encontrado");
     }
-    
+
     const contrasenia_login = queryContrasenia.rows[0].contrasenia;
 
     if(contrasenia_login === req.params.contrasenia){
@@ -96,39 +85,46 @@ router.put("/:id", (req, res) => {
   
 });
 
-/*
+
 Borrar perfil
 body:
 {
+  "id": id,
  "contrasenia": contasenia
 }
+*/
 
+router.delete("/", async(req, res) => {
+    try {
+    const contrasenia  = req.body.contrasenia;
 
-router.delete("/:id", async(req, res) => {
-  try{
+    const query_contrasenia_borrar = await pool.query(`
+      select contrasenia from usuarios
+      where id = '${req.body.id}'`);
 
-    const contrasenia_para_borrar = `select contrasenia from usuarios
-                               where id = '${req.params.id}'`;
-
-    const contrasenia = await pool.query(contrasenia_para_borrar);
-    
-    if(contrasenia == req.body.contrasenia){
-      const query = `delete from usuarios
-                    where id = '${req.params.id}'`;
-
-      await pool.query(query);
-      res.json("Usuario borrado");
-    }
-    else {
-    res.json("Contrasenia incorrecta");
+    if (query_contrasenia_borrar.rows.length === 0) {
+      return res.json("Usuario no encontrado");
     }
 
-  }catch (err){
+    const contrasenia_borrar = query_contrasenia_borrar.rows[0].contrasenia;
+
+    if (contrasenia_borrar === contrasenia) {
+
+      await pool.query(`
+        delete from usuarios
+        where id = '${req.body.id}'`);
+
+      return res.json("Usuario eliminado");
+    } else {
+      return res.json("Contrasenia incorrecta");
+    }
+
+  } catch (err) {
     console.error(err);
     res.status(500).json({ error: "DB error" });
   }
 
 });
-*/
+
 
 export default router;
