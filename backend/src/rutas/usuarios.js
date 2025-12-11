@@ -3,8 +3,6 @@ import { pool } from "../../db.js";
 
 const router = express.Router();
 
-console.log("=> cargando router /usuarios");
-
 /*
 Registrarse
 body:
@@ -72,20 +70,53 @@ router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
 /*
 Editar perfil
 body:
-{"nombre": nombre,   
+{ "id": id,
+ "nombre": nombre,   
  "apellido": apellido,
  "mail": mail,
  "pais": pais,
  "nombreUsuario": nombreUsuario,
  "contrasenia": contasenia
 }
+*/
 
+router.put("/", async(req, res) => {
+  try{
+    let nuevoUsuario = req.body.usuario;
+    let nuevoNombre = req.body.nombre;
+    let nuevoApellido = req.body.apellido;
+    let nuevoMail = req.body.mail;
+    let nuevoPass = req.body.contrasenia;
+    let nuevoPais = req.body.pais;
 
-router.put("/:id", (req, res) => {
-  
+    const datos = await pool.query(`select * from usuarios
+                                    where id = '${req.body.id}'`);
+
+    const usuario = datos.rows[0];
+
+    if(nuevoUsuario === undefined) nuevoUsuario = usuario.usuario;
+    if(nuevoNombre === undefined) nuevoNombre = usuario.nombre;
+    if(nuevoApellido === undefined) nuevoApellido = usuario.apellido;
+    if(nuevoMail === undefined) nuevoMail = usuario.mail;
+    if(nuevoPass === undefined) nuevoPass = usuario.contrasenia;
+    if(nuevoPais === undefined) nuevoPais = usuario.pais;
+    
+    const query = `update usuarios set usuario = '${nuevoUsuario}', nombre = '${nuevoNombre}', apellido = '${nuevoApellido}', 
+                                   mail = '${nuevoMail}', contrasenia = '${nuevoPass}', pais = '${nuevoPais}' 
+                   where id = '${req.body.id}'`;
+    
+    await pool.query(query);
+
+    return res.json("Usuario actualizado");
+
+  }catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
+  }
+
 });
 
-
+/*
 Borrar perfil
 body:
 {
