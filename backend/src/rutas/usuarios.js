@@ -57,6 +57,11 @@ router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
   try{
     const queryContrasenia = await pool.query(`select contrasenia from usuarios
                                     where usuario = '${req.params.nombreUsuario}'`);
+
+    if (queryContrasenia.rows.length === 0) {
+      return res.json("Usuario no encontrado");
+    }
+    
     const contrasenia_login = queryContrasenia.rows[0].contrasenia;
 
     if(contrasenia_login === req.params.contrasenia){
