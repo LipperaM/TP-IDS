@@ -103,3 +103,15 @@ async function registrarse(event){
         console.log("Error:", err);
     }
 }
+
+function login(){
+    console.log("entre");
+
+    const usuario = document.getElementById("usuarioLogin").value;
+    const contrasenia = document.getElementById("contraLogin").value;
+
+    const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
+
+
+
+}

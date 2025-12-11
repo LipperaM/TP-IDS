@@ -101,20 +101,18 @@
         </div>
       
     <div id="modalLogin" class="modal"> 
-    <div class="modal-content">
-      <span id="closeLogin" class="close">&times;</span>
+      <div class="modal-content">
+        <span id="closeLogin" class="close">&times;</span>
         <div class="card-body">
-          <form>
             <div class="mb-3">
               <label class="form-label">Nombre de Usuario</label>
-              <input type="text" class="form-control">
+              <input id = "usuarioLogin" type="text" class="form-control">
             </div>
             <div class="mb-3">
               <label class="form-label">Contraseña</label>
-              <input type="password" class="form-control">
+              <input id = "contraLogin" type="password" class="form-control">
             </div>
-            <button class="boton">Iniciar Sesion</button>
-          </form>
+            <button type="button" class="boton" onclick="login()">Iniciar Sesion</button>
         </div>
       </div>
     </div>

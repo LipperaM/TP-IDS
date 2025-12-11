@@ -1,6 +1,7 @@
 @import url("../variables.css");
 
 .boton{
+  display: flex;
   background-color: var(--color-pricipal);
   color: white;
   padding: 8px 15px;
