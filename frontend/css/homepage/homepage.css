@@ -38,6 +38,17 @@
     padding-bottom: 10px;
 }
 
+.btn-primary {
+    background-color: var(--color-pricipal) !important;
+    border-color: var(--color-pricipal) !important;
+    border: none !important;
+
+    &:hover{
+        background-color: var(--color-secundario) !important;
+        color: black !important;
+    }
+}
+
 .date-time{
     margin: 0;
     font-size: 1rem;
