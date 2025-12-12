@@ -30,8 +30,7 @@ window.onclick = (e) => {
 
 async function registrarse(event){
     if (event) event.preventDefault(); 
-    console.log("Registrando...");
-
+    
     try{
         const usuario = document.getElementById("usuario");
         const nombre = document.getElementById("nombre");
@@ -119,7 +118,7 @@ async function login(){
     } else if (data === "Usuario no encontrado") {
         alert("El usuario no existe");
     } else {
-        console.log("LOGIN OK!", data);
+        console.log("Login OK!", data);
     }
 
     const divDatos = document.getElementById("datosUsuario");
@@ -166,7 +165,7 @@ async function login(){
 }
 
 async function eliminarUsuario(){
-    console.log("entre");
+
     try{
         const contrasenia = document.getElementById("contraElim");
         const id = document.getElementById("idUsuario");
@@ -190,3 +189,39 @@ async function eliminarUsuario(){
     }
     
 }
+
+async function editarUsuario(){
+    try{
+        const id = document.getElementById("idUsuario");
+        const usuarioNuevo = document.getElementById("editUsuario");
+        const nombreNuevo = document.getElementById("editNombre");
+        const apellidoNuevo = document.getElementById("editApellido");
+        const paisNuevo = document.getElementById("editPais");
+        const mailNuevo = document.getElementById("editMail");
+        console.log(mailNuevo.textContent);
+        const contraseniaNuevo = document.getElementById("editPass");
+
+        const response = await fetch("http://localhost:3000/usuarios", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id: id.textContent,
+                usuario: usuarioNuevo.value,
+                nombre: nombreNuevo.value,
+                apellido: apellidoNuevo.value,
+                mail: mailNuevo.value,
+                pais: paisNuevo.value,
+                contrasenia: contraseniaNuevo.value,
+            })
+        });
+
+        const post = await response.json();
+        console.log(post);
+
+        modalEditar.style.display = "none";
+
+    }catch(err){
+        console.log("Error:", err);
+    }
+}
+

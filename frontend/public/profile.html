@@ -17,7 +17,7 @@
   <body>
 
     <nav class="navbar">
-      <a class="navbar-brand" href="./index.html">Home</a>
+      <a class="navbar-brand" href="./index.html">Homepage</a>
 
       <form class="d-flex" role="search">
         <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
@@ -118,37 +118,47 @@
     </div>
 
     <div id="modalEditar" class="modal"> 
-      <div class="modal-content">
-        <span id="closeEditar" class="close">&times;</span>
-          <form>
-            <div class="mb-3">
-              <label class="form-label">Editar nombre</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar apellido</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar mail</label>
-              <input type="email" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar País</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar Nombre de Usuario</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar Contraseña</label>
-              <input type="password" class="form-control" />
-            </div>
-            <button type="submit" class="boton">Aplicar</button>
-          </form>
+  <div class="modal-content">
+    <span id="closeEditar" class="close">&times;</span>
+
+    <div class="card-body">
+
+      <div class="mb-3">
+        <label class="form-label">Editar nombre</label>
+        <input type="text" id="editNombre" class="form-control" />
       </div>
+
+      <div class="mb-3">
+        <label class="form-label">Editar apellido</label>
+        <input type="text" id="editApellido" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Editar mail</label>
+        <input type="email" id="editMail" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Editar País</label>
+        <input type="text" id="editPais" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Editar Nombre de Usuario</label>
+        <input type="text" id="editUsuario" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Editar Contraseña</label>
+        <input type="password" id="editPass" class="form-control" />
+      </div>
+
+      <button type="button" class="boton" onclick="editarUsuario()">Aplicar</button>
+
     </div>
+
+  </div>
+</div>
   
 
     <div id="modalEliminar" class="modal"> 

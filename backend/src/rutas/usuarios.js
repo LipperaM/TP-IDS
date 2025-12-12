@@ -94,12 +94,12 @@ router.put("/", async(req, res) => {
 
     const usuario = datos.rows[0];
 
-    if(nuevoUsuario === undefined) nuevoUsuario = usuario.usuario;
-    if(nuevoNombre === undefined) nuevoNombre = usuario.nombre;
-    if(nuevoApellido === undefined) nuevoApellido = usuario.apellido;
-    if(nuevoMail === undefined) nuevoMail = usuario.mail;
-    if(nuevoPass === undefined) nuevoPass = usuario.contrasenia;
-    if(nuevoPais === undefined) nuevoPais = usuario.pais;
+    if(nuevoUsuario === "") nuevoUsuario = usuario.usuario;
+    if(nuevoNombre === "") nuevoNombre = usuario.nombre;
+    if(nuevoApellido === "") nuevoApellido = usuario.apellido;
+    if(nuevoMail === "") nuevoMail = usuario.mail;
+    if(nuevoPass === "") nuevoPass = usuario.contrasenia;
+    if(nuevoPais === "") nuevoPais = usuario.pais;
     
     const query = `update usuarios set usuario = '${nuevoUsuario}', nombre = '${nuevoNombre}', apellido = '${nuevoApellido}', 
                                    mail = '${nuevoMail}', contrasenia = '${nuevoPass}', pais = '${nuevoPais}' 
