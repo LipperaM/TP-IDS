@@ -164,14 +164,18 @@ body:
 
 router.delete("/", async(req, res) => {
     try {
+    //Validaciones
     const contrasenia  = req.body.contrasenia;
-
+    
     const query_contrasenia_borrar = await pool.query(`
       select contrasenia from usuarios
       where id = '${req.body.id}'`);
 
     if (query_contrasenia_borrar.rows.length === 0) {
       return res.json("Usuario no encontrado");
+    }
+    if(contrasenia === ""){
+      return res.json("Todos los campos son obligatorios");
     }
 
     const contrasenia_borrar = query_contrasenia_borrar.rows[0].contrasenia;

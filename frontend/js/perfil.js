@@ -225,6 +225,15 @@ async function eliminarUsuario(){
 
         const borrar = await response.json();
         console.log(borrar);
+
+        if (borrar === "Contrasenia incorrecta") {
+            alert("Contraseña incorrecta");
+            return;
+        }
+        if (borrar === "Todos los campos son obligatorios") {
+            alert("Todos los campos son obligatorios");
+            return;
+        }
         
         window.location.reload();
 
