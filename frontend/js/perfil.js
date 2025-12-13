@@ -20,6 +20,8 @@ if (openModalRegistro) openModalRegistro.onclick = () => modalRegistro.style.dis
 if (openModalLogin) openModalLogin.onclick = () => modalLogin.style.display = "flex";
 if (openModalEliminar) openModalEliminar.onclick = () => modalEliminar.style.display = "flex";
 
+document.getElementById("openModalEliminar").classList.add("hidden");
+document.getElementById("openModalEditar").classList.add("hidden");
 
 window.onclick = (e) => {
     if (e.target === modalRegistro) modalRegistro.style.display = "none";
@@ -27,6 +29,8 @@ window.onclick = (e) => {
     if (e.target === modalEliminar) modalEliminar.style.display = "none";
     if (e.target === modalEditar) modalEditar.style.display = "none";
 };
+
+
 
 async function registrarse(event){
     if (event) event.preventDefault(); 
@@ -96,6 +100,8 @@ async function registrarse(event){
         modalRegistro.style.display = "none";
         openModalLogin.style.display = "none";
         openModalRegistro.style.display = "none";
+        document.getElementById("openModalEliminar").classList.remove("hidden");
+        document.getElementById("openModalEditar").classList.remove("hidden");
 
     }catch(err){
         console.log("Error:", err);
@@ -163,6 +169,9 @@ async function login(){
         modalLogin.style.display = "none";
         openModalLogin.style.display = "none";
         openModalRegistro.style.display = "none";
+        document.getElementById("openModalEliminar").classList.remove("hidden");
+        document.getElementById("openModalEditar").classList.remove("hidden");
+
     }catch(err){
         console.log("Error:", err);
     }
