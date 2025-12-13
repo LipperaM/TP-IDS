@@ -13,7 +13,7 @@ async function cargarPosts() {
       card.innerHTML = `
         <div class="card-body">
           <h5 class="card-title">@${post.usuario}</h5>
-          <span class="category-label badge text-bg-secondary">#Categoria${post.id_categoria}</span>
+          <span class="category-label badge text-bg-secondary">#${post.categoria}</span>
           <p class="card-text">${post.texto}</p>
         </div>
         <div class="post-actions">
