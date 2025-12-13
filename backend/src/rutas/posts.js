@@ -22,7 +22,10 @@ router.post("/", async function(req, res) {
 router.get("/", async function(req, res) {
   try {
     const result = await pool.query(
-      "SELECT id, id_usuario, texto, imagen_url, id_categoria, creado_en FROM posts ORDER BY creado_en DESC"
+      `SELECT posts.id, posts.texto, posts.imagen_url, posts.id_categoria, posts.creado_en, usuarios.usuario 
+       FROM posts 
+       JOIN usuarios ON posts.id_usuario = usuarios.id
+       ORDER BY posts.creado_en DESC`
     );
     res.json(result.rows);
   } catch (err) {
