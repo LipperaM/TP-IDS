@@ -18,14 +18,43 @@ body:
 
 router.post("/", async(req, res) => {
   try{
-    //Validacion de datos despues lo agrego
+    //Validaciones
+    const query_verificacion_usuario = await pool.query(`select * from usuarios where usuario = '${req.body.usuario}'`);
+    const query_verificacion_mail = await pool.query(`select * from usuarios where mail = '${req.body.mail}'`);
+
+    let verificacionUsuario = req.body.usuario;
+    let verificacionNombre = req.body.nombre;
+    let verificacionApellido = req.body.apellido;
+    let verificacionMail = req.body.mail;
+    let verificacionPass = req.body.contrasenia;
+    let verificacionPais = req.body.pais;
+    let verificacionEquipo = req.body.equipo;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(verificacionUsuario === "" || verificacionNombre === "" || verificacionApellido === "" || verificacionMail === "" || verificacionPass === "" || verificacionPais === "" || verificacionEquipo === ""){
+      return res.json("Todos los campos son obligatorios");
+    }
+    if(query_verificacion_usuario.rows.length > 0){
+      return res.json("El usuario ya existe");
+    }
+    if(query_verificacion_mail.rows.length > 0){
+      return res.json("El mail ya fue registrado");
+    }
+    if(verificacionPass.length < 8){
+      return res.json("La contraseña debe tener al menos 8 caracteres");
+    }
+    if(!emailRegex.test(verificacionMail)){
+      return res.json("Formato de mail invalido");
+    }
+    else{
+
     const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) 
                    values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', 'a', '${req.body.pais}', '${req.body.equipo}')`;
 
     await pool.query(query);
     
     return res.status(201).json({ ok: true });
-
+    }
   }catch(err){
     console.error("SQL ERROR:", err);
     res.status(500).json({ error: "DB error", details: err.message });

@@ -61,7 +61,30 @@ async function registrarse(event){
         const post = await response.json();
         console.log(post);
 
-        if (!post.ok) return;
+        if (post === "El usuario ya existe") {
+            alert("El usuario ya existe");
+            return;
+        }
+        if (post === "El mail ya fue registrado") {
+            alert("El mail ya fue registrado");
+            return;
+        }
+        if (post === "Todos los campos son obligatorios") {
+            alert("Todos los campos son obligatorios");
+            return;
+        }
+        if (post === "La contraseña debe tener al menos 8 caracteres") {
+            alert("La contraseña debe tener al menos 8 caracteres");
+            return;
+        }
+        if (post === "Formato de mail invalido") {
+            alert("Formato de mail invalido");
+            return;
+        }
+        if (!post.ok) {
+            alert("Error al registrarse");
+            return;
+        }
 
         const divDatos = document.getElementById("datosUsuario");
         divDatos.innerHTML = "";
