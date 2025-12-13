@@ -1,4 +1,4 @@
-.PHONY: up down restart logs build ps local prod
+.PHONY: logs build ps local local-down local-restart prod prod-down nginx postgres api
 
 
 # Levantar entorno local sin tunel Cloudflare para desarrollo
@@ -6,7 +6,7 @@ local:
 	docker compose --profile dev up -d
 
 local-down:
-	docker compose down
+	docker compose --profile dev down
 
 local-restart:
 	docker compose --profile dev restart
@@ -32,7 +32,10 @@ ps:
 
 # Servicios individuales
 nginx:
-	docker compose up -d nginx
+	docker compose --profile dev up -d nginx
 
 postgres:
-	docker compose up -d postgres
+	docker compose --profile dev up -d postgres
+
+api:
+	docker compose --profile dev up -d api
