@@ -103,65 +103,69 @@ async function registrarse(event){
 }
 
 async function login(){
-    const usuario = document.getElementById("usuarioLogin").value;
-    const contrasenia = document.getElementById("contraLogin").value;
+    try{
+        const usuario = document.getElementById("usuarioLogin").value;
+        const contrasenia = document.getElementById("contraLogin").value;
 
-    const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
+        const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
 
-    const response = await fetch(url, { method: "GET" });
-    const data = await response.json();
+        const response = await fetch(url, { method: "GET" });
+        const data = await response.json();
 
-    console.log("Respuesta del login:", data);
+        console.log("Respuesta del login:", data);
 
-    if (data === "Contrasenia incorrecta") {
-        alert("Contraseña incorrecta");
-    } else if (data === "Usuario no encontrado") {
-        alert("El usuario no existe");
-    } else {
-        console.log("Login OK!", data);
+        if (data === "Contrasenia incorrecta") {
+            alert("Contraseña incorrecta");
+        } else if (data === "Usuario no encontrado") {
+            alert("El usuario no existe");
+        } else {
+            console.log("Login OK!", data);
+        }
+
+        const divDatos = document.getElementById("datosUsuario");
+        divDatos.innerHTML = "";
+
+        const contenedor = document.createElement("div");
+        contenedor.className = "datos";
+
+        const hUsuario = document.createElement("h5");
+        hUsuario.className = "usuario";
+        hUsuario.textContent = data.usuario;
+
+        const infoExtra = document.createElement("div");
+        infoExtra.className = "info-extra";
+
+        const hEquipo = document.createElement("h5");
+        hEquipo.textContent = data.equipo;
+
+        const hPais = document.createElement("h5");
+        hPais.textContent = data.pais;
+
+        const hid = document.createElement("h5");
+        hid.id = "idUsuario"
+        hid.textContent = `${data.id}`;
+        hid.style.display = "none";
+
+        const btnEditar = document.createElement("button");
+        btnEditar.className = "boton";
+        btnEditar.textContent = "Editar Perfil";
+        btnEditar.onclick = () => modalEditar.style.display = "flex";
+
+        infoExtra.appendChild(hEquipo);
+        infoExtra.appendChild(hPais);
+        infoExtra.appendChild(hid);
+        infoExtra.appendChild(btnEditar);
+
+        contenedor.appendChild(hUsuario);
+        contenedor.appendChild(infoExtra);
+        divDatos.appendChild(contenedor);
+
+        modalLogin.style.display = "none";
+        openModalLogin.style.display = "none";
+        openModalRegistro.style.display = "none";
+    }catch(err){
+        console.log("Error:", err);
     }
-
-    const divDatos = document.getElementById("datosUsuario");
-    divDatos.innerHTML = "";
-
-    const contenedor = document.createElement("div");
-    contenedor.className = "datos";
-
-    const hUsuario = document.createElement("h5");
-    hUsuario.className = "usuario";
-    hUsuario.textContent = data.usuario;
-
-    const infoExtra = document.createElement("div");
-    infoExtra.className = "info-extra";
-
-    const hEquipo = document.createElement("h5");
-    hEquipo.textContent = data.equipo;
-
-    const hPais = document.createElement("h5");
-    hPais.textContent = data.pais;
-
-    const hid = document.createElement("h5");
-    hid.id = "idUsuario"
-    hid.textContent = `${data.id}`;
-    hid.style.display = "none";
-
-    const btnEditar = document.createElement("button");
-    btnEditar.className = "boton";
-    btnEditar.textContent = "Editar Perfil";
-    btnEditar.onclick = () => modalEditar.style.display = "flex";
-
-    infoExtra.appendChild(hEquipo);
-    infoExtra.appendChild(hPais);
-    infoExtra.appendChild(hid);
-    infoExtra.appendChild(btnEditar);
-
-    contenedor.appendChild(hUsuario);
-    contenedor.appendChild(infoExtra);
-    divDatos.appendChild(contenedor);
-
-    modalLogin.style.display = "none";
-    openModalLogin.style.display = "none";
-    openModalRegistro.style.display = "none";
 }
 
 async function eliminarUsuario(){
@@ -224,4 +228,3 @@ async function editarUsuario(){
         console.log("Error:", err);
     }
 }
-
