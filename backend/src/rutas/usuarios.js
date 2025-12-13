@@ -71,6 +71,13 @@ body:
 
 router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
   try{
+    //Validaciones
+    let verificacionUsuario = req.params.nombreUsuario;
+    
+     if(verificacionUsuario === ""){
+      return res.json("Ingrese el nombre de usuario");
+    }
+
     const queryContrasenia = await pool.query(`select contrasenia from usuarios
                                     where usuario = '${req.params.nombreUsuario}'`);
 
@@ -122,7 +129,8 @@ router.put("/", async(req, res) => {
                                     where id = '${req.body.id}'`);
 
     const usuario = datos.rows[0];
-
+    
+    //Validaciones (si lo manda vacio no lo actualizo)
     if(nuevoUsuario === "") nuevoUsuario = usuario.usuario;
     if(nuevoNombre === "") nuevoNombre = usuario.nombre;
     if(nuevoApellido === "") nuevoApellido = usuario.apellido;

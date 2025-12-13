@@ -136,6 +136,11 @@ async function login(){
         const usuario = document.getElementById("usuarioLogin").value;
         const contrasenia = document.getElementById("contraLogin").value;
 
+        if (!usuario || !contrasenia) {
+            alert("Todos los campos son obligatorios");
+            return;
+        }
+
         const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
 
         const response = await fetch(url, { method: "GET" });
@@ -145,9 +150,13 @@ async function login(){
 
         if (data === "Contrasenia incorrecta") {
             alert("Contraseña incorrecta");
-        } else if (data === "Usuario no encontrado") {
+            return;
+        }
+        if (data === "Usuario no encontrado") {
             alert("El usuario no existe");
-        } else {
+            return;
+        }
+        else {
             console.log("Login OK!", data);
         }
 
@@ -201,7 +210,6 @@ async function login(){
 }
 
 async function eliminarUsuario(){
-
     try{
         const contrasenia = document.getElementById("contraElim");
         const id = document.getElementById("idUsuario");
