@@ -104,6 +104,27 @@ CREATE TABLE public.tabla_posiciones (
     CONSTRAINT tabla_posiciones_id_equipo_fkey FOREIGN KEY (id_equipo) REFERENCES public.equipos(id)
 );
 
+-- Datos mock para pruebas
+
+-- Categorías
+INSERT INTO public.categorias (nombre) VALUES 
+('Champions'),
+('Libertadores'),
+('Liga Profesional');
+
+-- Usuarios mock
+INSERT INTO public.usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) VALUES 
+('JorgeVarsky23', 'Jorge', 'Varsky', 'varsky@mail.com', 'pass123', 'https://ejemplo.com/foto1.jpg', 'Argentina', 'River Plate'),
+('Ronaldo', 'Cristiano', 'Ronaldo', 'cr7@mail.com', 'pass123', 'https://ejemplo.com/foto2.jpg', 'Portugal', 'Al Nassr'),
+('MoristeEnMadrid420', 'Juan', 'Perez', 'juan@mail.com', 'pass123', 'https://ejemplo.com/foto3.jpg', 'Argentina', 'Boca Juniors');
+
+-- Posts mock
+INSERT INTO public.posts (id_usuario, texto, id_categoria, creado_en) VALUES 
+(1, 'Allí la tiene Messi... ¡Messi, Messi, Messi! ¡Se va Messi, se va Messi, se va Messi! ¡Qué grande sos, Messi! ¡Genio, genio, genio! ¡Ta-ta-ta-ta-ta-ta-ta-ta...! ¡Gooooool! ¡Gooooool! ¡Quiero llorar! ¡Dios santo, viva el fútbol! ¡Golaaazo! ¡Golaaazo! ¡Golaaazo!', 1, '2024-06-20 14:30:00'),
+(2, 'Losh dosh.', 1, '2024-01-22 10:30:00'),
+(3, 'Increíble partido hoy, no puedo creer que ganamos así en el último minuto. Este equipo tiene corazón!', 1, '2024-12-11 20:15:00'),
+(1, 'La final de la Libertadores va a ser épica, no me la pierdo por nada del mundo', 2, '2024-12-10 18:45:00'),
+(2, 'SIUUUUU! Otro gol más para la colección', 3, '2024-12-09 16:20:00');
 --
 -- PostgreSQL database dump complete
 --
