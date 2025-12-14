@@ -22,7 +22,7 @@
           DB_PASSWORD: ${POSTGRES_PASSWORD}
           DB_NAME: ${POSTGRES_DB}
         ports:
-          - "3000:3000"
+          - "127.0.0.1:3000:3000"
         depends_on:
           - postgres
         restart: unless-stopped
@@ -37,10 +37,11 @@
           - ./frontend:/usr/share/nginx/html:ro
           - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
         ports:
-          - "80:80"
+          - "127.0.0.1:80:80"
         restart: unless-stopped
         networks:
           - fydem
+        profiles: ["dev", "prod"]
 
       postgres:
         image: postgres:18
@@ -53,10 +54,11 @@
           - pgdata:/var/lib/postgresql  
           - ./db/init:/docker-entrypoint-initdb.d
         ports:
-          - "5432:5432"
+          - "127.0.0.1:5432:5432"
         restart: unless-stopped
         networks:
           - fydem
+        profiles: ["dev", "prod"]
 
   networks:
     fydem:

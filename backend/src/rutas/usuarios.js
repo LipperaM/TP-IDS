@@ -12,7 +12,8 @@ body:
  "pais": pais,
  "equipo": equipo,
  "usuario": usuario,
- "contrasenia": contasenia
+ "contrasenia": contasenia,
+ "foto_url": foto_url
 }
 */
 
@@ -49,7 +50,7 @@ router.post("/", async(req, res) => {
     else{
 
     const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) 
-                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', 'a', '${req.body.pais}', '${req.body.equipo}')`;
+                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', '${req.body.foto_url}', '${req.body.pais}', '${req.body.equipo}')`;
 
     await pool.query(query);
     
@@ -89,7 +90,7 @@ router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
 
     if(contrasenia_login === req.params.contrasenia){
 
-      const queryDatos = await pool.query(`select id, usuario, equipo, pais from usuarios
+      const queryDatos = await pool.query(`select id, usuario, equipo, pais, foto_url from usuarios
                            where usuario = '${req.params.nombreUsuario}'`);
       
       return res.json(queryDatos.rows[0]); 
@@ -197,6 +198,5 @@ router.delete("/", async(req, res) => {
   }
 
 });
-
 
 export default router;

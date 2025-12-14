@@ -30,111 +30,10 @@ window.onclick = (e) => {
     if (e.target === modalEditar) modalEditar.style.display = "none";
 };
 
-
-
-async function registrarse(event){
-    if (event) event.preventDefault(); 
-    
+async function login(nombreUsuario, pass){
     try{
-        const usuario = document.getElementById("usuario");
-        const nombre = document.getElementById("nombre");
-        const apellido = document.getElementById("apellido");
-        const pais = document.getElementById("pais");
-        const equipo = document.getElementById("equipo");
-        const mail = document.getElementById("mail");
-        const contrasenia = document.getElementById("contrasenia");
-
-        const response = await fetch("http://localhost:3000/usuarios", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                usuario: usuario.value,
-                nombre: nombre.value,
-                apellido: apellido.value,
-                mail: mail.value,
-                pais: pais.value,
-                equipo: equipo.value,
-                contrasenia: contrasenia.value,
-            })
-        });
-
-        const post = await response.json();
-        console.log(post);
-
-        if (post === "El usuario ya existe") {
-            alert("El usuario ya existe");
-            return;
-        }
-        if (post === "El mail ya fue registrado") {
-            alert("El mail ya fue registrado");
-            return;
-        }
-        if (post === "Todos los campos son obligatorios") {
-            alert("Todos los campos son obligatorios");
-            return;
-        }
-        if (post === "La contraseña debe tener al menos 8 caracteres") {
-            alert("La contraseña debe tener al menos 8 caracteres");
-            return;
-        }
-        if (post === "Formato de mail invalido") {
-            alert("Formato de mail invalido");
-            return;
-        }
-        if (!post.ok) {
-            alert("Error al registrarse");
-            return;
-        }
-
-        const divDatos = document.getElementById("datosUsuario");
-        divDatos.innerHTML = "";
-
-        const contenedor = document.createElement("div");
-        contenedor.className = "datos";
-
-        const hUsuario = document.createElement("h5");
-        hUsuario.className = "usuario";
-        hUsuario.textContent = usuario.value;
-
-        const infoExtra = document.createElement("div");
-        infoExtra.className = "info-extra";
-
-        const hEquipo = document.createElement("h5");
-        hEquipo.textContent = equipo.value;
-
-        const hPais = document.createElement("h5");
-        hPais.textContent = pais.value;
-
-        
-        const btnEditar = document.createElement("button");
-        btnEditar.className = "boton";
-        btnEditar.textContent = "Editar Perfil";
-
-        btnEditar.onclick = () => modalEditar.style.display = "flex";
-
-        infoExtra.appendChild(hEquipo);
-        infoExtra.appendChild(hPais);
-        infoExtra.appendChild(btnEditar);
-
-        contenedor.appendChild(hUsuario);
-        contenedor.appendChild(infoExtra);
-        divDatos.appendChild(contenedor);
-
-        modalRegistro.style.display = "none";
-        openModalLogin.style.display = "none";
-        openModalRegistro.style.display = "none";
-        document.getElementById("openModalEliminar").classList.remove("hidden");
-        document.getElementById("openModalEditar").classList.remove("hidden");
-
-    }catch(err){
-        console.log("Error:", err);
-    }
-}
-
-async function login(){
-    try{
-        const usuario = document.getElementById("usuarioLogin").value;
-        const contrasenia = document.getElementById("contraLogin").value;
+        const usuario = nombreUsuario;
+        const contrasenia = pass;
 
         if (!usuario || !contrasenia) {
             alert("Todos los campos son obligatorios");
@@ -162,6 +61,15 @@ async function login(){
 
         const divDatos = document.getElementById("datosUsuario");
         divDatos.innerHTML = "";
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "datos-usuario";
+
+        const fotoUsuario = document.createElement("img");
+        fotoUsuario.className = "foto-perfil";
+        fotoUsuario.src = data.foto_url;
+        fotoUsuario.alt = "Foto de perfil";
+        fotoUsuario.width = 100;
 
         const contenedor = document.createElement("div");
         contenedor.className = "datos";
@@ -194,15 +102,85 @@ async function login(){
         infoExtra.appendChild(hid);
         infoExtra.appendChild(btnEditar);
 
+        wrapper.appendChild(fotoUsuario);
+        wrapper.appendChild(contenedor);
         contenedor.appendChild(hUsuario);
         contenedor.appendChild(infoExtra);
-        divDatos.appendChild(contenedor);
+        divDatos.appendChild(wrapper);
 
+        modalRegistro.style.display = "none";
         modalLogin.style.display = "none";
         openModalLogin.style.display = "none";
         openModalRegistro.style.display = "none";
         document.getElementById("openModalEliminar").classList.remove("hidden");
         document.getElementById("openModalEditar").classList.remove("hidden");
+
+    }catch(err){
+        console.log("Error:", err);
+    }
+}
+
+async function registrarse(event){
+    if (event) event.preventDefault(); 
+    
+    try{
+        const usuario = document.getElementById("usuario");
+        const nombre = document.getElementById("nombre");
+        const apellido = document.getElementById("apellido");
+        const pais = document.getElementById("pais");
+        const equipo = document.getElementById("equipo");
+        const mail = document.getElementById("mail");
+        const contrasenia = document.getElementById("contrasenia");
+        let foto_url = "foto";
+
+        if(equipo.value === "boca juniors"){
+            foto_url = "https://upload.wikimedia.org/wikipedia/commons/c/c9/Boca_escudo.png";
+        }
+
+        const response = await fetch("http://localhost:3000/usuarios", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                usuario: usuario.value,
+                nombre: nombre.value,
+                apellido: apellido.value,
+                mail: mail.value,
+                pais: pais.value,
+                equipo: equipo.value,
+                contrasenia: contrasenia.value,
+                foto_url: foto_url
+            })
+        });
+
+        const post = await response.json();
+        console.log(post);
+
+        if (post === "El usuario ya existe") {
+            alert("El usuario ya existe");
+            return;
+        }
+        if (post === "El mail ya fue registrado") {
+            alert("El mail ya fue registrado");
+            return;
+        }
+        if (post === "Todos los campos son obligatorios") {
+            alert("Todos los campos son obligatorios");
+            return;
+        }
+        if (post === "La contraseña debe tener al menos 8 caracteres") {
+            alert("La contraseña debe tener al menos 8 caracteres");
+            return;
+        }
+        if (post === "Formato de mail invalido") {
+            alert("Formato de mail invalido");
+            return;
+        }
+        if (!post.ok) {
+            alert("Error al registrarse");
+            return;
+        }
+
+        login(usuario.value, contrasenia.value);
 
     }catch(err){
         console.log("Error:", err);
