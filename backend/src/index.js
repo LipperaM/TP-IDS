@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import usuarios from "./rutas/usuarios.js";
 import posts from "./rutas/posts.js";
+import comentarios from "./rutas/comentarios.js";
+
 
 const app = express();
 app.use(cors());
@@ -17,6 +19,8 @@ app.get("/", (req, res) => {
 
 app.use("/usuarios", usuarios);
 app.use("/posts", posts);
+app.use("/comentarios", comentarios);
+
 
 app.listen(port, () => {
   console.log(`API escuchando en puerto ${port}`);
