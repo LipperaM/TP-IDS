@@ -11,7 +11,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
-console.log("CARGÓ INDEX NUEVO");
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("API funcionando");

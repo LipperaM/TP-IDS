@@ -2,7 +2,6 @@ document.querySelectorAll("form").forEach(form => {
     form.addEventListener("submit", e => e.preventDefault());
 });
 
-
 const modalRegistro = document.getElementById("modalRegistro");
 const modalLogin = document.getElementById("modalLogin");
 const modalEliminar = document.getElementById("modalEliminar");
@@ -21,6 +20,8 @@ if (openModalRegistro) openModalRegistro.onclick = () => modalRegistro.style.dis
 if (openModalLogin) openModalLogin.onclick = () => modalLogin.style.display = "flex";
 if (openModalEliminar) openModalEliminar.onclick = () => modalEliminar.style.display = "flex";
 
+document.getElementById("openModalEliminar").classList.add("hidden");
+document.getElementById("openModalEditar").classList.add("hidden");
 
 window.onclick = (e) => {
     if (e.target === modalRegistro) modalRegistro.style.display = "none";
@@ -29,10 +30,99 @@ window.onclick = (e) => {
     if (e.target === modalEditar) modalEditar.style.display = "none";
 };
 
+async function login(nombreUsuario, pass){
+    try{
+        const usuario = nombreUsuario;
+        const contrasenia = pass;
+
+        if (!usuario || !contrasenia) {
+            alert("Todos los campos son obligatorios");
+            return;
+        }
+
+        const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
+
+        const response = await fetch(url, { method: "GET" });
+        const data = await response.json();
+
+        console.log("Respuesta del login:", data);
+
+        if (data === "Contrasenia incorrecta") {
+            alert("Contraseña incorrecta");
+            return;
+        }
+        if (data === "Usuario no encontrado") {
+            alert("El usuario no existe");
+            return;
+        }
+        else {
+            console.log("Login OK!", data);
+        }
+
+        const divDatos = document.getElementById("datosUsuario");
+        divDatos.innerHTML = "";
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "datos-usuario";
+
+        const fotoUsuario = document.createElement("img");
+        fotoUsuario.className = "foto-perfil";
+        fotoUsuario.src = data.foto_url;
+        fotoUsuario.alt = "Foto de perfil";
+        fotoUsuario.width = 100;
+
+        const contenedor = document.createElement("div");
+        contenedor.className = "datos";
+
+        const hUsuario = document.createElement("h5");
+        hUsuario.className = "usuario";
+        hUsuario.textContent = data.usuario;
+
+        const infoExtra = document.createElement("div");
+        infoExtra.className = "info-extra";
+
+        const hEquipo = document.createElement("h5");
+        hEquipo.textContent = data.equipo;
+
+        const hPais = document.createElement("h5");
+        hPais.textContent = data.pais;
+
+        const hid = document.createElement("h5");
+        hid.id = "idUsuario"
+        hid.textContent = `${data.id}`;
+        hid.style.display = "none";
+
+        const btnEditar = document.createElement("button");
+        btnEditar.className = "boton";
+        btnEditar.textContent = "Editar Perfil";
+        btnEditar.onclick = () => modalEditar.style.display = "flex";
+
+        infoExtra.appendChild(hEquipo);
+        infoExtra.appendChild(hPais);
+        infoExtra.appendChild(hid);
+        infoExtra.appendChild(btnEditar);
+
+        wrapper.appendChild(fotoUsuario);
+        wrapper.appendChild(contenedor);
+        contenedor.appendChild(hUsuario);
+        contenedor.appendChild(infoExtra);
+        divDatos.appendChild(wrapper);
+
+        modalRegistro.style.display = "none";
+        modalLogin.style.display = "none";
+        openModalLogin.style.display = "none";
+        openModalRegistro.style.display = "none";
+        document.getElementById("openModalEliminar").classList.remove("hidden");
+        document.getElementById("openModalEditar").classList.remove("hidden");
+
+    }catch(err){
+        console.log("Error:", err);
+    }
+}
+
 async function registrarse(event){
     if (event) event.preventDefault(); 
-    console.log("Registrando...");
-
+    
     try{
         const usuario = document.getElementById("usuario");
         const nombre = document.getElementById("nombre");
@@ -41,6 +131,11 @@ async function registrarse(event){
         const equipo = document.getElementById("equipo");
         const mail = document.getElementById("mail");
         const contrasenia = document.getElementById("contrasenia");
+        let foto_url = "foto";
+
+        if(equipo.value === "boca juniors"){
+            foto_url = "https://upload.wikimedia.org/wikipedia/commons/c/c9/Boca_escudo.png";
+        }
 
         const response = await fetch("http://localhost:3000/usuarios", {
             method: "POST",
@@ -53,65 +148,110 @@ async function registrarse(event){
                 pais: pais.value,
                 equipo: equipo.value,
                 contrasenia: contrasenia.value,
+                foto_url: foto_url
             })
         });
 
         const post = await response.json();
         console.log(post);
 
-        if (!post.ok) return;
+        if (post === "El usuario ya existe") {
+            alert("El usuario ya existe");
+            return;
+        }
+        if (post === "El mail ya fue registrado") {
+            alert("El mail ya fue registrado");
+            return;
+        }
+        if (post === "Todos los campos son obligatorios") {
+            alert("Todos los campos son obligatorios");
+            return;
+        }
+        if (post === "La contraseña debe tener al menos 8 caracteres") {
+            alert("La contraseña debe tener al menos 8 caracteres");
+            return;
+        }
+        if (post === "Formato de mail invalido") {
+            alert("Formato de mail invalido");
+            return;
+        }
+        if (!post.ok) {
+            alert("Error al registrarse");
+            return;
+        }
 
-        const divDatos = document.getElementById("datosUsuario");
-        divDatos.innerHTML = "";
-
-        const contenedor = document.createElement("div");
-        contenedor.className = "datos";
-
-        const hUsuario = document.createElement("h5");
-        hUsuario.className = "usuario";
-        hUsuario.textContent = usuario.value;
-
-        const infoExtra = document.createElement("div");
-        infoExtra.className = "info-extra";
-
-        const hEquipo = document.createElement("h5");
-        hEquipo.textContent = equipo.value;
-
-        const hPais = document.createElement("h5");
-        hPais.textContent = pais.value;
-
-        
-        const btnEditar = document.createElement("button");
-        btnEditar.className = "boton";
-        btnEditar.textContent = "Editar Perfil";
-
-        btnEditar.onclick = () => modalEditar.style.display = "flex";
-
-        infoExtra.appendChild(hEquipo);
-        infoExtra.appendChild(hPais);
-        infoExtra.appendChild(btnEditar);
-
-        contenedor.appendChild(hUsuario);
-        contenedor.appendChild(infoExtra);
-        divDatos.appendChild(contenedor);
-
-        modalRegistro.style.display = "none";
-        openModalLogin.style.display = "none";
-        openModalRegistro.style.display = "none";
+        login(usuario.value, contrasenia.value);
 
     }catch(err){
         console.log("Error:", err);
     }
 }
 
-function login(){
-    console.log("entre");
+async function eliminarUsuario(){
+    try{
+        const contrasenia = document.getElementById("contraElim");
+        const id = document.getElementById("idUsuario");
+        console.log(id.textContent);
+        const response = await fetch("http://localhost:3000/usuarios", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id: id.textContent,
+                contrasenia: contrasenia.value
+            })
+        });
 
-    const usuario = document.getElementById("usuarioLogin").value;
-    const contrasenia = document.getElementById("contraLogin").value;
+        const borrar = await response.json();
+        console.log(borrar);
 
-    const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
+        if (borrar === "Contrasenia incorrecta") {
+            alert("Contraseña incorrecta");
+            return;
+        }
+        if (borrar === "Todos los campos son obligatorios") {
+            alert("Todos los campos son obligatorios");
+            return;
+        }
+        
+        window.location.reload();
 
+    }catch(err){
+        console.log("Error:", err);
+    }
+    
+}
 
+async function editarUsuario(){
+    try{
+        const id = document.getElementById("idUsuario");
+        const usuarioNuevo = document.getElementById("editUsuario");
+        const nombreNuevo = document.getElementById("editNombre");
+        const apellidoNuevo = document.getElementById("editApellido");
+        const paisNuevo = document.getElementById("editPais");
+        const mailNuevo = document.getElementById("editMail");
+        console.log(mailNuevo.textContent);
+        const contraseniaNuevo = document.getElementById("editPass");
 
+        const response = await fetch("http://localhost:3000/usuarios", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id: id.textContent,
+                usuario: usuarioNuevo.value,
+                nombre: nombreNuevo.value,
+                apellido: apellidoNuevo.value,
+                mail: mailNuevo.value,
+                pais: paisNuevo.value,
+                contrasenia: contraseniaNuevo.value,
+            })
+        });
+
+        const post = await response.json();
+        console.log(post);
+
+        modalEditar.style.display = "none";
+
+    }catch(err){
+        console.log("Error:", err);
+    }
 }
