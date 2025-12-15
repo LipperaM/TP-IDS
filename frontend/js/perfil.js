@@ -1,7 +1,8 @@
 document.querySelectorAll("form").forEach(form => {
-    form.addEventListener("submit", e => e.preventDefault());
+  form.addEventListener("submit", e => e.preventDefault());
 });
 
+/*MODALES*/
 const modalRegistro = document.getElementById("modalRegistro");
 const modalLogin = document.getElementById("modalLogin");
 const modalEliminar = document.getElementById("modalEliminar");
@@ -10,25 +11,111 @@ const modalEditar = document.getElementById("modalEditar");
 const openModalRegistro = document.getElementById("openModalRegistro");
 const openModalLogin = document.getElementById("openModalLogin");
 const openModalEliminar = document.getElementById("openModalEliminar");
+const openModalEditar = document.getElementById("openModalEditar");
 
 const closeRegistro = document.getElementById("closeRegistro");
 const closeLogin = document.getElementById("closeLogin");
 const closeEliminar = document.getElementById("closeEliminar");
 const closeEditar = document.getElementById("closeEditar");
 
+/* Abrir modales */
 if (openModalRegistro) openModalRegistro.onclick = () => modalRegistro.style.display = "flex";
 if (openModalLogin) openModalLogin.onclick = () => modalLogin.style.display = "flex";
 if (openModalEliminar) openModalEliminar.onclick = () => modalEliminar.style.display = "flex";
+if (openModalEditar) openModalEditar.onclick = () => modalEditar.style.display = "flex";
 
-document.getElementById("openModalEliminar").classList.add("hidden");
-document.getElementById("openModalEditar").classList.add("hidden");
+/* Cerrar modales */
+if (closeRegistro) closeRegistro.onclick = () => modalRegistro.style.display = "none";
+if (closeLogin) closeLogin.onclick = () => modalLogin.style.display = "none";
+if (closeEliminar) closeEliminar.onclick = () => modalEliminar.style.display = "none";
+if (closeEditar) closeEditar.onclick = () => modalEditar.style.display = "none";
 
+/* Click fuera del modal */
 window.onclick = (e) => {
-    if (e.target === modalRegistro) modalRegistro.style.display = "none";
-    if (e.target === modalLogin) modalLogin.style.display = "none";
-    if (e.target === modalEliminar) modalEliminar.style.display = "none";
-    if (e.target === modalEditar) modalEditar.style.display = "none";
+  if (e.target === modalRegistro) modalRegistro.style.display = "none";
+  if (e.target === modalLogin) modalLogin.style.display = "none";
+  if (e.target === modalEliminar) modalEliminar.style.display = "none";
+  if (e.target === modalEditar) modalEditar.style.display = "none";
 };
+
+/* Ocultar botones al inicio */
+if (openModalEliminar) openModalEliminar.classList.add("hidden");
+if (openModalEditar) openModalEditar.classList.add("hidden");
+
+/*MOSTRAR DATOS DEL USUARIO */
+function mostrarDatosUsuario(data) {
+    const divDatos = document.getElementById("datosUsuario");
+    divDatos.innerHTML = "";
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "datos-usuario";
+
+    const fotoUsuario = document.createElement("img");
+    fotoUsuario.className = "foto-perfil";
+    fotoUsuario.src = data.escudo_url || "img/default-avatar.png";
+    fotoUsuario.alt = "Foto de perfil";
+    fotoUsuario.width = 90;
+
+    const contenedor = document.createElement("div");
+    contenedor.className = "datos";
+
+    const hUsuario = document.createElement("h5");
+    hUsuario.className = "usuario";
+    hUsuario.textContent = data.usuario;
+
+    const infoExtra = document.createElement("div");
+    infoExtra.className = "info-extra";
+
+    const hEquipo = document.createElement("h5");
+    hEquipo.textContent = data.nombre;
+
+    const hPais = document.createElement("h5");
+    hPais.textContent = data.pais;
+
+    const btnEditar = document.createElement("button");
+    btnEditar.className = "boton";
+    btnEditar.textContent = "Editar Perfil";
+    btnEditar.onclick = () => modalEditar.style.display = "flex";
+
+    infoExtra.appendChild(hEquipo);
+    infoExtra.appendChild(hPais);
+    infoExtra.appendChild(btnEditar);
+
+    contenedor.appendChild(hUsuario);
+    contenedor.appendChild(infoExtra);
+
+    wrapper.appendChild(fotoUsuario);
+    wrapper.appendChild(contenedor);
+
+    divDatos.appendChild(wrapper);
+
+    /* UI logged */
+    if (openModalRegistro) openModalRegistro.style.display = "none";
+    if (openModalLogin) openModalLogin.style.display = "none";
+    if (openModalEliminar) openModalEliminar.classList.remove("hidden");
+    if (openModalEditar) openModalEditar.classList.remove("hidden");
+}
+
+/*SESIÓN PERSISTENTE*/
+async function verificarSesion() {
+  const id = localStorage.getItem("idUsuario");
+  if (!id) return;
+
+  try {
+    const response = await fetch(`http://localhost:3000/usuarios/${id}`);
+    const data = await response.json();
+
+    if (!data || data.error) {
+      localStorage.removeItem("idUsuario");
+      return;
+    }
+
+    mostrarDatosUsuario(data);
+
+  } catch (err) {
+    console.error("Error al verificar sesión:", err);
+  }
+}
 
 async function login(nombreUsuario, pass){
     try{
@@ -59,67 +146,17 @@ async function login(nombreUsuario, pass){
             console.log("Login OK!", data);
         }
 
-        const divDatos = document.getElementById("datosUsuario");
-        divDatos.innerHTML = "";
+        localStorage.setItem("idUsuario", data.id);
 
-        const wrapper = document.createElement("div");
-        wrapper.className = "datos-usuario";
-
-        const fotoUsuario = document.createElement("img");
-        fotoUsuario.className = "foto-perfil";
-        fotoUsuario.src = data.escudo_url;
-        fotoUsuario.alt = "Foto de perfil";
-        fotoUsuario.width = 90;
-
-        const contenedor = document.createElement("div");
-        contenedor.className = "datos";
-
-        const hUsuario = document.createElement("h5");
-        hUsuario.className = "usuario";
-        hUsuario.textContent = data.usuario;
-
-        const infoExtra = document.createElement("div");
-        infoExtra.className = "info-extra";
-
-        const hEquipo = document.createElement("h5");
-        hEquipo.textContent = data.nombre;
-
-        const hPais = document.createElement("h5");
-        hPais.textContent = data.pais;
-
-        const hid = document.createElement("h5");
-        hid.id = "idUsuario"
-        hid.textContent = `${data.id}`;
-        hid.style.display = "none";
-
-        const btnEditar = document.createElement("button");
-        btnEditar.className = "boton";
-        btnEditar.textContent = "Editar Perfil";
-        btnEditar.onclick = () => modalEditar.style.display = "flex";
-
-        infoExtra.appendChild(hEquipo);
-        infoExtra.appendChild(hPais);
-        infoExtra.appendChild(hid);
-        infoExtra.appendChild(btnEditar);
-
-        wrapper.appendChild(fotoUsuario);
-        wrapper.appendChild(contenedor);
-        contenedor.appendChild(hUsuario);
-        contenedor.appendChild(infoExtra);
-        divDatos.appendChild(wrapper);
-
-        modalRegistro.style.display = "none";
         modalLogin.style.display = "none";
-        openModalLogin.style.display = "none";
-        openModalRegistro.style.display = "none";
-        document.getElementById("openModalEliminar").classList.remove("hidden");
-        document.getElementById("openModalEditar").classList.remove("hidden");
+        mostrarDatosUsuario(data);
 
     }catch(err){
         console.log("Error:", err);
     }
 }
 
+/*REGISTRO*/
 async function registrarse(event){
     if (event) event.preventDefault(); 
     
@@ -183,16 +220,17 @@ async function registrarse(event){
     }
 }
 
+/*ELIMINAR USUARIO*/
 async function eliminarUsuario(){
     try{
         const contrasenia = document.getElementById("contraElim");
-        const id = document.getElementById("idUsuario");
-        console.log(id.textContent);
+        const id = localStorage.getItem("idUsuario");
+        console.log(id);
         const response = await fetch("http://localhost:3000/usuarios", {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                id: id.textContent,
+                id: id,
                 contrasenia: contrasenia.value
             })
         });
@@ -209,6 +247,7 @@ async function eliminarUsuario(){
             return;
         }
         
+        localStorage.removeItem("idUsuario");
         window.location.reload();
 
     }catch(err){
@@ -217,9 +256,10 @@ async function eliminarUsuario(){
     
 }
 
+/*EDITAR USUARIO*/
 async function editarUsuario(){
     try{
-        const id = document.getElementById("idUsuario");
+        const id = localStorage.getItem("idUsuario");
         const usuarioNuevo = document.getElementById("editUsuario");
         const nombreNuevo = document.getElementById("editNombre");
         const apellidoNuevo = document.getElementById("editApellido");
@@ -232,7 +272,7 @@ async function editarUsuario(){
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                id: id.textContent,
+                id: id,
                 usuario: usuarioNuevo.value,
                 nombre: nombreNuevo.value,
                 apellido: apellidoNuevo.value,
@@ -246,12 +286,14 @@ async function editarUsuario(){
         console.log(post);
 
         modalEditar.style.display = "none";
+        verificarSesion();
 
     }catch(err){
         console.log("Error:", err);
     }
 }
 
+/*TRAER EQUIPOS*/
 async function getEquipos() {
     const url = "http://localhost:3000/equipos";
 
@@ -269,3 +311,9 @@ async function getEquipos() {
     });
 
 }
+
+/*AL ABRIR LA PAGINA*/
+document.addEventListener("DOMContentLoaded", () => {
+  verificarSesion();
+  getEquipos();
+});
