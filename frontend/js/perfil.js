@@ -7,6 +7,7 @@ const modalRegistro = document.getElementById("modalRegistro");
 const modalLogin = document.getElementById("modalLogin");
 const modalEliminar = document.getElementById("modalEliminar");
 const modalEditar = document.getElementById("modalEditar");
+const modalPost = document.getElementById("modal");
 
 const openModalRegistro = document.getElementById("openModalRegistro");
 const openModalLogin = document.getElementById("openModalLogin");
@@ -19,27 +20,28 @@ const closeLogin = document.getElementById("closeLogin");
 const closeEliminar = document.getElementById("closeEliminar");
 const closeEditar = document.getElementById("closeEditar");
 
-/* Abrir modales */
+/*ABRIR MODALES*/
 if (openModalRegistro) openModalRegistro.onclick = () => modalRegistro.style.display = "flex";
 if (openModalLogin) openModalLogin.onclick = () => modalLogin.style.display = "flex";
 if (openModalEliminar) openModalEliminar.onclick = () => modalEliminar.style.display = "flex";
 if (openModalEditar) openModalEditar.onclick = () => modalEditar.style.display = "flex";
 
-/* Cerrar modales */
+/*CERRAR MODALES*/
 if (closeRegistro) closeRegistro.onclick = () => modalRegistro.style.display = "none";
 if (closeLogin) closeLogin.onclick = () => modalLogin.style.display = "none";
 if (closeEliminar) closeEliminar.onclick = () => modalEliminar.style.display = "none";
 if (closeEditar) closeEditar.onclick = () => modalEditar.style.display = "none";
 
-/* Click fuera del modal */
+/*CLICK FUERA DEL MODAL*/
 window.onclick = (e) => {
   if (e.target === modalRegistro) modalRegistro.style.display = "none";
   if (e.target === modalLogin) modalLogin.style.display = "none";
   if (e.target === modalEliminar) modalEliminar.style.display = "none";
   if (e.target === modalEditar) modalEditar.style.display = "none";
+  if (e.target === modalPost) modalPost.style.display = "none";
 };
 
-/* Ocultar botones al inicio */
+/*OCULTAR BOTONES AL INICIO*/
 if (openModalEliminar) openModalEliminar.classList.add("hidden");
 if (openModalEditar) openModalEditar.classList.add("hidden");
 if (cerrarSesion) cerrarSesion.classList.add("hidden");
@@ -91,7 +93,6 @@ function mostrarDatosUsuario(data) {
 
     divDatos.appendChild(wrapper);
 
-    /* UI logged */
     if (openModalRegistro) openModalRegistro.style.display = "none";
     if (openModalLogin) openModalLogin.style.display = "none";
     if (openModalEliminar) openModalEliminar.classList.remove("hidden");
@@ -120,6 +121,7 @@ async function verificarSesion() {
   }
 }
 
+/*LOGIN*/
 async function login(nombreUsuario, pass){
     try{
         const usuario = nombreUsuario;
@@ -315,6 +317,7 @@ async function getEquipos() {
 
 }
 
+/*LOG OUT*/
 function logOut(){
     localStorage.removeItem("idUsuario");
     window.location.reload();
