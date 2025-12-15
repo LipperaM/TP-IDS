@@ -11,6 +11,7 @@ const modalEditar = document.getElementById("modalEditar");
 const openModalRegistro = document.getElementById("openModalRegistro");
 const openModalLogin = document.getElementById("openModalLogin");
 const openModalEliminar = document.getElementById("openModalEliminar");
+const cerrarSesion = document.getElementById("logout");
 const openModalEditar = document.getElementById("openModalEditar");
 
 const closeRegistro = document.getElementById("closeRegistro");
@@ -41,6 +42,7 @@ window.onclick = (e) => {
 /* Ocultar botones al inicio */
 if (openModalEliminar) openModalEliminar.classList.add("hidden");
 if (openModalEditar) openModalEditar.classList.add("hidden");
+if (cerrarSesion) cerrarSesion.classList.add("hidden");
 
 /*MOSTRAR DATOS DEL USUARIO */
 function mostrarDatosUsuario(data) {
@@ -93,6 +95,7 @@ function mostrarDatosUsuario(data) {
     if (openModalRegistro) openModalRegistro.style.display = "none";
     if (openModalLogin) openModalLogin.style.display = "none";
     if (openModalEliminar) openModalEliminar.classList.remove("hidden");
+    if (cerrarSesion) cerrarSesion.classList.remove("hidden");
     if (openModalEditar) openModalEditar.classList.remove("hidden");
 }
 
@@ -310,6 +313,11 @@ async function getEquipos() {
         select.appendChild(option);
     });
 
+}
+
+function logOut(){
+    localStorage.removeItem("idUsuario");
+    window.location.reload();
 }
 
 /*AL ABRIR LA PAGINA*/
