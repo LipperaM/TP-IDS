@@ -7,6 +7,7 @@ function crearPostBox() {
     const postsContainer = document.getElementById("post-container");
     const categoriaBtn = document.getElementById("categoria-btn");
 
+    // funcionalidad del modal
     openModal.onclick = () => {
         modal.style.display = "flex";
     };
@@ -19,16 +20,17 @@ function crearPostBox() {
         categoriaBtn.classList.add("btn-secondary");
     };
 
+    //boton de postear
     postBtn.onclick = () => {
         const text = postText.value.trim();
         const categoriaTexto = categoriaBtn.textContent.trim();
-
+        //chequear si el usuario escribio algo en el campo de texto
         if (text === "") {
             alert("Por favor escribe algo en tu post");
             postText.focus();
             return;
         }
-
+        //chequeo si selecciono una categoria
         if (categoriaTexto === "Categoria") {
             alert("⚠️ Debes seleccionar una categoría antes de postear");
             categoriaBtn.classList.remove("btn-secondary");
@@ -36,6 +38,7 @@ function crearPostBox() {
             return;
         }
 
+        // crear el nuevo post y agregarlo al contenedor
         const nuevoPost = document.createElement("div");
         nuevoPost.className = "card w-75 mb-3";
         nuevoPost.innerHTML = `
@@ -66,7 +69,7 @@ function crearPostBox() {
         modal.style.display = "none";
     };
     
-    //Modal-categoria-dropdown
+    //Modal de categorias
     const opciones = document.querySelectorAll(".categoria-opcion");
 
     opciones.forEach((option) => {
