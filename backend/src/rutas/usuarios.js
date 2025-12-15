@@ -10,7 +10,7 @@ body:
  "apellido": apellido,
  "mail": mail,
  "pais": pais,
- "equipo": equipo,
+ "id_equipo": id_equipo,
  "usuario": usuario,
  "contrasenia": contasenia,
  "foto_url": foto_url
@@ -29,7 +29,7 @@ router.post("/", async(req, res) => {
     let verificacionMail = req.body.mail;
     let verificacionPass = req.body.contrasenia;
     let verificacionPais = req.body.pais;
-    let verificacionEquipo = req.body.equipo;
+    let verificacionEquipo = req.body.id_equipo;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if(verificacionUsuario === "" || verificacionNombre === "" || verificacionApellido === "" || verificacionMail === "" || verificacionPass === "" || verificacionPais === "" || verificacionEquipo === ""){
@@ -49,8 +49,8 @@ router.post("/", async(req, res) => {
     }
     else{
 
-    const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) 
-                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', '${req.body.foto_url}', '${req.body.pais}', '${req.body.equipo}')`;
+    const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, id_equipo) 
+                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', '${req.body.foto_url}', '${req.body.pais}', '${req.body.id_equipo}')`;
 
     await pool.query(query);
     
@@ -90,8 +90,9 @@ router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
 
     if(contrasenia_login === req.params.contrasenia){
 
-      const queryDatos = await pool.query(`select id, usuario, equipo, pais, foto_url from usuarios
-                           where usuario = '${req.params.nombreUsuario}'`);
+      const queryDatos = await pool.query(`select u.id, u.usuario, e.nombre, u.pais, e.escudo_url from usuarios u
+                                           inner join equipos e on u.id_equipo = e.id
+                                           where usuario = '${req.params.nombreUsuario}'`);
       
       return res.json(queryDatos.rows[0]); 
     }

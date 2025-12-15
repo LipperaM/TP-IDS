@@ -28,7 +28,7 @@ async function getEquipos(){
             <td>0</td>
         `;
             contadorA++;
-        } else {
+        } else {    
             tbodyB.appendChild(tr);
             tr.innerHTML = `
             <td>${contadorB}</td>
