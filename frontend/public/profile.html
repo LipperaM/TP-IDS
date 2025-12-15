@@ -17,20 +17,8 @@
   </head> 
   <body>
 
-    <nav class="navbar">
-      <a class="navbar-brand" href="./index.html">Homepage</a>
-      <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
-
-      <form class="d-flex" role="search">
-        <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
-        <button class="boton" type="submit">Buscar</button>
-      </form>
-      
-      <div class="nav-buttons">
-      <button class="boton" id="openModalRegistro">Registrarse</button>
-      <button class="boton" id="openModalEliminar">Eliminar Perfil</button>
-      <button class="boton" id="openModalLogin">Iniciar Sesion</button>
-      </div>
+    <nav class="navbar-container">
+      <div class="navbar"></div>
     </nav>
 
       
@@ -190,6 +178,8 @@
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+
+    <script src="/js/navbar.js"></script>
     <script src="/js/perfil.js"></script>
     <script>
       getEquipos();

@@ -31,5 +31,19 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
       </div>
   `
 } else if (currentPage.includes('profile.html')) {
+  navbarContainer.innerHTML = `
+      <a class="navbar-brand" href="./index.html">Homepage</a>
+      <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
 
+      <form class="d-flex" role="search">
+        <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
+        <button class="boton" type="submit">Buscar</button>
+      </form>
+      
+      <div class="nav-buttons">
+      <button class="boton" id="openModalRegistro">Registrarse</button>
+      <button class="boton" id="openModalEliminar">Eliminar Perfil</button>
+      <button class="boton" id="openModalLogin">Iniciar Sesion</button>
+      </div>
+  `
 }
