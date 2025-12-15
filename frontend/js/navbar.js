@@ -20,7 +20,16 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
       </form> 
   `
 } else if (currentPage.includes('leaderboard.html')) {
-
+  navbarContainer.innerHTML = `
+      <div class="navbar-links">
+        <a class="navbar-brand" href="./index.html">
+          <i class="bi bi-house-fill"></i> Home
+        </a>
+        <a class="navbar-brand" href="./profile.html">
+          <i class="bi bi-person-circle"></i> Mi perfil
+        </a>
+      </div>
+  `
 } else if (currentPage.includes('profile.html')) {
 
 }
