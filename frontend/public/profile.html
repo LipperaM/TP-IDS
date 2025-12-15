@@ -5,160 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.ico" />
     <title>Perfil</title>
+
+    <!-- Estilos -->
     <link href="../css/styles.css" rel="stylesheet" />
     <link href="../css/perfil/perfil.css" rel="stylesheet" />
-
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
-  </head> 
-  <body>
+  </head>
 
+  <body>
+    <!-- NAVBAR -->
     <nav class="navbar">
       <a class="navbar-brand" href="./index.html">Homepage</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
 
       <form class="d-flex" role="search">
-        <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
+        <input
+          class="form-control"
+          type="search"
+          placeholder="Buscar en tus post"
+          aria-label="Search"
+        />
         <button class="boton" type="submit">Buscar</button>
       </form>
-      
+
       <div class="nav-buttons">
-      <button class="boton" id="openModalRegistro">Registrarse</button>
-      <button class="boton" id="openModalEliminar">Eliminar Perfil</button>
-      <button class="boton" id="openModalLogin">Iniciar Sesion</button>
+        <button class="boton" id="openModalRegistro">Registrarse</button>
+        <button class="boton" id="openModalEliminar">Eliminar Perfil</button>
+        <button class="boton" onclick="logOut()" id="logout">Cerrar Sesion</button>
+        <button class="boton" id="openModalLogin">Iniciar Sesión</button>
       </div>
     </nav>
 
-      
-        <div id="modalRegistro" class="modal">
-          <div class="modal-content">
-            <span id="closeRegistro" class="close">&times;</span>
-            <div class="card-body">
-                <div class="mb-3">
-                  <label class="form-label">Nombre</label>
-                  <input id = "nombre" type="text" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Apellido</label>
-                  <input id = "apellido" type="text" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Mail</label>
-                  <input id = "mail" type="email" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Pais</label>
-                  <input id = "pais" type="text" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Equipo</label>
-                  <select id = "equipo" class="form-control">
-                    <option value="">Selecciona tu equipo</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Nombre de Usuario</label>
-                  <input id = "usuario" type="text" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Contraseña</label>
-                  <input id = "contrasenia" type="password" class="form-control">
-                </div>
-                <button type="button" class="boton" onclick="registrarse()">Registrarse</button>
-            </div>
+    <!-- MODAL REGISTRO -->
+    <div id="modalRegistro" class="modal">
+      <div class="modal-content">
+        <span id="closeRegistro" class="close">&times;</span>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input id="nombre" type="text" class="form-control" />
           </div>
+
+          <div class="mb-3">
+            <label class="form-label">Apellido</label>
+            <input id="apellido" type="text" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Mail</label>
+            <input id="mail" type="email" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">País</label>
+            <input id="pais" type="text" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Equipo</label>
+            <select id="equipo" class="form-control">
+              <option value="">Selecciona tu equipo</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Nombre de Usuario</label>
+            <input id="usuario" type="text" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input id="contrasenia" type="password" class="form-control" />
+          </div>
+
+          <button type="button" class="boton" onclick="registrarse()">
+            Registrarse
+          </button>
         </div>
-      
-    <div id="modalLogin" class="modal"> 
+      </div>
+    </div>
+
+    <!-- MODAL LOGIN -->
+    <div id="modalLogin" class="modal">
       <div class="modal-content">
         <span id="closeLogin" class="close">&times;</span>
         <div class="card-body">
-            <div class="mb-3">
-              <label class="form-label">Nombre de Usuario</label>
-              <input id = "usuarioLogin" type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Contraseña</label>
-              <input id = "contraLogin" type="password" class="form-control">
-            </div>
-            <button type="button" class="boton" onclick="login(document.getElementById('usuarioLogin').value, document.getElementById('contraLogin').value)">Iniciar Sesion</button>
+          <div class="mb-3">
+            <label class="form-label">Nombre de Usuario</label>
+            <input id="usuarioLogin" type="text" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input id="contraLogin" type="password" class="form-control" />
+          </div>
+
+          <button
+            type="button"
+            class="boton"
+            onclick="login(
+              document.getElementById('usuarioLogin').value,
+              document.getElementById('contraLogin').value
+            )"
+          >
+            Iniciar Sesión
+          </button>
         </div>
       </div>
     </div>
 
-    <div id="modalEditar" class="modal"> 
-  <div class="modal-content">
-    <span id="closeEditar" class="close">&times;</span>
+    <!-- MODAL EDITAR -->
+    <div id="modalEditar" class="modal">
+      <div class="modal-content">
+        <span id="closeEditar" class="close">&times;</span>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Editar nombre</label>
+            <input type="text" id="editNombre" class="form-control" />
+          </div>
 
-    <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Editar apellido</label>
+            <input type="text" id="editApellido" class="form-control" />
+          </div>
 
-      <div class="mb-3">
-        <label class="form-label">Editar nombre</label>
-        <input type="text" id="editNombre" class="form-control" />
+          <div class="mb-3">
+            <label class="form-label">Editar mail</label>
+            <input type="email" id="editMail" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Editar País</label>
+            <input type="text" id="editPais" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Editar Nombre de Usuario</label>
+            <input type="text" id="editUsuario" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Editar Contraseña</label>
+            <input type="password" id="editPass" class="form-control" />
+          </div>
+
+          <button type="button" class="boton" onclick="editarUsuario()">
+            Aplicar
+          </button>
+        </div>
       </div>
-
-      <div class="mb-3">
-        <label class="form-label">Editar apellido</label>
-        <input type="text" id="editApellido" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Editar mail</label>
-        <input type="email" id="editMail" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Editar País</label>
-        <input type="text" id="editPais" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Editar Nombre de Usuario</label>
-        <input type="text" id="editUsuario" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Editar Contraseña</label>
-        <input type="password" id="editPass" class="form-control" />
-      </div>
-
-      <button type="button" class="boton" onclick="editarUsuario()">Aplicar</button>
-
     </div>
 
-  </div>
-</div>
-  
-
-    <div id="modalEliminar" class="modal"> 
+    <!-- MODAL ELIMINAR -->
+    <div id="modalEliminar" class="modal">
       <div class="modal-content">
         <span id="closeEliminar" class="close">&times;</span>
-          <div class="card-body">
-            <h5 class="card-title">Confirmar borrado</h5>
-            <p class="card-text">Ingrese su contraseña para confirmar que desea eliminar el perfil.</p>
-              <div class="mb-3">
-                <label class="form-label">Contraseña</label>
-                <input type="password" class="form-control"></div>
-              <div class="mb-3">
-                <label class="form-label">Reingrese Contraseña</label>
-                <input type="password" id="contraElim" class="form-control">
-              </div>
-              <button type="button" class="boton" onclick="eliminarUsuario()">BORRAR</button>
+        <div class="card-body">
+          <h5 class="card-title">Confirmar borrado</h5>
+          <p class="card-text">
+            Ingrese su contraseña para confirmar que desea eliminar el perfil.
+          </p>
+
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" />
           </div>
+
+          <div class="mb-3">
+            <label class="form-label">Reingrese Contraseña</label>
+            <input type="password" id="contraElim" class="form-control" />
+          </div>
+
+          <button type="button" class="boton" onclick="eliminarUsuario()">
+            BORRAR
+          </button>
+        </div>
       </div>
     </div>
 
+    <!-- DATOS USUARIO -->
     <div class="datos-usuario" id="datosUsuario">
       <img
         class="foto-perfil"
-        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F360%2F247%2Foriginal%2Fdefault-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg&f=1&ipt=29b6572ccc8f6a9df4143312e9e00445fbf08fd153011442ebd1006f80e403cf"
+        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F360%2F247%2Foriginal%2Fdefault-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg"
         alt="foto perfil"
-        width="150px"
+        width="150"
       />
+
       <div class="datos">
         <h5 class="usuario">Nombre de Usuario</h5>
         <div class="info-extra">
@@ -168,7 +206,8 @@
         </div>
       </div>
     </div>
-    
+
+    <!-- POSTS -->
     <div class="post-usuario">
       <h1>Tus posts</h1>
     </div>
@@ -179,20 +218,19 @@
         <p class="card-text">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum quam
           veniam a fuga, non doloremque eum, nisi fugit consequuntur autem
-          doloribus voluptas commodi aut iusto rem porro excepturi maiores
-          quasi.
+          doloribus voluptas commodi aut iusto rem porro excepturi maiores quasi.
         </p>
       </div>
     </div>
 
+    <!-- SCRIPTS -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+
     <script src="/js/perfil.js"></script>
-    <script>
-      getEquipos();
-    </script>
+
   </body>
 </html>

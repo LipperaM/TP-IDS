@@ -62,13 +62,7 @@ router.post("/", async(req, res) => {
   }
 });
 
-/*
-Login
-body:
-{"nombreUsuario": nombreUsuario,   
- "contrasenia": contasenia
-}
-*/
+//Login
 
 router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
   try{
@@ -99,6 +93,22 @@ router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
     else{
       res.json("Contrasenia incorrecta");
     }
+  }catch (err){
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
+  }
+});
+
+//GET un usuario
+
+router.get("/:id", async(req, res) => {
+  try{
+    const query = await pool.query(`select u.id, u.usuario, e.nombre, u.pais, e.escudo_url from usuarios u
+                                    inner join equipos e on u.id_equipo = e.id
+                                    where u.id = ${req.params.id}`);
+      
+    return res.json(query.rows[0]); 
+
   }catch (err){
     console.error(err);
     res.status(500).json({ error: "DB error" });
