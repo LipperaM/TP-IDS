@@ -67,9 +67,9 @@ async function login(nombreUsuario, pass){
 
         const fotoUsuario = document.createElement("img");
         fotoUsuario.className = "foto-perfil";
-        fotoUsuario.src = data.foto_url;
+        fotoUsuario.src = data.escudo_url;
         fotoUsuario.alt = "Foto de perfil";
-        fotoUsuario.width = 100;
+        fotoUsuario.width = 90;
 
         const contenedor = document.createElement("div");
         contenedor.className = "datos";
@@ -82,7 +82,7 @@ async function login(nombreUsuario, pass){
         infoExtra.className = "info-extra";
 
         const hEquipo = document.createElement("h5");
-        hEquipo.textContent = data.equipo;
+        hEquipo.textContent = data.nombre;
 
         const hPais = document.createElement("h5");
         hPais.textContent = data.pais;
@@ -128,14 +128,10 @@ async function registrarse(event){
         const nombre = document.getElementById("nombre");
         const apellido = document.getElementById("apellido");
         const pais = document.getElementById("pais");
-        const equipo = document.getElementById("equipo");
+        const id_equipo = document.getElementById("equipo");
         const mail = document.getElementById("mail");
         const contrasenia = document.getElementById("contrasenia");
         let foto_url = "foto";
-
-        if(equipo.value === "boca juniors"){
-            foto_url = "https://upload.wikimedia.org/wikipedia/commons/c/c9/Boca_escudo.png";
-        }
 
         const response = await fetch("http://localhost:3000/usuarios", {
             method: "POST",
@@ -146,7 +142,7 @@ async function registrarse(event){
                 apellido: apellido.value,
                 mail: mail.value,
                 pais: pais.value,
-                equipo: equipo.value,
+                id_equipo: id_equipo.value,
                 contrasenia: contrasenia.value,
                 foto_url: foto_url
             })
@@ -254,4 +250,22 @@ async function editarUsuario(){
     }catch(err){
         console.log("Error:", err);
     }
+}
+
+async function getEquipos() {
+    const url = "http://localhost:3000/equipos";
+
+    const response = await fetch(url, { method: "GET" });
+    const equipos = await response.json();
+
+    const select = document.getElementById("equipo");
+
+    equipos.forEach(equipo => {
+        const option = document.createElement("option");
+        option.value = equipo.id;
+        option.textContent = equipo.nombre;
+
+        select.appendChild(option);
+    });
+
 }

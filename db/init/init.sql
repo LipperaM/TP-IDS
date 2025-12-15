@@ -27,7 +27,7 @@ CREATE TABLE public.usuarios (
     contrasenia VARCHAR(100) NOT NULL,
     foto_url VARCHAR(255),
     pais VARCHAR(100),
-    equipo VARCHAR(100),
+    id_equipo INTEGER,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
