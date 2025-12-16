@@ -3,7 +3,7 @@ const navbarContainer = document.querySelector('.navbar');
 
 if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
     navbarContainer.innerHTML = `
-      <a class="navbar-brand" href="./index.html">Homepage</a>
+      <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
       <a class="navbar-brand" href="./profile.html">Perfil</a>
 
@@ -14,7 +14,7 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
   `
 } else if (currentPage.includes('leaderboard.html')) {
   navbarContainer.innerHTML = `
-      <a class="navbar-brand" href="./index.html">Homepage</a>
+      <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
       <a class="navbar-brand" href="./profile.html">Perfil</a>
 
@@ -25,7 +25,7 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
   `
 } else if (currentPage.includes('profile.html')) {
   navbarContainer.innerHTML = `
-      <a class="navbar-brand" href="./index.html">Homepage</a>
+      <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
       <a class="navbar-brand" href="./profile.html">Perfil</a>
 
