@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", async(req, res) => {
   try{
     
-    const result = await pool.query("select * from equipos");
+    const result = await pool.query("select * from equipos where activo = true");
     res.json(result.rows);
 
   }catch (err){
@@ -17,21 +17,27 @@ router.get("/", async(req, res) => {
 });
 
 /*
-Borrar equipo
+Desactivar equipo
 body:
 {
   "id": id,
 }
 */
 
-router.delete("/", async(req, res) => {
+router.put("/", async(req, res) => {
     try {
       const { id } = req.body;
-      await pool.query(`
-        delete from equipos
-        where id = $1`, [id]);
 
-      return res.json({ ok: true });
+      if (!id) {
+        return res.status(400).json("ID requerido");
+      }
+
+      await pool.query(
+        `update equipos set activo = false where id = $1`,
+        [id]
+      );
+
+    return res.json({ ok: true });
 
   } catch (err) {
     console.error(err);
@@ -47,6 +53,11 @@ body:
  "escudo": escudo,
  "zona": zona
 }
+
+UPDATE usuarios
+SET id_equipo = 34
+WHERE id_equipo = 7;
+
 */
 
 router.post("/", async(req, res) => {
@@ -81,7 +92,7 @@ router.post("/", async(req, res) => {
     }
 
     await pool.query(
-      `insert into equipos (nombre, escudo_url, zona) values ($1, $2, $3)`,
+      `insert into equipos (nombre, escudo_url, zona, activo) values ($1, $2, $3, true)`,
       [nombre, escudo, zonaMayus]
     );
 

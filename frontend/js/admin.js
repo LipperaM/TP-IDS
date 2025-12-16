@@ -67,7 +67,7 @@ async function altaEquipo(){
     }
 }
 
-/*ELIMINAR EQUIPO*/
+/*BAJA EQUIPO*/
 async function eliminarEquipo(idEquipo){
     try{
         if (!idEquipo) {
@@ -76,10 +76,10 @@ async function eliminarEquipo(idEquipo){
         }
         
         const response = await fetch("http://localhost:3000/equipos", {
-            method: "DELETE",
+            method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                id: idEquipo,
+                id: idEquipo
             })
         });
 
