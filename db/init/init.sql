@@ -113,10 +113,10 @@ INSERT INTO public.categorias (nombre) VALUES
 ('Liga Profesional');
 
 -- Usuarios mock
-INSERT INTO public.usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) VALUES 
-('JorgeVarsky23', 'Jorge', 'Varsky', 'varsky@mail.com', 'pass123', 'https://ejemplo.com/foto1.jpg', 'Argentina', 'River Plate'),
-('Ronaldo', 'Cristiano', 'Ronaldo', 'cr7@mail.com', 'pass123', 'https://ejemplo.com/foto2.jpg', 'Portugal', 'Al Nassr'),
-('MoristeEnMadrid420', 'Juan', 'Perez', 'juan@mail.com', 'pass123', 'https://ejemplo.com/foto3.jpg', 'Argentina', 'Boca Juniors');
+INSERT INTO public.usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, id_equipo) VALUES 
+('JorgeVarsky23', 'Jorge', 'Varsky', 'varsky@mail.com', 'pass123', 'https://ejemplo.com/foto1.jpg', 'Argentina', NULL),
+('Ronaldo', 'Cristiano', 'Ronaldo', 'cr7@mail.com', 'pass123', 'https://ejemplo.com/foto2.jpg', 'Portugal', NULL),
+('MoristeEnMadrid420', 'Juan', 'Perez', 'juan@mail.com', 'pass123', 'https://ejemplo.com/foto3.jpg', 'Argentina', NULL);
 
 -- Posts mock
 INSERT INTO public.posts (id_usuario, texto, id_categoria, creado_en) VALUES 
