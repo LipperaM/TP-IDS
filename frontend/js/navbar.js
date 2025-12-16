@@ -43,6 +43,7 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
       <div class="nav-buttons">
       <button class="boton" id="openModalRegistro">Registrarse</button>
       <button class="boton" id="openModalEliminar">Eliminar Perfil</button>
+      <button class="boton" onclick="logOut()" id="logout">Cerrar Sesion</button>
       <button class="boton" id="openModalLogin">Iniciar Sesion</button>
       </div>
   `
