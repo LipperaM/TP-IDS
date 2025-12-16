@@ -8,10 +8,10 @@
     <h4>CRUD Equipos</h4>
     <div class="darBaja">
         <label>Dar de baja Equipo</label>
-        <select>
+        <select id = "equipo">
             <option value="">Selecciona tu equipo</option>
         </select>
-        <button>Baja</button>
+        <button onclick="eliminarEquipo(document.getElementById('equipo').value)">Baja</button>
     </div>
     <br>
     <div class="darAlta">
@@ -24,6 +24,11 @@
         <label class="form-label">Zona</label>
         <input type="text" class="form-control">
         <button>Alta</button>
-    </div>  
+    </div>
+
+    <script src="/js/admin.js"></script>
+    <script>
+        getEquipos();
+    </script>
 </body>
 </html>
