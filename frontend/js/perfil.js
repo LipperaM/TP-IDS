@@ -154,6 +154,7 @@ async function login(nombreUsuario, pass){
         localStorage.setItem("idUsuario", data.id);
 
         modalLogin.style.display = "none";
+        modalRegistro.style.display = "none";
         mostrarDatosUsuario(data);
 
     }catch(err){
