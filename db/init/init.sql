@@ -88,7 +88,8 @@ CREATE TABLE public.likes_comentarios (
 CREATE TABLE public.equipos (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) UNIQUE NOT NULL,
-    escudo_url VARCHAR(255)
+    escudo_url VARCHAR(255),
+    zona VARCHAR(1)
 );
 
 -- TABLA_POSICIONES
