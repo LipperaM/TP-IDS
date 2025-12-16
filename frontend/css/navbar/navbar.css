@@ -1,25 +1,25 @@
 @import url("../variables.css");
-.navbar-brand {
-    text-decoration: none;
-    font-weight: bold;
-    color: black;
-    font-size: 25px;
-}
 
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--color-secundario);
-    padding: 10px 20px;
-    border-radius: 10px;
-    margin: 4px;    
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 25px;
+  background-color: #b1b1b193;
+  border-radius: 10px;
+  margin: 10px;
+}
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 20px; 
 }
 
+.navbar-brand { color: white; text-decoration: none; font-weight: bold; }
 
-.navbar-brand:hover {
-    text-decoration: underline;
-}
+.navbar-brand:hover { text-decoration: underline; }
+
+.d-flex form { max-width: 400px; width: 100%; }
 
 .navbar form {
     max-width: 400px;
