@@ -77,7 +77,7 @@ router.get("/:usuario/:contrasenia", async(req, res) => {
 
     if(contrasenia_login === contrasenia){
 
-      const queryDatos = await pool.query(`select u.id, u.usuario, e.nombre, u.pais, e.escudo_url from usuarios u
+      const queryDatos = await pool.query(`select u.id, u.usuario, e.nombre, u.pais, e.escudo_url, u.administrador from usuarios u
                                            inner join equipos e on u.id_equipo = e.id
                                            where usuario = $1`, [usuario]);
       

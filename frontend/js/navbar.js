@@ -1,6 +1,8 @@
 const currentPage = window.location.pathname;
 const navbarContainer = document.querySelector('.navbar');
 
+const esAdministrador = !!localStorage.getItem("admin");
+
 if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
     navbarContainer.innerHTML = `
       <a class="navbar-brand" href="./index.html">Home</a>
@@ -16,7 +18,7 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
   navbarContainer.innerHTML = `
       <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
-      <a class="navbar-brand" href="./admin.html">ADMIN</a>
+      ${esAdministrador ? `<a class="navbar-brand" href="./admin.html">ADMIN</a>` : ``}
       <a class="navbar-brand" href="./profile.html">Perfil</a>
 
       <form class="d-flex" role="search">

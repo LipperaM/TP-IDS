@@ -28,6 +28,7 @@ CREATE TABLE public.usuarios (
     foto_url VARCHAR(255),
     pais VARCHAR(100),
     id_equipo INTEGER,
+    administrador INTEGER,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
