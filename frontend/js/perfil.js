@@ -7,6 +7,7 @@ const modalRegistro = document.getElementById("modalRegistro");
 const modalLogin = document.getElementById("modalLogin");
 const modalEliminar = document.getElementById("modalEliminar");
 const modalEditar = document.getElementById("modalEditar");
+const modalPost = document.getElementById("modal");
 
 const openModalRegistro = document.getElementById("openModalRegistro");
 const openModalLogin = document.getElementById("openModalLogin");
@@ -19,27 +20,28 @@ const closeLogin = document.getElementById("closeLogin");
 const closeEliminar = document.getElementById("closeEliminar");
 const closeEditar = document.getElementById("closeEditar");
 
-/* Abrir modales */
+/*ABRIR MODALES*/
 if (openModalRegistro) openModalRegistro.onclick = () => modalRegistro.style.display = "flex";
 if (openModalLogin) openModalLogin.onclick = () => modalLogin.style.display = "flex";
 if (openModalEliminar) openModalEliminar.onclick = () => modalEliminar.style.display = "flex";
 if (openModalEditar) openModalEditar.onclick = () => modalEditar.style.display = "flex";
 
-/* Cerrar modales */
+/*CERRAR MODALES*/
 if (closeRegistro) closeRegistro.onclick = () => modalRegistro.style.display = "none";
 if (closeLogin) closeLogin.onclick = () => modalLogin.style.display = "none";
 if (closeEliminar) closeEliminar.onclick = () => modalEliminar.style.display = "none";
 if (closeEditar) closeEditar.onclick = () => modalEditar.style.display = "none";
 
-/* Click fuera del modal */
+/*CLICK FUERA DEL MODAL*/
 window.onclick = (e) => {
   if (e.target === modalRegistro) modalRegistro.style.display = "none";
   if (e.target === modalLogin) modalLogin.style.display = "none";
   if (e.target === modalEliminar) modalEliminar.style.display = "none";
   if (e.target === modalEditar) modalEditar.style.display = "none";
+  if (e.target === modalPost) modalPost.style.display = "none";
 };
 
-/* Ocultar botones al inicio */
+/*OCULTAR BOTONES AL INICIO*/
 if (openModalEliminar) openModalEliminar.classList.add("hidden");
 if (openModalEditar) openModalEditar.classList.add("hidden");
 if (cerrarSesion) cerrarSesion.classList.add("hidden");
@@ -91,13 +93,88 @@ function mostrarDatosUsuario(data) {
 
     divDatos.appendChild(wrapper);
 
-    /* UI logged */
     if (openModalRegistro) openModalRegistro.style.display = "none";
     if (openModalLogin) openModalLogin.style.display = "none";
     if (openModalEliminar) openModalEliminar.classList.remove("hidden");
     if (cerrarSesion) cerrarSesion.classList.remove("hidden");
     if (openModalEditar) openModalEditar.classList.remove("hidden");
 }
+
+/*POSTS USUARIO*/
+let todosLosPostsUsuario = [];
+
+async function cargarPosts() {
+  try {
+    const idUsuario = localStorage.getItem("idUsuario");
+    console.log("ID Usuario:", idUsuario);
+    
+    if (!idUsuario) {
+        renderizarPosts([]);
+        return;
+    }
+    
+    const response = await fetch("http://localhost:3000/posts");
+    const todosLosPosts = await response.json();
+    console.log("Todos los posts:", todosLosPosts);
+    
+    todosLosPostsUsuario = todosLosPosts.filter(post => post.id_usuario == idUsuario);
+    console.log("Posts del usuario:", todosLosPostsUsuario);
+
+    renderizarPosts(todosLosPostsUsuario);
+  } catch (err) {
+    console.error("Error al cargar los posts del usuario.", err);
+  }
+}
+
+function renderizarPosts(posts) {
+  const container = document.querySelector(".post-usuario-container");
+  container.innerHTML = "";
+
+  posts.forEach(post => {
+    const card = document.createElement("div");
+    card.className = "card w-75 mb-3";
+    card.innerHTML = `
+    <div class="card-body">
+      <h5 class="card-title">@${post.usuario}</h5>
+      <span class="category-label badge text-bg-secondary">#${post.categoria}</span>
+      <p class="card-text">${post.texto}</p>
+    </div>
+    <div class="post-actions">
+      <div class="buttons">
+        <a href="#" class="btn btn-primary">Like</a>
+        <a href="#" class="btn btn-primary">Comentar</a>
+      </div>
+      <p class="date-time">${new Date(post.creado_en).toLocaleString('es-AR')}</p>
+    </div>
+`
+    container.appendChild(card);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  cargarPosts();
+
+  const busquedaForm = document.querySelector('form[role="search"]');
+  const busquedaInput = busquedaForm.querySelector('input[type="search"]');
+
+  busquedaForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const textoBusqueda = busquedaInput.value.trim().toLowerCase();
+
+    if (textoBusqueda === '') {
+      renderizarPosts(todosLosPostsUsuario);
+    } else {
+      const postsFiltrados = todosLosPostsUsuario.filter(post => {
+        return  post.categoria.toLowerCase().includes(textoBusqueda) ||
+                post.texto.toLowerCase().includes(textoBusqueda);
+      });
+
+      renderizarPosts(postsFiltrados);
+    }
+  });
+});
+
 
 /*SESIÓN PERSISTENTE*/
 async function verificarSesion() {
@@ -120,6 +197,7 @@ async function verificarSesion() {
   }
 }
 
+/*LOGIN*/
 async function login(nombreUsuario, pass){
     try{
         const usuario = nombreUsuario;
@@ -130,9 +208,15 @@ async function login(nombreUsuario, pass){
             return;
         }
 
-        const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
+        const url = `http://localhost:3000/usuarios/login`;
 
-        const response = await fetch(url, { method: "GET" });
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ usuario, contrasenia })
+        });
         const data = await response.json();
 
         console.log("Respuesta del login:", data);
@@ -150,9 +234,14 @@ async function login(nombreUsuario, pass){
         }
 
         localStorage.setItem("idUsuario", data.id);
+        if(data.administrador === 1){
+            localStorage.setItem("admin", data.administrador);
+        }
 
         modalLogin.style.display = "none";
+        modalRegistro.style.display = "none";
         mostrarDatosUsuario(data);
+        cargarPosts();
 
     }catch(err){
         console.log("Error:", err);
@@ -251,6 +340,7 @@ async function eliminarUsuario(){
         }
         
         localStorage.removeItem("idUsuario");
+        localStorage.removeItem("admin");
         window.location.reload();
 
     }catch(err){
@@ -315,8 +405,10 @@ async function getEquipos() {
 
 }
 
+/*LOG OUT*/
 function logOut(){
     localStorage.removeItem("idUsuario");
+    localStorage.removeItem("admin");
     window.location.reload();
 }
 

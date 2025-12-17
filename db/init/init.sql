@@ -28,6 +28,7 @@ CREATE TABLE public.usuarios (
     foto_url VARCHAR(255),
     pais VARCHAR(100),
     id_equipo INTEGER,
+    administrador INTEGER,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -106,12 +107,7 @@ CREATE TABLE public.tabla_posiciones (
 );
 
 -- Datos mock para pruebas
---equipos
-INSERT INTO public.equipos (nombre, escudo_url, zona) VALUES 
-('River Plate', 'https://upload.wikimedia.org/wikipedia/commons/2/20/River_Plate_logo.svg', 'A'),
-('Boca Juniors', 'https://upload.wikimedia.org/wikipedia/commons/4/43/Boca_Juniors_logo.svg', 'A'),
-('Real Madrid', 'https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg', 'B'),
-('FC Barcelona', 'https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg', 'B');
+
 -- Categorías
 INSERT INTO public.categorias (nombre) VALUES 
 ('Champions'),

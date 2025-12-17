@@ -6,54 +6,47 @@ const router = express.Router();
 /*
 Registrarse
 body:
-{"nombre": nombre,   
+{"usuario": usuario,   
+ "nombre": nombre,
  "apellido": apellido,
  "mail": mail,
+ "contrasenia": contrasenia,
+ "foto_url": foto_url,
  "pais": pais,
- "id_equipo": id_equipo,
- "usuario": usuario,
- "contrasenia": contasenia,
- "foto_url": foto_url
+ "id_equipo": id_equipo
 }
 */
 
 router.post("/", async(req, res) => {
   try{
-    //Validaciones
-    const query_verificacion_usuario = await pool.query(`select * from usuarios where usuario = '${req.body.usuario}'`);
-    const query_verificacion_mail = await pool.query(`select * from usuarios where mail = '${req.body.mail}'`);
+    const { usuario, nombre, apellido, mail, contrasenia, foto_url, pais, id_equipo } = req.body;
 
-    let verificacionUsuario = req.body.usuario;
-    let verificacionNombre = req.body.nombre;
-    let verificacionApellido = req.body.apellido;
-    let verificacionMail = req.body.mail;
-    let verificacionPass = req.body.contrasenia;
-    let verificacionPais = req.body.pais;
-    let verificacionEquipo = req.body.id_equipo;
+    //Validaciones
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if(verificacionUsuario === "" || verificacionNombre === "" || verificacionApellido === "" || verificacionMail === "" || verificacionPass === "" || verificacionPais === "" || verificacionEquipo === ""){
-      return res.json("Todos los campos son obligatorios");
+    if(!usuario || !nombre || !apellido || !mail || !contrasenia || !pais){
+      return res.status(400).json("Todos los campos son obligatorios");
     }
-    if(query_verificacion_usuario.rows.length > 0){
-      return res.json("El usuario ya existe");
+    if(contrasenia.length < 8){
+      return res.status(400).json("La contraseña debe tener al menos 8 caracteres");
     }
-    if(query_verificacion_mail.rows.length > 0){
-      return res.json("El mail ya fue registrado");
+    if(!emailRegex.test(mail)){
+      return res.status(400).json("Formato de mail invalido");
     }
-    if(verificacionPass.length < 8){
-      return res.json("La contraseña debe tener al menos 8 caracteres");
+    const verificacion_usuario = await pool.query(`select * from usuarios where usuario = $1`, [usuario]);
+    if(verificacion_usuario.rows.length > 0){
+      return res.status(400).json("El usuario ya existe");
     }
-    if(!emailRegex.test(verificacionMail)){
-      return res.json("Formato de mail invalido");
+    const verificacion_mail = await pool.query(`select * from usuarios where mail = $1`, [mail]);
+    if(verificacion_mail.rows.length > 0){
+      return res.status(400).json("El mail ya fue registrado");
     }
     else{
 
-    const query = `insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, id_equipo) 
-                   values ('${req.body.usuario}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.mail}', '${req.body.contrasenia}', '${req.body.foto_url}', '${req.body.pais}', '${req.body.id_equipo}')`;
-
-    await pool.query(query);
-    
+    await pool.query(`insert into usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, id_equipo) 
+                                    values ($1, $2, $3, $4, $5, $6, $7, $8)`,
+                                    [usuario, nombre, apellido, mail, contrasenia, foto_url, pais, id_equipo] 
+                                  );
     return res.status(201).json({ ok: true });
     }
   }catch(err){
@@ -64,17 +57,17 @@ router.post("/", async(req, res) => {
 
 //Login
 
-router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
+router.post("/login", async(req, res) => {
   try{
     //Validaciones
-    let verificacionUsuario = req.params.nombreUsuario;
+    const { usuario, contrasenia } = req.body;
     
-     if(verificacionUsuario === ""){
-      return res.json("Ingrese el nombre de usuario");
+     if(!usuario){
+      return res.status(400).json("Ingrese el nombre de usuario");
     }
 
     const queryContrasenia = await pool.query(`select contrasenia from usuarios
-                                    where usuario = '${req.params.nombreUsuario}'`);
+                                               where usuario = $1`, [usuario]);
 
     if (queryContrasenia.rows.length === 0) {
       return res.json("Usuario no encontrado");
@@ -82,16 +75,16 @@ router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
 
     const contrasenia_login = queryContrasenia.rows[0].contrasenia;
 
-    if(contrasenia_login === req.params.contrasenia){
+    if(contrasenia_login === contrasenia){
 
-      const queryDatos = await pool.query(`select u.id, u.usuario, e.nombre, u.pais, e.escudo_url from usuarios u
+      const queryDatos = await pool.query(`select u.id, u.usuario, e.nombre, u.pais, e.escudo_url, u.administrador from usuarios u
                                            inner join equipos e on u.id_equipo = e.id
-                                           where usuario = '${req.params.nombreUsuario}'`);
+                                           where usuario = $1`, [usuario]);
       
       return res.json(queryDatos.rows[0]); 
     }
     else{
-      res.json("Contrasenia incorrecta");
+      res.status(400).json("Contrasenia incorrecta");
     }
   }catch (err){
     console.error(err);
@@ -103,9 +96,10 @@ router.get("/:nombreUsuario/:contrasenia", async(req, res) => {
 
 router.get("/:id", async(req, res) => {
   try{
+    const { id } = req.params;
     const query = await pool.query(`select u.id, u.usuario, e.nombre, u.pais, e.escudo_url from usuarios u
                                     inner join equipos e on u.id_equipo = e.id
-                                    where u.id = ${req.params.id}`);
+                                    where u.id = $1`, [id]);
       
     return res.json(query.rows[0]); 
 
@@ -130,33 +124,36 @@ body:
 
 router.put("/", async(req, res) => {
   try{
-    let nuevoUsuario = req.body.usuario;
-    let nuevoNombre = req.body.nombre;
-    let nuevoApellido = req.body.apellido;
-    let nuevoMail = req.body.mail;
-    let nuevoPass = req.body.contrasenia;
-    let nuevoPais = req.body.pais;
+    const { id, usuario, nombre, apellido, mail, contrasenia, pais } = req.body;
 
-    const datos = await pool.query(`select * from usuarios
-                                    where id = '${req.body.id}'`);
+    if (!id) {
+      return res.status(400).json("Falta el id del usuario");
+    }
 
-    const usuario = datos.rows[0];
-    
-    //Validaciones (si lo manda vacio no lo actualizo)
-    if(nuevoUsuario === "") nuevoUsuario = usuario.usuario;
-    if(nuevoNombre === "") nuevoNombre = usuario.nombre;
-    if(nuevoApellido === "") nuevoApellido = usuario.apellido;
-    if(nuevoMail === "") nuevoMail = usuario.mail;
-    if(nuevoPass === "") nuevoPass = usuario.contrasenia;
-    if(nuevoPais === "") nuevoPais = usuario.pais;
-    
-    const query = `update usuarios set usuario = '${nuevoUsuario}', nombre = '${nuevoNombre}', apellido = '${nuevoApellido}', 
-                                   mail = '${nuevoMail}', contrasenia = '${nuevoPass}', pais = '${nuevoPais}' 
-                   where id = '${req.body.id}'`;
-    
-    await pool.query(query);
+    const datos = await pool.query(
+      "SELECT * FROM usuarios WHERE id = $1",
+      [id]
+    );
 
-    return res.json("Usuario actualizado");
+    if (datos.rows.length === 0) {
+      return res.status(404).json("Usuario no encontrado");
+    }
+
+    const actual = datos.rows[0];
+
+    //Si lo manda vacio usa el que ya estaba en la db
+    const nuevoUsuario = usuario || actual.usuario;
+    const nuevoNombre = nombre || actual.nombre;
+    const nuevoApellido = apellido || actual.apellido;
+    const nuevoMail = mail || actual.mail;
+    const nuevoPass = contrasenia || actual.contrasenia;
+    const nuevoPais = pais || actual.pais;
+    
+    await pool.query(`update usuarios set usuario = $2, nombre = $3, apellido = $4, 
+                                   mail = $5, contrasenia = $6, pais = $7 
+                                   where id = $1`, [id, nuevoUsuario, nuevoNombre, nuevoApellido, nuevoMail, nuevoPass, nuevoPais]);
+
+    return res.json({ ok: true });
 
   }catch (err) {
     console.error(err);
@@ -177,28 +174,27 @@ body:
 router.delete("/", async(req, res) => {
     try {
     //Validaciones
-    const contrasenia  = req.body.contrasenia;
+    const { id, contrasenia} = req.body;
     
-    const query_contrasenia_borrar = await pool.query(`
+    const query = await pool.query(`
       select contrasenia from usuarios
-      where id = '${req.body.id}'`);
+      where id = $1`, [id]);
 
-    if (query_contrasenia_borrar.rows.length === 0) {
-      return res.json("Usuario no encontrado");
+    if(!contrasenia){
+      return res.status(400).json("Todos los campos son obligatorios");
     }
-    if(contrasenia === ""){
-      return res.json("Todos los campos son obligatorios");
+    if (query.rows.length === 0) {
+      return res.status(404).json("Usuario no encontrado");
     }
+    const contraseniaDB = query.rows[0].contrasenia;
 
-    const contrasenia_borrar = query_contrasenia_borrar.rows[0].contrasenia;
-
-    if (contrasenia_borrar === contrasenia) {
+    if (contraseniaDB === contrasenia) {
 
       await pool.query(`
         delete from usuarios
-        where id = '${req.body.id}'`);
+        where id = $1`, [id]);
 
-      return res.json("Usuario eliminado");
+      return res.json({ ok: true });
     } else {
       return res.json("Contrasenia incorrecta");
     }
