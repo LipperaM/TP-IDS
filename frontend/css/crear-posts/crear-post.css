@@ -40,11 +40,10 @@
         -webkit-backdrop-filter: blur(2px);
         justify-content: center;
         align-items: center;
-        z-index: 998;
+        z-index: 1000;
         padding: 16px;
     }
 
-    /* Caja Modal */
     .modal-content {
         background: var(--color-fondos-box);
         padding: 24px;
@@ -57,6 +56,23 @@
         max-height: 90vh;
         overflow: auto;
 
+        .closeModal {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            font-size: 26px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            line-height: 1;
+            padding: 0;
+            transition: color 0.15s ease;
+            z-index: 10;
+            &:hover {
+                color: #1f2937;
+            }
+        }
         h2{
             margin: 0 0 16px 0;
             font-size: 20px;
@@ -89,22 +105,30 @@
             display: flex;
             margin-top: 16px;
             height: auto;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
             gap: 12px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap; 
+            background: transparent; 
+            padding: 0; 
+            width: 100%;
             
-            button{
-                border-radius: 8px;
+            .postBtn{
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 0; 
                 height: 42px;
-                padding: 0 20px;
+                padding: 6px 18px;
+                border-radius: 8px;
                 background-color: var(--color-pricipal);
-                color: white;
+                color: #fff;
                 border: none;
                 font-size: 15px;
                 font-weight: 500;
                 cursor: pointer;
                 transition: background-color 0.15s ease, transform 0.1s ease;
+                margin: 0; 
                 &:hover{
                     background-color: var(--color-secundario);
                     transition: 0.2s;
@@ -112,51 +136,41 @@
                 }
             }
             .dropdown-center{
+                margin-left: auto; 
                 .btn{
-                    height: 42px;
-                    background-color: #f3f4f6;
-                    border: 1px solid #d1d5db;
-                    font-size: 14px;
-                    color: #374151;
-                    border-radius: 8px;
-                    padding: 0 16px;
-                    font-weight: 500;
-                    transition: background-color 0.15s ease, border-color 0.15s ease;
-                    &:hover{
-                        background-color: #e5e7eb;
-                        border-color: #9ca3af;
-                    }   
-                }
-                .dropdown-item{
-                        padding: 10px 16px;
-                        font-size: 14px;
-                        transition: background-color 0.15s ease, color 0.15s ease;
-                    &:hover{
-                        background-color: var(--color-pricipal);
-                        color: white;
-                    }
-                }
-            }
-        }
+                     height: 42px;
+                     background-color: #f3f4f6;
+                     border: 1px solid #d1d5db;
+                     font-size: 14px;
+                     color: #374151;
+                     border-radius: 8px;
+                     padding: 0 16px;
+                     font-weight: 500;
+                     transition: background-color 0.15s ease, border-color 0.15s ease;
+                     &:hover{
+                         background-color: #e5e7eb;
+                         border-color: #9ca3af;
+                     }   
+                 }
+                 .dropdown-item{
+                         padding: 10px 16px;
+                         font-size: 14px;
+                         transition: background-color 0.15s ease, color 0.15s ease;
+                     &:hover{
+                         background-color: var(--color-pricipal);
+                         color: white;
+                     }
+                 }
+             }
+         }
         
-    }
-
-    /* Botón cerrar */
-    .close {
-        position: absolute;
-        right: 16px;
-        top: 16px;
-        font-size: 26px;
-        cursor: pointer;
-        background: transparent;
-        border: none;
-        color: #6b7280;
-        line-height: 1;
-        padding: 0;
-        transition: color 0.15s ease;
-        &:hover {
-            color: #1f2937;
-        }
-    }
-
+     }
 }
+
+.card{
+    .delete-post{
+        margin-left: 8px;
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+} 
