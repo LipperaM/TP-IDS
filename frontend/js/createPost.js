@@ -112,38 +112,3 @@ function crearPostBox() {
         });
     });
 }
-
-// Reutilizar la misma validación en nuevoPost()
-async function nuevoPost(){
-    try {
-        const contenido = document.getElementById("postText");
-        const tags = document.getElementById("categoria-btn");
-        const usuarioStr = localStorage.getItem("idUsuario");
-        const categoriaTexto = tags.textContent.trim();
-
-        const categoriaIdStr = tags.getAttribute("data-categoria-id");
-        let categoriaId = Number(categoriaIdStr);
-        if (!categoriaIdStr || Number.isNaN(categoriaId)) {
-            categoriaId = (typeof categoriaIdDesdeTexto === "function")
-                ? categoriaIdDesdeTexto(categoriaTexto)
-                : NaN;
-        }
-        if (!usuarioStr || Number.isNaN(Number(usuarioStr)) || Number.isNaN(categoriaId)) {
-            alert("⚠️ Debes seleccionar una categoría válida e iniciar sesión");
-            return;
-        }
-
-        const url = "http://localhost:3000/posts";
-        await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                id_usuario: Number(usuarioStr),
-                texto: contenido.value,
-                id_categoria: categoriaId
-            })
-        });
-    } catch (error){
-        console.log(error);
-    }
-}
