@@ -4,6 +4,8 @@ import usuarios from "./rutas/usuarios.js";
 import posts from "./rutas/posts.js";
 import comentarios from "./rutas/comentarios.js";
 import equipos from "./rutas/equipos.js";
+import likes from "./rutas/likes.js";
+
 
 
 const app = express();
@@ -22,6 +24,8 @@ app.use("/usuarios", usuarios);
 app.use("/posts", posts);
 app.use("/comentarios", comentarios);
 app.use("/equipos", equipos);
+app.use("/likes", likes);
+
 
 
 app.listen(port, () => {
