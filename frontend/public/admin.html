@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h4>CRUD Equipos</h4>
+    <div class="darBaja">
+        <label>Dar de baja Equipo</label>
+        <select id = "equipo">
+            <option value="">Selecciona tu equipo</option>
+        </select>
+        <button onclick="eliminarEquipo(document.getElementById('equipo').value)">Baja</button>
+    </div>
+    <br>
+    <div class="darAlta">
+        <label>Dar de Alta Equipo</label>
+        <br>
+        <label>Nombre</label>
+        <input id = "nombre"  type="text">
+        <label>Escudo</label>
+        <input id = "escudo" type="text">
+        <label>Zona</label>
+        <input id = "zona" type="text" >
+        <button onclick="altaEquipo()">Alta</button>
+    </div>
+
+    <script src="/js/admin.js"></script>
+    <script>
+        getEquipos();
+    </script>
+</body>
+</html>

@@ -152,6 +152,9 @@ async function login(nombreUsuario, pass){
         }
 
         localStorage.setItem("idUsuario", data.id);
+        if(data.administrador === 1){
+            localStorage.setItem("admin", data.administrador);
+        }
 
         modalLogin.style.display = "none";
         modalRegistro.style.display = "none";
@@ -254,6 +257,7 @@ async function eliminarUsuario(){
         }
         
         localStorage.removeItem("idUsuario");
+        localStorage.removeItem("admin");
         window.location.reload();
 
     }catch(err){
@@ -321,6 +325,7 @@ async function getEquipos() {
 /*LOG OUT*/
 function logOut(){
     localStorage.removeItem("idUsuario");
+    localStorage.removeItem("admin");
     window.location.reload();
 }
 
