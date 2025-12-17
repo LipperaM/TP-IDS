@@ -22,7 +22,7 @@ router.post("/", async function(req, res) {
 router.get("/", async function(req, res) {
   try {
     const result = await pool.query(
-      `SELECT posts.id, posts.texto, posts.imagen_url, posts.id_categoria, posts.creado_en, usuarios.usuario, categorias.nombre as categoria
+      `SELECT posts.id, posts.id_usuario, posts.texto, posts.imagen_url, posts.id_categoria, posts.creado_en, usuarios.usuario, categorias.nombre as categoria
        FROM posts 
        JOIN usuarios ON posts.id_usuario = usuarios.id
        JOIN categorias ON posts.id_categoria = categorias.id

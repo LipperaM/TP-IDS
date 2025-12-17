@@ -100,6 +100,82 @@ function mostrarDatosUsuario(data) {
     if (openModalEditar) openModalEditar.classList.remove("hidden");
 }
 
+/*POSTS USUARIO*/
+let todosLosPostsUsuario = [];
+
+async function cargarPosts() {
+  try {
+    const idUsuario = localStorage.getItem("idUsuario");
+    console.log("ID Usuario:", idUsuario);
+    
+    if (!idUsuario) {
+        renderizarPosts([]);
+        return;
+    }
+    
+    const response = await fetch("http://localhost:3000/posts");
+    const todosLosPosts = await response.json();
+    console.log("Todos los posts:", todosLosPosts);
+    
+    todosLosPostsUsuario = todosLosPosts.filter(post => post.id_usuario == idUsuario);
+    console.log("Posts del usuario:", todosLosPostsUsuario);
+
+    renderizarPosts(todosLosPostsUsuario);
+  } catch (err) {
+    console.error("Error al cargar los posts del usuario.", err);
+  }
+}
+
+function renderizarPosts(posts) {
+  const container = document.querySelector(".post-usuario-container");
+  container.innerHTML = "";
+
+  posts.forEach(post => {
+    const card = document.createElement("div");
+    card.className = "card w-75 mb-3";
+    card.innerHTML = `
+    <div class="card-body">
+      <h5 class="card-title">@${post.usuario}</h5>
+      <span class="category-label badge text-bg-secondary">#${post.categoria}</span>
+      <p class="card-text">${post.texto}</p>
+    </div>
+    <div class="post-actions">
+      <div class="buttons">
+        <a href="#" class="btn btn-primary">Like</a>
+        <a href="#" class="btn btn-primary">Comentar</a>
+      </div>
+      <p class="date-time">${new Date(post.creado_en).toLocaleString('es-AR')}</p>
+    </div>
+`
+    container.appendChild(card);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  cargarPosts();
+
+  const busquedaForm = document.querySelector('form[role="search"]');
+  const busquedaInput = busquedaForm.querySelector('input[type="search"]');
+
+  busquedaForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const textoBusqueda = busquedaInput.value.trim().toLowerCase();
+
+    if (textoBusqueda === '') {
+      renderizarPosts(todosLosPostsUsuario);
+    } else {
+      const postsFiltrados = todosLosPostsUsuario.filter(post => {
+        return  post.categoria.toLowerCase().includes(textoBusqueda) ||
+                post.texto.toLowerCase().includes(textoBusqueda);
+      });
+
+      renderizarPosts(postsFiltrados);
+    }
+  });
+});
+
+
 /*SESIÓN PERSISTENTE*/
 async function verificarSesion() {
   const id = localStorage.getItem("idUsuario");
@@ -132,9 +208,15 @@ async function login(nombreUsuario, pass){
             return;
         }
 
-        const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
+        const url = `http://localhost:3000/usuarios/login`;
 
-        const response = await fetch(url, { method: "GET" });
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ usuario, contrasenia })
+        });
         const data = await response.json();
 
         console.log("Respuesta del login:", data);
@@ -159,6 +241,7 @@ async function login(nombreUsuario, pass){
         modalLogin.style.display = "none";
         modalRegistro.style.display = "none";
         mostrarDatosUsuario(data);
+        cargarPosts();
 
     }catch(err){
         console.log("Error:", err);
