@@ -51,7 +51,3 @@ router.get("/:id", async function(req, res) {
 });
 
 export default router;
-
-
-
-
