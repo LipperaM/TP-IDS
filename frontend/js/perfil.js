@@ -208,9 +208,15 @@ async function login(nombreUsuario, pass){
             return;
         }
 
-        const url = `http://localhost:3000/usuarios/${usuario}/${contrasenia}`;
+        const url = `http://localhost:3000/usuarios/login`;
 
-        const response = await fetch(url, { method: "GET" });
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ usuario, contrasenia })
+        });
         const data = await response.json();
 
         console.log("Respuesta del login:", data);
@@ -235,6 +241,7 @@ async function login(nombreUsuario, pass){
         modalLogin.style.display = "none";
         modalRegistro.style.display = "none";
         mostrarDatosUsuario(data);
+        cargarPosts();
 
     }catch(err){
         console.log("Error:", err);
