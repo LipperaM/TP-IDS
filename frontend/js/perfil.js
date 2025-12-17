@@ -7,7 +7,6 @@ const modalRegistro = document.getElementById("modalRegistro");
 const modalLogin = document.getElementById("modalLogin");
 const modalEliminar = document.getElementById("modalEliminar");
 const modalEditar = document.getElementById("modalEditar");
-const modalPost = document.getElementById("modal");
 
 const openModalRegistro = document.getElementById("openModalRegistro");
 const openModalLogin = document.getElementById("openModalLogin");
