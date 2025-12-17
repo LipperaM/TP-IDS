@@ -191,7 +191,7 @@
     <div class="crear-post">
       <div id="modal" class="modal">
         <div class="modal-content">
-          <span id="closeModal" class="close">&times;</span>
+          <span id="closeModal" class="closeModal">&times;</span>
           <h2>Nueva publicación</h2>
           <textarea
             id="postText"
@@ -200,7 +200,7 @@
             class="textAreaPost"
           ></textarea>
           <div class="botones-modal">
-            <button id="postBtn">Postear</button>
+            <button id="postBtn" class="postBtn" type="button">Postear</button>
             <div class="dropdown-center">
               <button
                 class="btn btn-secondary dropdown-toggle"
@@ -211,21 +211,15 @@
               >
                 Categoria
               </button>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu" id="categoria-btn">
                 <li>
-                  <a class="dropdown-item categoria-opcion" href="#"
-                    >Libertadores</a
-                  >
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Libertadores</a>
                 </li>
                 <li>
-                  <a class="dropdown-item categoria-opcion" href="#"
-                    >Liga profesional de futbol</a
-                  >
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Liga profesional de futbol</a>
                 </li>
                 <li>
-                  <a class="dropdown-item categoria-opcion" href="#"
-                    >Champions</a
-                  >
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Champions</a>
                 </li>
               </ul>
             </div>
@@ -243,55 +237,8 @@
 
     <script src="/js/navbar.js"></script>
     <script src="/js/perfil.js"></script>
-
-    <script>
-      // Modal-Funcionalidad
-      const modal = document.getElementById("modal");
-      const openModal = document.getElementById("openModal");
-      const closeModal = document.getElementById("closeModal");
-      const postBtn = document.getElementById("postBtn");
-      const postText = document.getElementById("card-text");
-      const posts = document.getElementById("card");
-      const id = localStorage.getItem("idUsuario");
-
-      openModal.onclick = () => {
-        const id = localStorage.getItem("idUsuario");
-
-        if (!id) {
-          alert("Tenés que iniciar sesión para crear un post");
-          return;
-        }
-        
-        modal.style.display = "flex";
-      };
-
-      closeModal.onclick = () => {
-        modal.style.display = "none";
-        postText.value = "";
-      };
-
-      postBtn.onclick = () => {
-        const text = postText.value.trim();
-        if (text !== "") {
-          const newPost = document.createElement("div");
-          newPost.classList.add("post");
-          newPost.textContent = text;
-          posts.prepend(newPost);
-          postText.value = "";
-          modal.style.display = "none";
-        }
-      };
-      //Modal-categoria-dropdown
-      const categoriaBtn = document.getElementById("categoria-btn");
-      const opciones = document.querySelectorAll(".categoria-opcion");
-
-      opciones.forEach((option) => {
-        option.addEventListener("click", function (e) {
-          e.preventDefault(); // evita que navegue
-          categoriaBtn.textContent = this.textContent; // cambia el texto del botón
-        });
-      });
-    </script>
+    <script src="/js/createPost.js"></script>
+    <script>crearPostBox()</script>
 
   </body>
 </html>

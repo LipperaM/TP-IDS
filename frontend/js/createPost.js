@@ -9,6 +9,13 @@ function crearPostBox() {
 
     // funcionalidad del modal
     openModal.onclick = () => {
+        const idUsuario = localStorage.getItem("idUsuario");
+
+        if (!idUsuario) {
+            alert("⚠️ Tenés que iniciar sesión para crear un post");
+            return;
+        }
+        
         modal.style.display = "flex";
     };
 
