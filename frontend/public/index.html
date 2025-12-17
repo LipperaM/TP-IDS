@@ -48,7 +48,7 @@
             class="textAreaPost"
           ></textarea>
           <div class="botones-modal">
-            <button id="postBtn" class="postBtn" type="button" >Postear</button>
+            <button id="postBtn" class="postBtn" type="button" onclick="nuevoPost()">Postear</button>
             <div class="dropdown-center">
               <button
                 class="btn btn-secondary dropdown-toggle"
@@ -61,13 +61,13 @@
               </button>
               <ul class="dropdown-menu" id="categoria-btn">
                 <li>
-                  <a class="dropdown-item categoria-opcion" href="#">Libertadores</a>
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Libertadores</a>
                 </li>
                 <li>
-                  <a class="dropdown-item categoria-opcion" href="#">Liga profesional de futbol</a>
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Liga profesional de futbol</a>
                 </li>
                 <li>
-                  <a class="dropdown-item categoria-opcion" href="#">Champions</a>
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Champions</a>
                 </li>
               </ul>
             </div>

@@ -20,10 +20,24 @@ function crearPostBox() {
         categoriaBtn.classList.add("btn-secondary");
     };
 
+    // mapea el texto mostrado en el dropdown a un id de categoría
+    const normalizar = (txt) => (txt || "").trim().toLowerCase();
+    function categoriaIdDesdeTexto(texto) {
+        const mapa = {
+            "champions": 1,
+            "libertadores": 2,
+            "liga profesional": 3,
+            "liga profesional de futbol": 3
+        };
+        return mapa[normalizar(texto)] ?? NaN;
+    }
+
     //boton de postear
-    postBtn.onclick = () => {
+    postBtn.onclick = async () => {
         const text = postText.value.trim();
+        const idUsuarioStr = localStorage.getItem("idUsuario");
         const categoriaTexto = categoriaBtn.textContent.trim();
+
         //chequear si el usuario escribio algo en el campo de texto
         if (text === "") {
             alert("Por favor escribe algo en tu post");
@@ -38,47 +52,98 @@ function crearPostBox() {
             return;
         }
 
-        // crear el nuevo post y agregarlo al contenedor
-        const nuevoPost = document.createElement("div");
-        nuevoPost.className = "card w-75 mb-3";
-        nuevoPost.innerHTML = `
-            <div class="card-body">
-                <h5 class="card-title">@TuUsuario</h5>
-                <span class="category-label badge text-bg-secondary">#${categoriaTexto}</span>
-                <p class="card-text">
-                    ${text}
-                </p>
-            </div>
+        const categoriaIdStr = categoriaBtn.getAttribute("data-categoria-id");
+        let categoriaId = Number(categoriaIdStr);
+        if (!categoriaIdStr || Number.isNaN(categoriaId)) {
+            categoriaId = categoriaIdDesdeTexto(categoriaTexto);
+        }
+        if (Number.isNaN(categoriaId)) {
+            alert("⚠️ Debes seleccionar una categoría válida");
+            return;
+        }
 
-            <div class="post-actions">
-                <div class="buttons">
-                    <a href="#" class="btn btn-primary">Like</a>
-                    <a href="#" class="btn btn-primary">Comentar</a>
-                </div>
+        try {
+            const response = await fetch("http://localhost:3000/posts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id_usuario: Number(idUsuarioStr),
+                    texto: text,
+                    id_categoria: categoriaId
+                })
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                alert(data?.error || "Error al crear el post");
+                console.error("Detalles backend:", data);
+                return;
+            }
 
-                <p class="date-time">Ahora</p>
-            </div>
-        `;
+            // Reset UI y refrescar listado
+            postText.value = "";
+            categoriaBtn.textContent = "Categoria";
+            categoriaBtn.classList.remove("btn-warning");
+            categoriaBtn.classList.add("btn-secondary");
+            categoriaBtn.removeAttribute("data-categoria-id");
+            modal.style.display = "none";
 
-        postsContainer.prepend(nuevoPost);
-
-        postText.value = "";
-        categoriaBtn.textContent = "Categoria";
-        categoriaBtn.classList.remove("btn-warning");
-        categoriaBtn.classList.add("btn-secondary");
-        modal.style.display = "none";
+            if (typeof cargarPosts === "function") {
+                cargarPosts();
+            } else {
+                location.reload();
+            }
+        } catch (error) {
+            console.error("Error de red al crear post:", error);
+            alert("Error de red al crear el post. Verifica que el backend esté corriendo en :3000.");
+        }
     };
     
     //Modal de categorias
     const opciones = document.querySelectorAll(".categoria-opcion");
-
     opciones.forEach((option) => {
         option.addEventListener("click", function (e) {
             e.preventDefault();
             categoriaBtn.textContent = this.textContent;
-            // Cambiar el color cuando se selecciona una categoría
+            const catId = this.getAttribute("data-categoria-id");
+            if (catId) categoriaBtn.setAttribute("data-categoria-id", catId);
+            else categoriaBtn.removeAttribute("data-categoria-id");
             categoriaBtn.classList.remove("btn-warning");
             categoriaBtn.classList.add("btn-secondary");
         });
     });
+}
+
+// Reutilizar la misma validación en nuevoPost()
+async function nuevoPost(){
+    try {
+        const contenido = document.getElementById("postText");
+        const tags = document.getElementById("categoria-btn");
+        const usuarioStr = localStorage.getItem("idUsuario");
+        const categoriaTexto = tags.textContent.trim();
+
+        const categoriaIdStr = tags.getAttribute("data-categoria-id");
+        let categoriaId = Number(categoriaIdStr);
+        if (!categoriaIdStr || Number.isNaN(categoriaId)) {
+            categoriaId = (typeof categoriaIdDesdeTexto === "function")
+                ? categoriaIdDesdeTexto(categoriaTexto)
+                : NaN;
+        }
+        if (!usuarioStr || Number.isNaN(Number(usuarioStr)) || Number.isNaN(categoriaId)) {
+            alert("⚠️ Debes seleccionar una categoría válida e iniciar sesión");
+            return;
+        }
+
+        const url = "http://localhost:3000/posts";
+        await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id_usuario: Number(usuarioStr),
+                texto: contenido.value,
+                id_categoria: categoriaId
+            })
+        });
+    } catch (error){
+        console.log(error);
+    }
 }

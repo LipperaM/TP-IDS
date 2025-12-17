@@ -88,7 +88,8 @@ CREATE TABLE public.likes_comentarios (
 CREATE TABLE public.equipos (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) UNIQUE NOT NULL,
-    escudo_url VARCHAR(255)
+    escudo_url VARCHAR(255),
+    zona VARCHAR(1)
 );
 
 -- TABLA_POSICIONES
@@ -105,7 +106,12 @@ CREATE TABLE public.tabla_posiciones (
 );
 
 -- Datos mock para pruebas
-
+--equipos
+INSERT INTO public.equipos (nombre, escudo_url, zona) VALUES 
+('River Plate', 'https://upload.wikimedia.org/wikipedia/commons/2/20/River_Plate_logo.svg', 'A'),
+('Boca Juniors', 'https://upload.wikimedia.org/wikipedia/commons/4/43/Boca_Juniors_logo.svg', 'A'),
+('Real Madrid', 'https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg', 'B'),
+('FC Barcelona', 'https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg', 'B');
 -- Categorías
 INSERT INTO public.categorias (nombre) VALUES 
 ('Champions'),
@@ -113,10 +119,10 @@ INSERT INTO public.categorias (nombre) VALUES
 ('Liga Profesional');
 
 -- Usuarios mock
-INSERT INTO public.usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo) VALUES 
-('JorgeVarsky23', 'Jorge', 'Varsky', 'varsky@mail.com', 'pass123', 'https://ejemplo.com/foto1.jpg', 'Argentina', 'River Plate'),
-('Ronaldo', 'Cristiano', 'Ronaldo', 'cr7@mail.com', 'pass123', 'https://ejemplo.com/foto2.jpg', 'Portugal', 'Al Nassr'),
-('MoristeEnMadrid420', 'Juan', 'Perez', 'juan@mail.com', 'pass123', 'https://ejemplo.com/foto3.jpg', 'Argentina', 'Boca Juniors');
+INSERT INTO public.usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, id_equipo) VALUES 
+('JorgeVarsky23', 'Jorge', 'Varsky', 'varsky@mail.com', 'pass123', 'https://ejemplo.com/foto1.jpg', 'Argentina', NULL),
+('Ronaldo', 'Cristiano', 'Ronaldo', 'cr7@mail.com', 'pass123', 'https://ejemplo.com/foto2.jpg', 'Portugal', NULL),
+('MoristeEnMadrid420', 'Juan', 'Perez', 'juan@mail.com', 'pass123', 'https://ejemplo.com/foto3.jpg', 'Argentina', NULL);
 
 -- Posts mock
 INSERT INTO public.posts (id_usuario, texto, id_categoria, creado_en) VALUES 
