@@ -9,8 +9,8 @@ console.log("=> cargando router /posts");
 router.post("/", async function(req, res) {
   try {
     const query = `INSERT INTO posts (id_usuario, texto, id_categoria, creado_en) 
-                   VALUES (${req.body.id_usuario}, '${req.body.texto}', ${req.body.id_categoria}, NOW())`;
-    await pool.query(query);
+                   VALUES ($1, $2, $3, NOW())`;
+    await pool.query(query, [req.body.id_usuario, req.body.texto, req.body.id_categoria]);
     res.json({ mensaje: "Post creado" });
   } catch (err) {
     console.error("SQL ERROR:", err);
@@ -39,7 +39,8 @@ router.get("/", async function(req, res) {
 router.get("/:id", async function(req, res) {
   try {
     const result = await pool.query(
-      `SELECT id, id_usuario, texto, imagen_url, id_categoria, creado_en FROM posts WHERE id = ${req.params.id}`
+      `SELECT id, id_usuario, texto, imagen_url, id_categoria, creado_en FROM posts WHERE id = $1`,
+      [req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: "Post no encontrado" });
     res.json(result.rows[0]);
