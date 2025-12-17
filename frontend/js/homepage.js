@@ -26,55 +26,78 @@ function renderizarPosts(posts) {
       <div class="post-actions">
         <div class="buttons">
           <a href="#" class="btn btn-primary like-btn" data-post-id="${post.id}">Like</a>
-          <span class="like-count" id="like-count-${post.id}">0 likes</span>
-          <a href="#" class="btn btn-primary">Comentar</a>
+          <a href="#" class="btn btn-primary comment-btn" data-post-id="${post.id}">Comentar</a>
         </div>
-        <p class="date-time">${new Date(post.creado_en).toLocaleString('es-AR')}</p>
+        <div class="post-stats">
+          <span class="like-count" id="like-count-${post.id}">❤️ 0</span>
+          <span class="comment-count" id="comment-count-${post.id}">💬 0</span>
+          <span class="date-time">${new Date(post.creado_en).toLocaleString('es-AR')}</span>
+        </div>
       </div>`;
     container.appendChild(card);
 
-    // Obtener la cantidad de likes real y actualizar el span
+    const id_usuario = localStorage.getItem("idUsuario");
+
+    // cantidad liks
     fetch(`http://localhost:3000/likes/posts/${post.id}`)
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
         const likeSpan = document.getElementById(`like-count-${post.id}`);
-        likeSpan.textContent = `${data.likes} likes`;
+        likeSpan.textContent = `❤️ ${data.likes}`;
       })
       .catch(err => console.error("Error al obtener likes:", err));
+
+    // verificacion de like
+    fetch(`http://localhost:3000/likes/posts/${post.id}/me?id_usuario=${id_usuario}`)
+      .then(res => res.json())
+      .then(data => {
+        const btn = card.querySelector(".like-btn");
+        if (data.like) {
+          btn.textContent = "Deslikear";
+        } else {
+          btn.textContent = "Like";
+        }
+      });
   });
 
-  // Agregar funcionalidad de Like al hacer click
+  // like unlike
   document.querySelectorAll(".like-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       const postId = btn.dataset.postId;
       const id_usuario = localStorage.getItem("idUsuario");
 
-      fetch(`http://localhost:3000/likes/posts/${postId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_usuario })
-      })
-      .then(response => {
-        if (!response.ok) {
-          return response.json().then(err => Promise.reject(err));
-        }
-        return response.json();
-      })
-      .then(() => {
-        // Actualizar el contador de likes
-        return fetch(`http://localhost:3000/likes/posts/${postId}`);
-      })
-      .then(response => response.json())
-      .then(data => {
-        const likeSpan = document.getElementById(`like-count-${postId}`);
-        likeSpan.textContent = `${data.likes} likes`;
-      })
-      .catch(err => console.error("Error al dar like:", err));
+      // verificacion
+      fetch(`http://localhost:3000/likes/posts/${postId}/me?id_usuario=${id_usuario}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.like) {
+            // cambio por deslik
+            return fetch(`http://localhost:3000/likes/posts/${postId}`, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_usuario })
+            });
+          } else {
+            // like no dado
+            return fetch(`http://localhost:3000/likes/posts/${postId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_usuario })
+            });
+          }
+        })
+        .then(() => fetch(`http://localhost:3000/likes/posts/${postId}`))
+        .then(res => res.json())
+        .then(data => {
+          const likeSpan = document.getElementById(`like-count-${postId}`);
+          likeSpan.textContent = `❤️ ${data.likes}`;
+          btn.textContent = btn.textContent === "Like" ? "Deslikear" : "Like";
+        })
+        .catch(err => console.error("Error al actualizar like:", err));
     });
   });
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
   cargarPosts();
@@ -84,21 +107,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   busquedaForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const textoBusqueda = busquedaInput.value.trim().toLowerCase();
-
     if (textoBusqueda === '') {
       renderizarPosts(todosLosPosts);
     } else {
       const postsFiltrados = todosLosPosts.filter(post => {
         return post.usuario.toLowerCase().includes(textoBusqueda) ||
-                post.categoria.toLowerCase().includes(textoBusqueda) ||
-                post.texto.toLowerCase().includes(textoBusqueda);
+               post.categoria.toLowerCase().includes(textoBusqueda) ||
+               post.texto.toLowerCase().includes(textoBusqueda);
       });
-
       renderizarPosts(postsFiltrados);
     }
   });
 });
+
 
 

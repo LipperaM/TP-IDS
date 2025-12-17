@@ -162,6 +162,7 @@ INSERT INTO public.posts (id_usuario, texto, id_categoria, creado_en) VALUES
     (29,'Union','https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg/1024px-Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg.png', 'A', true),
     (30,'Velez Sarsfield','https://upload.wikimedia.org/wikipedia/commons/3/36/Escudo_V%C3%A9lez_Sarsfield.png', 'A', true);
 
+
 --
 -- PostgreSQL database dump complete
 --
