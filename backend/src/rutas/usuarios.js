@@ -57,10 +57,10 @@ router.post("/", async(req, res) => {
 
 //Login
 
-router.get("/:usuario/:contrasenia", async(req, res) => {
+router.post("/login", async(req, res) => {
   try{
     //Validaciones
-    const { usuario, contrasenia } = req.params;
+    const { usuario, contrasenia } = req.body;
     
      if(!usuario){
       return res.status(400).json("Ingrese el nombre de usuario");
