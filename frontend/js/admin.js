@@ -1,3 +1,10 @@
+/*VERIFICAR AUTORIZACIÓN DE ADMINISTRADOR*/
+if (localStorage.getItem('esAdministrador') !== 'true') {
+    alert('Acceso no autorizado. Solo administradores pueden acceder a esta página.');
+    window.location.href = 'index.html';
+    throw new Error('Acceso denegado');
+}
+
 /*TRAER EQUIPOS*/
 async function getEquipos() {
     const url = "http://localhost:3000/equipos";
