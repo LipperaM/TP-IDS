@@ -90,7 +90,7 @@ router.put("/", async(req, res) => {
     }
 
     const post = await pool.query(
-      "SELECT id_usuario FROM comentarios WHERE id = $1",
+      "SELECT id_usuario FROM posts WHERE id = $1",
       [id]
     );
 
