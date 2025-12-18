@@ -73,7 +73,7 @@ router.get("/:id", async function(req, res) {
 });
 
 /*
-Editar comentario
+Editar post
 body:
 { "id": id,
  "texto": texto
@@ -82,6 +82,7 @@ body:
 
 router.put("/", async(req, res) => {
   try{
+    //Validaciones
     const { id, texto, id_usuario } = req.body;
 
     if (!id) {
@@ -125,50 +126,50 @@ router.put("/", async(req, res) => {
 });
 
 /*
-Borrar perfil
+Borrar post
 body:
 {
   "id": id,
- "contrasenia": contasenia
+  "id_usuario": id_usuario
 }
 */
 
 router.delete("/", async(req, res) => {
     try {
     //Validaciones
-    const { id, contrasenia} = req.body;
-    
-    const query = await pool.query(`
-      select contrasenia from usuarios
-      where id = $1`, [id]);
+    const { id, id_usuario } = req.body;
 
-    if(!contrasenia){
+     if (!id || !id_usuario) {
       return res.status(400).json("Todos los campos son obligatorios");
     }
-    if (query.rows.length === 0) {
-      return res.status(404).json("Usuario no encontrado");
-    }
-    const contraseniaDB = query.rows[0].contrasenia;
 
-    if (contraseniaDB === contrasenia) {
+    const post = await pool.query(
+      "SELECT id_usuario FROM posts WHERE id = $1",
+      [id]
+    );
 
-      await pool.query(`
-        delete from usuarios
-        where id = $1`, [id]);
-
-      return res.json({ ok: true });
-    } else {
-      return res.json("Contrasenia incorrecta");
+    if (post.rows.length === 0) {
+      return res.status(404).json({ error: "Post no encontrado" });
     }
 
+    if (post.rows[0].id_usuario !== Number(id_usuario)) {
+      return res.status(403).json({
+        error: "Solo podés borrar tus propios post"
+      });
+    }
+
+    await pool.query("DELETE FROM likes_posts WHERE id_post = $1", [id]);
+    await pool.query("DELETE FROM comentarios WHERE id_post = $1", [id]);
+    await pool.query("DELETE FROM posts WHERE id = $1", [id]);
+
+    return res.json({ ok: true });
+  
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "DB error" });
+    console.error("DELETE POST ERROR:", err.message);
+    res.status(500).json({ error: err.message });
   }
 
 });
-
-
 
 export default router;
 
