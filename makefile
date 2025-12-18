@@ -25,7 +25,7 @@ logs:
 	docker compose logs -f
 
 build:
-	docker compose build
+	docker compose build --no-cache api
 
 ps:
 	docker compose ps 
