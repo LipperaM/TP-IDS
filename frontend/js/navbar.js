@@ -13,7 +13,7 @@ function irALogin() {
 }
 
 if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
-    navbarContainer.innerHTML = `
+  navbarContainer.innerHTML = `
       <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
       <a class="navbar-brand" href="./profile.html">Perfil</a>
@@ -24,15 +24,14 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
       </form>
 
       <div class="nav-buttons">
-        ${
-          !estaLogeado
-            ? `
+        ${!estaLogeado
+      ? `
               <button class="boton" onclick="irARegistro()">Registrate Aquí</button>
               <button class="boton" onclick="irALogin()">Inicia Sesión</button>
             `
-            : `
+      : `
               `
-        }
+    }
       </div>
   `
 } else if (currentPage.includes('leaderboard.html')) {
@@ -65,4 +64,10 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
       <button class="boton" id="openModalLogin">Iniciar Sesion</button>
       </div>
   `
+} else if (currentPage.includes('admin.html')) {
+  navbarContainer.innerHTML = `
+      <a class="navbar-brand" href="./index.html">Home</a>
+      <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
+      <a class="navbar-brand" href="./profile.html">Perfil</a>
+      `
 }
