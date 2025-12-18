@@ -1,7 +1,16 @@
 const currentPage = window.location.pathname;
 const navbarContainer = document.querySelector('.navbar');
 
+const estaLogeado = !!localStorage.getItem("idUsuario");
 const esAdministrador = !!localStorage.getItem("admin");
+
+function irARegistro() {
+  window.location.href = "./profile.html?action=registro";
+}
+
+function irALogin() {
+  window.location.href = "./profile.html?action=login";
+}
 
 if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
     navbarContainer.innerHTML = `
@@ -13,6 +22,18 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
         <input class="form-control" type="search" placeholder="Buscar" aria-label="Search"/>
         <button class="boton" type="submit">Buscar</button>
       </form>
+
+      <div class="nav-buttons">
+        ${
+          !estaLogeado
+            ? `
+              <button class="boton" onclick="irARegistro()">Registrate Aquí</button>
+              <button class="boton" onclick="irALogin()">Inicia Sesión</button>
+            `
+            : `
+              `
+        }
+      </div>
   `
 } else if (currentPage.includes('leaderboard.html')) {
   navbarContainer.innerHTML = `
