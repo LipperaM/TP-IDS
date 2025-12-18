@@ -1,5 +1,5 @@
 /*VERIFICAR AUTORIZACIÓN DE ADMINISTRADOR*/
-if (localStorage.getItem('esAdministrador') !== 'true') {
+if (localStorage.getItem('admin') !== '1') {
     alert('Acceso no autorizado. Solo administradores pueden acceder a esta página.');
     window.location.href = 'index.html';
     throw new Error('Acceso denegado');
