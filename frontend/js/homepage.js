@@ -32,7 +32,7 @@ function renderizarPosts(posts) {
         <div class="mt-2 text-muted small">
           <span id="like-count-${post.id}">❤️ 0</span> · 
           <span class="toggle-comments" data-post-id="${post.id}" style="cursor:pointer">
-            💬 <span id="comment-count-${post.id}">0</span> Comentarios
+            💬 <span id="comment-count-${post.id}">${post.cantidad_comentarios}</span> Comentarios
           </span> ·
           <span>${new Date(post.creado_en).toLocaleString("es-AR")}</span>
         </div>
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bootstrap.Modal.getInstance(document.getElementById("commentModal")).hide();
   });
 
-  // clickear para ver coment
+  // clickear para ver comentarios
   document.addEventListener("click", async e => {
     if (e.target.closest(".toggle-comments")) {
       const el = e.target.closest(".toggle-comments");

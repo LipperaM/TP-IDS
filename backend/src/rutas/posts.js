@@ -22,12 +22,30 @@ router.post("/", async function(req, res) {
 router.get("/", async function(req, res) {
   try {
     const result = await pool.query(
-      `SELECT posts.id, posts.id_usuario, posts.texto, posts.imagen_url, posts.id_categoria, posts.creado_en,
-              usuarios.usuario, categorias.nombre as categoria
-       FROM posts 
-       JOIN usuarios ON posts.id_usuario = usuarios.id
-       JOIN categorias ON posts.id_categoria = categorias.id
-       ORDER BY posts.creado_en DESC`
+      `SELECT 
+        p.id,
+        p.id_usuario,
+        p.texto,
+        p.imagen_url,
+        p.id_categoria,
+        p.creado_en,
+        u.usuario,
+        c.nombre AS categoria,
+        COUNT(com.id) AS cantidad_comentarios
+      FROM posts p
+      JOIN usuarios u ON p.id_usuario = u.id
+      JOIN categorias c ON p.id_categoria = c.id
+      LEFT JOIN comentarios com ON com.id_post = p.id
+      GROUP BY 
+        p.id,
+        p.id_usuario,
+        p.texto,
+        p.imagen_url,
+        p.id_categoria,
+        p.creado_en,
+        u.usuario,
+        c.nombre
+      ORDER BY p.creado_en DESC`
     );
     res.json(result.rows);
   } catch (err) {
