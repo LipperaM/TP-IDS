@@ -253,32 +253,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  //Editar Post
+  //editar Post
   document.addEventListener("click", async e => {
     if (!e.target.classList.contains("edit-post")) return;
 
     e.preventDefault();
 
-    const id = e.target.dataset.id;
-    const id_usuario = localStorage.getItem("idUsuario");
+    const postId = e.target.dataset.id;
+    const postCard = e.target.closest(".card");
+    const textoActual = postCard.querySelector(".card-text").textContent.trim();
+    const categoriaActual = postCard.querySelector(".badge").textContent.replace('#', '').trim();
 
-    const nuevoTexto = prompt("Editar post:");
-    if (!nuevoTexto) return;
+    // abrir modal con contenido actual del post
+    const modal = document.getElementById("modal");
+    const postText = document.getElementById("postText");
+    const categoriaBtn = document.getElementById("categoria-btn");
+    const postBtn = document.getElementById("postBtn");
 
-    await fetch("http://localhost:3000/posts", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id,
-        texto: nuevoTexto,
-        id_usuario
-      })
-    });
+    postText.value = textoActual;
+    categoriaBtn.textContent = categoriaActual;
+    modal.style.display = "flex";
 
-    cargarPosts();
+    // cambiar funcionalidad del botón a "Actualizar"
+    postBtn.textContent = "Actualizar";
+    postBtn.dataset.editMode = "true";
+    postBtn.dataset.postId = postId;
   });
 
-  //Eliminar Post
+  //eliminar Post
   document.addEventListener("click", async e => {
 
     if (!e.target.classList.contains("delete-post")) return;
