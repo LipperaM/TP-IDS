@@ -313,6 +313,13 @@ async function registrarse(event){
 
 /*ELIMINAR USUARIO*/
 async function eliminarUsuario(){
+
+    const confirmar = confirm(
+      "⚠️¿Seguro que querés eliminar tu cuenta?"
+    );
+
+    if (!confirmar) return;
+
     try{
         const contrasenia = document.getElementById("contraElim");
         const id = localStorage.getItem("idUsuario");
@@ -350,6 +357,13 @@ async function eliminarUsuario(){
 
 /*EDITAR USUARIO*/
 async function editarUsuario(){
+
+    const confirmar = confirm(
+      "¿Seguro que querés editar estos datos?"
+    );
+
+    if (!confirmar) return;
+
     try{
         const id = localStorage.getItem("idUsuario");
         const usuarioNuevo = document.getElementById("editUsuario");

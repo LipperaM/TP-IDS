@@ -72,5 +72,104 @@ router.get("/:id", async function(req, res) {
   }
 });
 
+/*
+Editar post
+body:
+{ "id": id,
+ "texto": texto
+}
+*/
+
+router.put("/", async(req, res) => {
+  try{
+    //Validaciones
+    const { id, texto, id_usuario } = req.body;
+
+    if (!id) {
+      return res.status(400).json("Falta el id del post");
+    }
+
+    const post = await pool.query(
+      "SELECT id_usuario FROM posts WHERE id = $1",
+      [id]
+    );
+
+    if (post.rows.length === 0) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+
+    if (post.rows[0].id_usuario !== Number(id_usuario)) {
+      return res.status(403).json({
+        error: "Solo podés editar tus propios post"
+      });
+    }
+
+    const datos = await pool.query(
+      "SELECT * FROM usuarios WHERE id = $1",
+      [id]
+    );
+
+    const actual = datos.rows[0];
+
+    //Si lo manda vacio usa el que ya estaba en la db
+    const nuevoTexto = texto || actual.texto;
+    
+    await pool.query(`update posts set texto = $2 where id = $1`, [id, nuevoTexto]);
+
+    return res.json({ ok: true });
+
+  }catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
+  }
+
+});
+
+/*
+Borrar post
+body:
+{
+  "id": id,
+  "id_usuario": id_usuario
+}
+*/
+
+router.delete("/", async(req, res) => {
+    try {
+    //Validaciones
+    const { id, id_usuario } = req.body;
+
+     if (!id || !id_usuario) {
+      return res.status(400).json("Todos los campos son obligatorios");
+    }
+
+    const post = await pool.query(
+      "SELECT id_usuario FROM posts WHERE id = $1",
+      [id]
+    );
+
+    if (post.rows.length === 0) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+
+    if (post.rows[0].id_usuario !== Number(id_usuario)) {
+      return res.status(403).json({
+        error: "Solo podés borrar tus propios post"
+      });
+    }
+
+    await pool.query("DELETE FROM likes_posts WHERE id_post = $1", [id]);
+    await pool.query("DELETE FROM comentarios WHERE id_post = $1", [id]);
+    await pool.query("DELETE FROM posts WHERE id = $1", [id]);
+
+    return res.json({ ok: true });
+  
+  } catch (err) {
+    console.error("DELETE POST ERROR:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+
+});
+
 export default router;
 

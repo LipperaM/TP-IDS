@@ -16,6 +16,10 @@ function renderizarPosts(posts) {
     const card = document.createElement("div");
     card.className = "card w-75 mb-3";
 
+    const idUsuarioLogeado = localStorage.getItem("idUsuario");
+    const esMio = Number(idUsuarioLogeado) === post.id_usuario;
+
+
     card.innerHTML = `
       <div class="card-body">
         <h5 class="card-title">@${post.usuario}</h5>
@@ -26,6 +30,19 @@ function renderizarPosts(posts) {
         <div class="d-flex gap-2 mt-2">
           <a href="#" class="btn btn-primary like-btn" data-post-id="${post.id}">Like</a>
           <a href="#" class="btn btn-primary comment-btn" data-post-id="${post.id}">Comentar</a>
+
+          ${
+            esMio
+              ? `
+                <a href="#" class="btn btn-warning edit-post" data-id="${post.id}">
+                  Editar
+                </a>
+                <a href="#" class="btn btn-danger delete-post" data-id="${post.id}">
+                  Borrar
+                </a>
+              `
+              : ""
+          }
         </div>
 
         <!-- STATS -->
@@ -235,11 +252,52 @@ document.addEventListener("DOMContentLoaded", () => {
       cargarComentarios(postId);
     }
   });
+
+  //Editar Post
+  document.addEventListener("click", async e => {
+    if (!e.target.classList.contains("edit-post")) return;
+
+    e.preventDefault();
+
+    const id = e.target.dataset.id;
+    const id_usuario = localStorage.getItem("idUsuario");
+
+    const nuevoTexto = prompt("Editar post:");
+    if (!nuevoTexto) return;
+
+    await fetch("http://localhost:3000/posts", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id,
+        texto: nuevoTexto,
+        id_usuario
+      })
+    });
+
+    cargarPosts();
+  });
+
+  //Eliminar Post
+  document.addEventListener("click", async e => {
+
+    if (!e.target.classList.contains("delete-post")) return;
+
+    e.preventDefault();
+
+    const confirmar = confirm("¿Seguro que querés borrar este post?");
+    if (!confirmar) return;
+
+    const id = e.target.dataset.id;
+    const id_usuario = localStorage.getItem("idUsuario");
+
+    await fetch("http://localhost:3000/posts", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, id_usuario })
+    });
+
+    cargarPosts();
+  });
+
 });
-
-
-
-
-
-
-
