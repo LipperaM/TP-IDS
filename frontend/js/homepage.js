@@ -45,7 +45,6 @@ function renderizarPosts(posts) {
     container.appendChild(card);
 
     const id_usuario = localStorage.getItem("idUsuario");
-
     
     fetch(`http://localhost:3000/likes/posts/${post.id}`)
       .then(r => r.json())
@@ -65,8 +64,15 @@ function renderizarPosts(posts) {
   document.querySelectorAll(".like-btn").forEach(btn => {
     btn.addEventListener("click", async e => {
       e.preventDefault();
-      const postId = btn.dataset.postId;
+
       const id_usuario = localStorage.getItem("idUsuario");
+
+      if (!id_usuario) {
+        alert("⚠️ Tenés que iniciar sesión para dar like");
+        return;
+      }
+
+      const postId = btn.dataset.postId;
 
       const me = await fetch(
         `http://localhost:3000/likes/posts/${postId}/me?id_usuario=${id_usuario}`
@@ -134,6 +140,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // nuevo modal de comentario (chequear tamaño)
   document.addEventListener("click", e => {
+    const id_usuario = localStorage.getItem("idUsuario");
+
+    if (!id_usuario) {
+        alert("⚠️ Tenés que iniciar sesión para comentar");
+        return;
+    }
+    
     if (e.target.classList.contains("comment-btn")) {
       currentPostId = e.target.dataset.postId;
       new bootstrap.Modal(document.getElementById("commentModal")).show();
@@ -143,7 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // send comentario
   document.getElementById("modalSubmitComment").addEventListener("click", async () => {
     const texto = document.getElementById("modalCommentText").value.trim();
+
     const id_usuario = localStorage.getItem("idUsuario");
+
     if (!texto || !currentPostId) return;
 
     await fetch("http://localhost:3000/comentarios", {
