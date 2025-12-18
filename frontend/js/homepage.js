@@ -96,14 +96,28 @@ async function cargarComentarios(postId) {
   const comentarios = await res.json();
   const container = document.getElementById(`comments-${postId}`);
   container.innerHTML = "";
+  const idUsuarioLogeado = localStorage.getItem("idUsuario");
 
   comentarios.forEach(c => {
     const div = document.createElement("div");
     div.className = "border-top pt-2";
+
+    const esMio = Number(idUsuarioLogeado) === c.id_usuario;
+
     div.innerHTML = `
       <b>@${c.usuario}</b>: ${c.texto}
-      <button class="btn btn-sm btn-link edit-comment" data-id="${c.id}">Editar</button>
-      <button class="btn btn-sm btn-link text-danger delete-comment" data-id="${c.id}">Borrar</button>
+      ${
+      esMio
+        ? `
+          <button class="btn btn-sm btn-link edit-comment" data-id="${c.id}">
+            Editar
+          </button>
+          <button class="btn btn-sm btn-link text-danger delete-comment" data-id="${c.id}">
+            Borrar
+          </button>
+        `
+        : ""
+    }
     `;
     container.appendChild(div);
   });
@@ -190,12 +204,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // edicion o borrar comen
+  // edicion o borrar comentario
   document.addEventListener("click", async e => {
+    const id_usuario = localStorage.getItem("idUsuario");
+
     if (e.target.classList.contains("delete-comment")) {
       const id = e.target.dataset.id;
       const postId = e.target.closest(".card").querySelector(".comment-btn").dataset.postId;
-      await fetch(`http://localhost:3000/comentarios/${id}`, { method: "DELETE" });
+      await fetch(`http://localhost:3000/comentarios/${id}`, { 
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+                id_usuario: id_usuario
+            })
+      });
       cargarComentarios(postId);
     }
 
@@ -208,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await fetch(`http://localhost:3000/comentarios/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texto })
+        body: JSON.stringify({ texto, id_usuario })
       });
       cargarComentarios(postId);
     }
