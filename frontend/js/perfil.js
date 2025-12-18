@@ -7,6 +7,7 @@ const modalRegistro = document.getElementById("modalRegistro");
 const modalLogin = document.getElementById("modalLogin");
 const modalEliminar = document.getElementById("modalEliminar");
 const modalEditar = document.getElementById("modalEditar");
+const modalPost = document.getElementById("modal"); // evita ReferenceError
 
 const openModalRegistro = document.getElementById("openModalRegistro");
 const openModalLogin = document.getElementById("openModalLogin");
@@ -127,6 +128,7 @@ async function cargarPosts() {
 
 function renderizarPosts(posts) {
   const container = document.querySelector(".post-usuario-container");
+  if (!container) return;
   container.innerHTML = "";
 
   posts.forEach(post => {
@@ -192,6 +194,7 @@ function renderizarPosts(posts) {
         card.querySelector(".like-btn").textContent = d.like ? "Deslikear" : "Like";
       });
   });
+
   // like unlike
   document.querySelectorAll(".like-btn").forEach(btn => {
     btn.addEventListener("click", async e => {
@@ -222,6 +225,7 @@ function renderizarPosts(posts) {
     });
   });
 }
+
 async function cargarComentarios(postId) {
   const res = await fetch(`http://localhost:3000/comentarios/post/${postId}`);
   const comentarios = await res.json();
@@ -232,21 +236,21 @@ async function cargarComentarios(postId) {
   comentarios.forEach(c => {
     const div = document.createElement("div");
     div.className = "border-top pt-2";
-
     const esMio = Number(idUsuarioLogeado) === c.id_usuario;
 
     div.innerHTML = `
-      <b>@${c.usuario}</b>: ${c.texto}
-      ${esMio
-        ? `
-          <button class="btn btn-sm btn-link edit-comment" data-id="${c.id}">
-            Editar
-          </button>
-          <button class="btn btn-sm btn-link text-danger delete-comment" data-id="${c.id}">
-            Borrar
-          </button>
-        `
-        : ""
+      <b>@${c.usuario}</b>: <span class="comment-text">${c.texto}</span>
+      ${
+        esMio
+          ? `
+            <button class="btn btn-sm btn-link edit-comment" data-id="${c.id}">
+              Editar
+            </button>
+            <button class="btn btn-sm btn-link text-danger delete-comment" data-id="${c.id}">
+              Borrar
+            </button>
+          `
+          : ""
       }
     `;
     container.appendChild(div);
@@ -260,61 +264,84 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Filtrado de posts search bar
   const busquedaForm = document.querySelector('form[role="search"]');
-  const busquedaInput = busquedaForm.querySelector('input[type="search"]');
+  const busquedaInput = busquedaForm?.querySelector('input[type="search"]');
 
-  busquedaForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const textoBusqueda = busquedaInput.value.trim().toLowerCase();
-
-    if (textoBusqueda === '') {
-      renderizarPosts(todosLosPostsUsuario);
-    } else {
-      const postsFiltrados = todosLosPostsUsuario.filter(post => {
-        return post.categoria.toLowerCase().includes(textoBusqueda) ||
-               post.texto.toLowerCase().includes(textoBusqueda);
-      });
-
-      renderizarPosts(postsFiltrados);
-    }
-  });
+  if (busquedaForm && busquedaInput) {
+    busquedaForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const textoBusqueda = busquedaInput.value.trim().toLowerCase();
+      if (textoBusqueda === '') {
+        renderizarPosts(todosLosPostsUsuario);
+      } else {
+        const postsFiltrados = todosLosPostsUsuario.filter(post =>
+          post.usuario.toLowerCase().includes(textoBusqueda) ||
+          post.categoria.toLowerCase().includes(textoBusqueda) ||
+          post.texto.toLowerCase().includes(textoBusqueda)
+        );
+        renderizarPosts(postsFiltrados);
+      }
+    });
+  }
 
   let currentPostId = null;
+  let currentCommentId = null;
+  let isEditingComment = false;
+  const commentModalEl = document.getElementById("commentModal");
+  const commentModalInstance = new bootstrap.Modal(commentModalEl);
+  const commentModalInput = document.getElementById("modalCommentText");
+  const commentModalBtn = document.getElementById("modalSubmitComment");
+  const commentModalTitle = commentModalEl.querySelector(".modal-title");
+  const resetCommentModal = () => {
+    isEditingComment = false;
+    currentCommentId = null;
+    commentModalTitle.textContent = "Nuevo comentario";
+    commentModalBtn.textContent = "Enviar";
+    commentModalInput.value = "";
+  };
+  commentModalEl.addEventListener("hidden.bs.modal", resetCommentModal);
 
-  // nuevo modal de comentario (chequear tamaño)
+  // nuevo modal de comentario
   document.addEventListener("click", e => {
-    if (!e.target.classList.contains("comment-btn")) {
-      return;
-    }
+    if (!e.target.classList.contains("comment-btn")) return;
 
     const id_usuario = localStorage.getItem("idUsuario");
-
     if (!id_usuario) {
       alert("⚠️ Tenés que iniciar sesión para comentar");
       return;
     }
 
     currentPostId = e.target.dataset.postId;
-    new bootstrap.Modal(document.getElementById("commentModal")).show();
+    resetCommentModal();
+    commentModalInstance.show();
   });
 
-  // send comentario
-  document.getElementById("modalSubmitComment").addEventListener("click", async () => {
-    const texto = document.getElementById("modalCommentText").value.trim();
-
+  // enviar / update comentario
+  commentModalBtn.addEventListener("click", async () => {
+    const texto = commentModalInput.value.trim();
     const id_usuario = localStorage.getItem("idUsuario");
 
+    if (!id_usuario) {
+      alert("⚠️ Tenés que iniciar sesión para comentar");
+      return;
+    }
     if (!texto || !currentPostId) return;
 
-    await fetch("http://localhost:3000/comentarios", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id_post: currentPostId, id_usuario, texto })
-    });
+    if (isEditingComment && currentCommentId) {
+      await fetch(`http://localhost:3000/comentarios/${currentCommentId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ texto, id_usuario })
+      });
+    } else {
+      await fetch("http://localhost:3000/comentarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_post: currentPostId, id_usuario, texto })
+      });
+    }
 
-    document.getElementById("modalCommentText").value = "";
     await cargarComentarios(currentPostId);
-    bootstrap.Modal.getInstance(document.getElementById("commentModal")).hide();
+    commentModalInstance.hide();
   });
 
   // clickear para ver comentarios
@@ -353,44 +380,47 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.classList.contains("edit-comment")) {
       const id = e.target.dataset.id;
       const postId = e.target.closest(".card").querySelector(".comment-btn").dataset.postId;
-      const texto = prompt("Editar comentario:");
-      if (!texto) return;
+      const commentTextEl = e.target.closest(".border-top").querySelector(".comment-text");
+      const texto = commentTextEl ? commentTextEl.textContent.trim() : "";
 
-      await fetch(`http://localhost:3000/comentarios/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texto, id_usuario })
-      });
-      cargarComentarios(postId);
+      isEditingComment = true;
+      currentCommentId = id;
+      currentPostId = postId;
+      commentModalTitle.textContent = "Editar comentario";
+      commentModalBtn.textContent = "Actualizar";
+      commentModalInput.value = texto;
+      commentModalInstance.show();
     }
   });
 
-  //Editar Post
+  //editar Post
   document.addEventListener("click", async e => {
     if (!e.target.classList.contains("edit-post")) return;
 
     e.preventDefault();
 
-    const id = e.target.dataset.id;
-    const id_usuario = localStorage.getItem("idUsuario");
+    const postId = e.target.dataset.id;
+    const postCard = e.target.closest(".card");
+    const textoActual = postCard.querySelector(".card-text").textContent.trim();
+    const categoriaActual = postCard.querySelector(".badge").textContent.replace('#', '').trim();
 
-    const nuevoTexto = prompt("Editar post:");
-    if (!nuevoTexto) return;
+    // abrir modal con contenido actual del post
+    const modal = document.getElementById("modal");
+    const postText = document.getElementById("postText");
+    const categoriaBtn = document.getElementById("categoria-btn");
+    const postBtn = document.getElementById("postBtn");
 
-    await fetch("http://localhost:3000/posts", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id,
-        texto: nuevoTexto,
-        id_usuario
-      })
-    });
+    postText.value = textoActual;
+    categoriaBtn.textContent = categoriaActual;
+    modal.style.display = "flex";
 
-    cargarPosts();
+    // cambiar boton a actualiz 
+    postBtn.textContent = "Actualizar";
+    postBtn.dataset.editMode = "true";
+    postBtn.dataset.postId = postId;
   });
 
-  //Eliminar Post
+  //eliminar Post
   document.addEventListener("click", async e => {
 
     if (!e.target.classList.contains("delete-post")) return;
