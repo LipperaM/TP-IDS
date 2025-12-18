@@ -32,7 +32,7 @@ function renderizarPosts(posts) {
         <div class="mt-2 text-muted small">
           <span id="like-count-${post.id}">❤️ 0</span> · 
           <span class="toggle-comments" data-post-id="${post.id}" style="cursor:pointer">
-            💬 <span id="comment-count-${post.id}">0</span> Comentarios
+            💬 <span id="comment-count-${post.id}">${post.cantidad_comentarios}</span> Comentarios
           </span> ·
           <span>${new Date(post.creado_en).toLocaleString("es-AR")}</span>
         </div>
@@ -45,7 +45,6 @@ function renderizarPosts(posts) {
     container.appendChild(card);
 
     const id_usuario = localStorage.getItem("idUsuario");
-
     
     fetch(`http://localhost:3000/likes/posts/${post.id}`)
       .then(r => r.json())
@@ -65,8 +64,15 @@ function renderizarPosts(posts) {
   document.querySelectorAll(".like-btn").forEach(btn => {
     btn.addEventListener("click", async e => {
       e.preventDefault();
-      const postId = btn.dataset.postId;
+
       const id_usuario = localStorage.getItem("idUsuario");
+
+      if (!id_usuario) {
+        alert("⚠️ Tenés que iniciar sesión para dar like");
+        return;
+      }
+
+      const postId = btn.dataset.postId;
 
       const me = await fetch(
         `http://localhost:3000/likes/posts/${postId}/me?id_usuario=${id_usuario}`
@@ -90,14 +96,28 @@ async function cargarComentarios(postId) {
   const comentarios = await res.json();
   const container = document.getElementById(`comments-${postId}`);
   container.innerHTML = "";
+  const idUsuarioLogeado = localStorage.getItem("idUsuario");
 
   comentarios.forEach(c => {
     const div = document.createElement("div");
     div.className = "border-top pt-2";
+
+    const esMio = Number(idUsuarioLogeado) === c.id_usuario;
+
     div.innerHTML = `
       <b>@${c.usuario}</b>: ${c.texto}
-      <button class="btn btn-sm btn-link edit-comment" data-id="${c.id}">Editar</button>
-      <button class="btn btn-sm btn-link text-danger delete-comment" data-id="${c.id}">Borrar</button>
+      ${
+      esMio
+        ? `
+          <button class="btn btn-sm btn-link edit-comment" data-id="${c.id}">
+            Editar
+          </button>
+          <button class="btn btn-sm btn-link text-danger delete-comment" data-id="${c.id}">
+            Borrar
+          </button>
+        `
+        : ""
+    }
     `;
     container.appendChild(div);
   });
@@ -134,16 +154,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // nuevo modal de comentario (chequear tamaño)
   document.addEventListener("click", e => {
-    if (e.target.classList.contains("comment-btn")) {
-      currentPostId = e.target.dataset.postId;
-      new bootstrap.Modal(document.getElementById("commentModal")).show();
+    if (!e.target.classList.contains("comment-btn")) {
+      return; 
     }
+
+    const id_usuario = localStorage.getItem("idUsuario");
+
+    if (!id_usuario) {
+        alert("⚠️ Tenés que iniciar sesión para comentar");
+        return;
+    }
+
+    currentPostId = e.target.dataset.postId;
+    new bootstrap.Modal(document.getElementById("commentModal")).show();
   });
 
   // send comentario
   document.getElementById("modalSubmitComment").addEventListener("click", async () => {
     const texto = document.getElementById("modalCommentText").value.trim();
+
     const id_usuario = localStorage.getItem("idUsuario");
+
     if (!texto || !currentPostId) return;
 
     await fetch("http://localhost:3000/comentarios", {
@@ -157,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bootstrap.Modal.getInstance(document.getElementById("commentModal")).hide();
   });
 
-  // clickear para ver coment
+  // clickear para ver comentarios
   document.addEventListener("click", async e => {
     if (e.target.closest(".toggle-comments")) {
       const el = e.target.closest(".toggle-comments");
@@ -173,12 +204,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // edicion o borrar comen
+  // edicion o borrar comentario
   document.addEventListener("click", async e => {
+    const id_usuario = localStorage.getItem("idUsuario");
+
     if (e.target.classList.contains("delete-comment")) {
       const id = e.target.dataset.id;
       const postId = e.target.closest(".card").querySelector(".comment-btn").dataset.postId;
-      await fetch(`http://localhost:3000/comentarios/${id}`, { method: "DELETE" });
+      await fetch(`http://localhost:3000/comentarios/${id}`, { 
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+                id_usuario: id_usuario
+            })
+      });
       cargarComentarios(postId);
     }
 
@@ -191,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await fetch(`http://localhost:3000/comentarios/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texto })
+        body: JSON.stringify({ texto, id_usuario })
       });
       cargarComentarios(postId);
     }
