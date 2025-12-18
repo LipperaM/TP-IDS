@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", () => {
+    getEquipos();
+});
+
 /*TRAER EQUIPOS*/
 async function getEquipos() {
     const url = "http://localhost:3000/equipos";
