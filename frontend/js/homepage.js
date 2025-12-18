@@ -41,7 +41,6 @@ function renderizarPosts(posts) {
         <div class="comments-container mt-3" id="comments-${post.id}" style="display:none;"></div>
       </div>
     `;
-      //revisar esos iconos poronga
       
     container.appendChild(card);
 
@@ -108,6 +107,28 @@ async function cargarComentarios(postId) {
 
 document.addEventListener("DOMContentLoaded", () => {
   cargarPosts();
+
+  // Filtrado de posts search bar
+  const busquedaForm = document.querySelector('form[role="search"]');
+  const busquedaInput = busquedaForm.querySelector('input[type="search"]');
+
+  busquedaForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const textoBusqueda = busquedaInput.value.trim().toLowerCase();
+
+    if (textoBusqueda === '') {
+      renderizarPosts(todosLosPosts);
+    } else {
+      const postsFiltrados = todosLosPosts.filter(post => {
+        return post.usuario.toLowerCase().includes(textoBusqueda) ||
+               post.categoria.toLowerCase().includes(textoBusqueda) ||
+               post.texto.toLowerCase().includes(textoBusqueda);
+      });
+
+      renderizarPosts(postsFiltrados);
+    }
+  })
 
   let currentPostId = null;
 
