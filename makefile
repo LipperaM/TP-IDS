@@ -1,4 +1,4 @@
-.PHONY: logs build ps local local-down local-restart prod prod-down nginx postgres api
+.PHONY: logs build ps local local-down local-restart prod prod-down nginx postgres api clean
 
 
 # Levantar entorno local sin tunel Cloudflare para desarrollo
@@ -39,3 +39,7 @@ postgres:
 
 api:
 	docker compose --profile dev up -d api
+
+clean:
+	docker volume rm tp-ids_pgdata
+	docker image rm tp-ids-api
