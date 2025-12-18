@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", async(req, res) => {
   try{
     
-    const result = await pool.query("SELECT * FROM equipos");
+    const result = await pool.query("SELECT * FROM equipos WHERE activo = true ORDER BY nombre");
     res.json(result.rows);
 
   }catch (err){
@@ -74,9 +74,28 @@ router.post("/", async(req, res) => {
 
     const zonaMayus = zona.toUpperCase();
 
-    const total = await pool.query(`select count(*) from equipos`);
+    const chequeoDuplicado = await pool.query(
+      `SELECT * FROM equipos WHERE nombre = $1`,
+      [nombre]
+    );
+
+    if (chequeoDuplicado.rows.length > 0) {
+      const equipoExistente = chequeoDuplicado.rows[0];
+
+      if (!equipoExistente.activo) {
+        await pool.query(
+          `UPDATE equipos SET activo = true, escudo_url = $1, zona = $2 WHERE nombre = $3`,
+          [escudo, zonaMayus, nombre]
+        );
+        return res.status(200).json({ ok: true, message: "Equipo reactivado" });
+      }
+
+      return res.status(400).json("El equipo ya existe");
+    }
+
+    const total = await pool.query(`select count(*) FROM equipos WHERE activo = true`);
     const cantZona = await pool.query(
-      `select count(*) from equipos where zona = $1`,
+      `select count(*) FROM equipos WHERE zona = $1 AND activo = true`,
       [zonaMayus]
     );
 
