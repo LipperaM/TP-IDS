@@ -140,17 +140,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // nuevo modal de comentario (chequear tamaño)
   document.addEventListener("click", e => {
+    if (!e.target.classList.contains("comment-btn")) {
+      return; 
+    }
+
     const id_usuario = localStorage.getItem("idUsuario");
 
     if (!id_usuario) {
         alert("⚠️ Tenés que iniciar sesión para comentar");
         return;
     }
-    
-    if (e.target.classList.contains("comment-btn")) {
-      currentPostId = e.target.dataset.postId;
-      new bootstrap.Modal(document.getElementById("commentModal")).show();
-    }
+
+    currentPostId = e.target.dataset.postId;
+    new bootstrap.Modal(document.getElementById("commentModal")).show();
   });
 
   // send comentario
