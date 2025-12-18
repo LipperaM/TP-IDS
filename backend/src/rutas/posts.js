@@ -72,5 +72,103 @@ router.get("/:id", async function(req, res) {
   }
 });
 
+/*
+Editar comentario
+body:
+{ "id": id,
+ "texto": texto
+}
+*/
+
+router.put("/", async(req, res) => {
+  try{
+    const { id, texto, id_usuario } = req.body;
+
+    if (!id) {
+      return res.status(400).json("Falta el id del post");
+    }
+
+    const post = await pool.query(
+      "SELECT id_usuario FROM comentarios WHERE id = $1",
+      [id]
+    );
+
+    if (post.rows.length === 0) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+
+    if (post.rows[0].id_usuario !== Number(id_usuario)) {
+      return res.status(403).json({
+        error: "Solo podés editar tus propios post"
+      });
+    }
+
+    const datos = await pool.query(
+      "SELECT * FROM usuarios WHERE id = $1",
+      [id]
+    );
+
+    const actual = datos.rows[0];
+
+    //Si lo manda vacio usa el que ya estaba en la db
+    const nuevoTexto = texto || actual.texto;
+    
+    await pool.query(`update posts set texto = $2 where id = $1`, [id, nuevoTexto]);
+
+    return res.json({ ok: true });
+
+  }catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
+  }
+
+});
+
+/*
+Borrar perfil
+body:
+{
+  "id": id,
+ "contrasenia": contasenia
+}
+*/
+
+router.delete("/", async(req, res) => {
+    try {
+    //Validaciones
+    const { id, contrasenia} = req.body;
+    
+    const query = await pool.query(`
+      select contrasenia from usuarios
+      where id = $1`, [id]);
+
+    if(!contrasenia){
+      return res.status(400).json("Todos los campos son obligatorios");
+    }
+    if (query.rows.length === 0) {
+      return res.status(404).json("Usuario no encontrado");
+    }
+    const contraseniaDB = query.rows[0].contrasenia;
+
+    if (contraseniaDB === contrasenia) {
+
+      await pool.query(`
+        delete from usuarios
+        where id = $1`, [id]);
+
+      return res.json({ ok: true });
+    } else {
+      return res.json("Contrasenia incorrecta");
+    }
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "DB error" });
+  }
+
+});
+
+
+
 export default router;
 
