@@ -19,6 +19,7 @@ function crearPostBox() {
         modal.style.display = "flex";
     };
 
+    
     closeModal.onclick = () => {
         modal.style.display = "none";
         postText.value = "";

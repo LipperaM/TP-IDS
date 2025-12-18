@@ -121,6 +121,7 @@ async function cargarComentarios(postId) {
 
     const esMio = Number(idUsuarioLogeado) === c.id_usuario;
 
+    
     div.innerHTML = `
       <b>@${c.usuario}</b>: ${c.texto}
       ${
