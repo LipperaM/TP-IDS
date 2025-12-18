@@ -415,4 +415,19 @@ function logOut(){
 document.addEventListener("DOMContentLoaded", () => {
   verificarSesion();
   getEquipos();
+
+  const params = new URLSearchParams(window.location.search);
+  const action = params.get("action");
+
+  if (action === "registro") {
+    modalRegistro.style.display = "flex";
+  }
+
+  if (action === "login") {
+    modalLogin.style.display = "flex";
+  }
+
+  history.replaceState(null, "", "profile.html");
+
 });
+
