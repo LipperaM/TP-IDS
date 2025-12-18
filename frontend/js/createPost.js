@@ -19,12 +19,18 @@ function crearPostBox() {
         modal.style.display = "flex";
     };
 
+    
     closeModal.onclick = () => {
         modal.style.display = "none";
         postText.value = "";
         categoriaBtn.textContent = "Categoria";
         categoriaBtn.classList.remove("btn-warning");
         categoriaBtn.classList.add("btn-secondary");
+        
+        // resetear modo edición al cerrar
+        postBtn.textContent = "Postear";
+        delete postBtn.dataset.editMode;
+        delete postBtn.dataset.postId;
     };
 
     // mapea el texto mostrado en el dropdown a un id de categoría
@@ -70,23 +76,44 @@ function crearPostBox() {
         }
 
         try {
-            const response = await fetch("http://localhost:3000/posts", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id_usuario: Number(idUsuarioStr),
-                    texto: text,
-                    id_categoria: categoriaId
-                })
-            });
+            // detectar si estamos en modo edición
+            const esEdicion = postBtn.dataset.editMode === "true";
+            const postId = postBtn.dataset.postId;
+
+            let response;
+            if (esEdicion) {
+                // PUT para editar
+                response = await fetch("http://localhost:3000/posts", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        id: postId,
+                        texto: text,
+                        id_usuario: Number(idUsuarioStr),
+                        id_categoria: categoriaId
+                    })
+                });
+            } else {
+                // POST para crear
+                response = await fetch("http://localhost:3000/posts", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        id_usuario: Number(idUsuarioStr),
+                        texto: text,
+                        id_categoria: categoriaId
+                    })
+                });
+            }
+
             const data = await response.json().catch(() => ({}));
             if (!response.ok) {
-                alert(data?.error || "Error al crear el post");
+                alert(data?.error || `Error al ${esEdicion ? 'actualizar' : 'crear'} el post`);
                 console.error("Detalles backend:", data);
                 return;
             }
 
-            // Reset UI y refrescar listado
+            // reset UI
             postText.value = "";
             categoriaBtn.textContent = "Categoria";
             categoriaBtn.classList.remove("btn-warning");
@@ -94,18 +121,23 @@ function crearPostBox() {
             categoriaBtn.removeAttribute("data-categoria-id");
             modal.style.display = "none";
 
+            // resetear modo edición
+            postBtn.textContent = "Postear";
+            delete postBtn.dataset.editMode;
+            delete postBtn.dataset.postId;
+
             if (typeof cargarPosts === "function") {
                 cargarPosts();
             } else {
                 location.reload();
             }
         } catch (error) {
-            console.error("Error de red al crear post:", error);
-            alert("Error de red al crear el post. Verifica que el backend esté corriendo en :3000.");
+            console.error("Error de red al guardar el post:", error);
+            alert("Error de red. Verifica que el backend esté corriendo en :3000.");
         }
     };
     
-    //Modal de categorias
+    //modal de categorias
     const opciones = document.querySelectorAll(".categoria-opcion");
     opciones.forEach((option) => {
         option.addEventListener("click", function (e) {

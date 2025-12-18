@@ -16,6 +16,10 @@ function renderizarPosts(posts) {
     const card = document.createElement("div");
     card.className = "card w-75 mb-3";
 
+    const idUsuarioLogeado = localStorage.getItem("idUsuario");
+    const esMio = Number(idUsuarioLogeado) === post.id_usuario;
+
+
     card.innerHTML = `
       <div class="card-body">
         <h5 class="card-title">@${post.usuario}</h5>
@@ -26,6 +30,19 @@ function renderizarPosts(posts) {
         <div class="d-flex gap-2 mt-2">
           <a href="#" class="btn btn-primary like-btn" data-post-id="${post.id}">Like</a>
           <a href="#" class="btn btn-primary comment-btn" data-post-id="${post.id}">Comentar</a>
+
+          ${
+            esMio
+              ? `
+                <a href="#" class="btn btn-warning edit-post" data-id="${post.id}">
+                  Editar
+                </a>
+                <a href="#" class="btn btn-danger delete-post" data-id="${post.id}">
+                  Borrar
+                </a>
+              `
+              : ""
+          }
         </div>
 
         <!-- STATS -->
@@ -104,6 +121,7 @@ async function cargarComentarios(postId) {
 
     const esMio = Number(idUsuarioLogeado) === c.id_usuario;
 
+    
     div.innerHTML = `
       <b>@${c.usuario}</b>: ${c.texto}
       ${
@@ -235,11 +253,54 @@ document.addEventListener("DOMContentLoaded", () => {
       cargarComentarios(postId);
     }
   });
+
+  //editar Post
+  document.addEventListener("click", async e => {
+    if (!e.target.classList.contains("edit-post")) return;
+
+    e.preventDefault();
+
+    const postId = e.target.dataset.id;
+    const postCard = e.target.closest(".card");
+    const textoActual = postCard.querySelector(".card-text").textContent.trim();
+    const categoriaActual = postCard.querySelector(".badge").textContent.replace('#', '').trim();
+
+    // abrir modal con contenido actual del post
+    const modal = document.getElementById("modal");
+    const postText = document.getElementById("postText");
+    const categoriaBtn = document.getElementById("categoria-btn");
+    const postBtn = document.getElementById("postBtn");
+
+    postText.value = textoActual;
+    categoriaBtn.textContent = categoriaActual;
+    modal.style.display = "flex";
+
+    // cambiar funcionalidad del botón a "Actualizar"
+    postBtn.textContent = "Actualizar";
+    postBtn.dataset.editMode = "true";
+    postBtn.dataset.postId = postId;
+  });
+
+  //eliminar Post
+  document.addEventListener("click", async e => {
+
+    if (!e.target.classList.contains("delete-post")) return;
+
+    e.preventDefault();
+
+    const confirmar = confirm("¿Seguro que querés borrar este post?");
+    if (!confirmar) return;
+
+    const id = e.target.dataset.id;
+    const id_usuario = localStorage.getItem("idUsuario");
+
+    await fetch("http://localhost:3000/posts", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, id_usuario })
+    });
+
+    cargarPosts();
+  });
+
 });
-
-
-
-
-
-
-
