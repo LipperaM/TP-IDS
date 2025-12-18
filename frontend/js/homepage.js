@@ -118,24 +118,22 @@ async function cargarComentarios(postId) {
   comentarios.forEach(c => {
     const div = document.createElement("div");
     div.className = "border-top pt-2";
-
     const esMio = Number(idUsuarioLogeado) === c.id_usuario;
 
-    
     div.innerHTML = `
-      <b>@${c.usuario}</b>: ${c.texto}
+      <b>@${c.usuario}</b>: <span class="comment-text">${c.texto}</span>
       ${
-      esMio
-        ? `
-          <button class="btn btn-sm btn-link edit-comment" data-id="${c.id}">
-            Editar
-          </button>
-          <button class="btn btn-sm btn-link text-danger delete-comment" data-id="${c.id}">
-            Borrar
-          </button>
-        `
-        : ""
-    }
+        esMio
+          ? `
+            <button class="btn btn-sm btn-link edit-comment" data-id="${c.id}">
+              Editar
+            </button>
+            <button class="btn btn-sm btn-link text-danger delete-comment" data-id="${c.id}">
+              Borrar
+            </button>
+          `
+          : ""
+      }
     `;
     container.appendChild(div);
   });
@@ -169,41 +167,64 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   let currentPostId = null;
+  let currentCommentId = null;
+  let isEditingComment = false;
+  const commentModalEl = document.getElementById("commentModal");
+  const commentModalInstance = new bootstrap.Modal(commentModalEl);
+  const commentModalInput = document.getElementById("modalCommentText");
+  const commentModalBtn = document.getElementById("modalSubmitComment");
+  const commentModalTitle = commentModalEl.querySelector(".modal-title");
+  const resetCommentModal = () => {
+    isEditingComment = false;
+    currentCommentId = null;
+    commentModalTitle.textContent = "Nuevo comentario";
+    commentModalBtn.textContent = "Enviar";
+    commentModalInput.value = "";
+  };
+  commentModalEl.addEventListener("hidden.bs.modal", resetCommentModal);
 
-  // nuevo modal de comentario (chequear tamaño)
+  // nuevo modal de comentario
   document.addEventListener("click", e => {
-    if (!e.target.classList.contains("comment-btn")) {
-      return; 
-    }
+    if (!e.target.classList.contains("comment-btn")) return;
 
     const id_usuario = localStorage.getItem("idUsuario");
-
     if (!id_usuario) {
-        alert("⚠️ Tenés que iniciar sesión para comentar");
-        return;
+      alert("⚠️ Tenés que iniciar sesión para comentar");
+      return;
     }
 
     currentPostId = e.target.dataset.postId;
-    new bootstrap.Modal(document.getElementById("commentModal")).show();
+    resetCommentModal();
+    commentModalInstance.show();
   });
 
-  // send comentario
-  document.getElementById("modalSubmitComment").addEventListener("click", async () => {
-    const texto = document.getElementById("modalCommentText").value.trim();
-
+  // enviar / update comentario
+  commentModalBtn.addEventListener("click", async () => {
+    const texto = commentModalInput.value.trim();
     const id_usuario = localStorage.getItem("idUsuario");
 
+    if (!id_usuario) {
+      alert("⚠️ Tenés que iniciar sesión para comentar");
+      return;
+    }
     if (!texto || !currentPostId) return;
 
-    await fetch("http://localhost:3000/comentarios", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id_post: currentPostId, id_usuario, texto })
-    });
+    if (isEditingComment && currentCommentId) {
+      await fetch(`http://localhost:3000/comentarios/${currentCommentId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ texto, id_usuario })
+      });
+    } else {
+      await fetch("http://localhost:3000/comentarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_post: currentPostId, id_usuario, texto })
+      });
+    }
 
-    document.getElementById("modalCommentText").value = "";
     await cargarComentarios(currentPostId);
-    bootstrap.Modal.getInstance(document.getElementById("commentModal")).hide();
+    commentModalInstance.hide();
   });
 
   // clickear para ver comentarios
@@ -242,15 +263,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.classList.contains("edit-comment")) {
       const id = e.target.dataset.id;
       const postId = e.target.closest(".card").querySelector(".comment-btn").dataset.postId;
-      const texto = prompt("Editar comentario:");
-      if (!texto) return;
+      const commentTextEl = e.target.closest(".border-top").querySelector(".comment-text");
+      const texto = commentTextEl ? commentTextEl.textContent.trim() : "";
 
-      await fetch(`http://localhost:3000/comentarios/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texto, id_usuario })
-      });
-      cargarComentarios(postId);
+      isEditingComment = true;
+      currentCommentId = id;
+      currentPostId = postId;
+      commentModalTitle.textContent = "Editar comentario";
+      commentModalBtn.textContent = "Actualizar";
+      commentModalInput.value = texto;
+      commentModalInstance.show();
     }
   });
 
