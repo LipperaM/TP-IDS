@@ -169,7 +169,7 @@ function renderizarPosts(posts) {
           <span class="toggle-comments" data-post-id="${post.id}" style="cursor:pointer">
             💬 <span id="comment-count-${post.id}">${post.cantidad_comentarios}</span> Comentarios
           </span> ·
-          <span>${new Date(post.creado_en).toLocaleString("es-AR")}</span>
+          <span>${new Date(post.creado_en).toLocaleString("es-AR", { timeZone:"America/Argentina/Buenos_Aires" })}</span>
         </div>
 
         <!-- COMENTARIOS ABAJO -->
