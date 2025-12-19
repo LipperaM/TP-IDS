@@ -45,7 +45,8 @@ router.get("/", async function(req, res) {
         p.creado_en,
         u.usuario,
         c.nombre
-      ORDER BY p.creado_en DESC`
+      ORDER BY p.creado_en DESC
+      LIMIT 50`
     );
     res.json(result.rows);
   } catch (err) {

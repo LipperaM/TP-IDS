@@ -18,6 +18,18 @@
 - La base de datos toma el archivo `init.sql` como plantilla inicial al crearse el contenedor por   primera vez. Este archivo tiene todas las tablas y entidades vacias.
 - El proyecto tiene dos modos de despliegue, *dev* para desarollo local sin el tunel de Cloudflare, y *prod* para produccion incluyendo el tunel.
 
+
+## INSTRUCCIONES DE USO PARA PRODUCCION
+
+### Docker Compose
+- Cambiar los puertos del compose de `ip_loopback:puerto:puerto` para uso en localhost a 
+` expose:
+  \- "puerto" `
+
+  Con esto no podremos acceder en localhost pero queda seguro con el tunel al exterior.
+
+- Completar el token del tunel Cloudflared y levantar con perfil `prod`.
+
 ### Instrucciones makefile
 
 **Desarrollo local:**
@@ -40,7 +52,7 @@
 - `make ps` - Ver estado de los contenedores
 - `make clean` - Limpia la imagen antigua junto al volumen utilizado por la db
 
-### Acceso
+### Acceso en local:
 - **Frontend**: http://localhost:80/
 - **API**: http://localhost:3000/
 - **Base de datos**: localhost:5432
