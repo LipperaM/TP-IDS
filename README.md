@@ -1,23 +1,58 @@
 # TP Final de Introduccion al Desarrollo Software.
 ---------------------------------------------------
 
-### FORO DE FUTBOL
-  * *PAGINAS*: 
-    HOME, TABLA, USUARIO 
-  
-  * *ENTIDADES*:
+> **Que es Fydem?**
+> Es una red social que viene a suplir la necesidad de un foro de futbol, con libre expresión y sin distracciones. Cualquiera puede crear un usuario y dar su opinion (menos Moretti) así como también estar al tanto de las novedades de los partidos y puntajes de los torneos actuales.
 
-    *USUARIOS*: id, foto, usuario, nombre, apellido, mail, hincha, pais, fecha, hora.
+---------------------------------------------------
 
-    *POST*: id, id_foto_usuario; texto, id_usuario, id_categoria, id_comentario, id_like_post, fecha, hora.
+## INSTRUCCIONES DE USO PARA DESARROLLO
 
-    *LIKES*: id, id_post, id_usuario.
+### Requisitos previos
+- Tener Docker y Docker Compose instalados.
+- Tener Make instalado.
 
-    *PUNTAJES*: id, id_equipo, partidos_ganados, pratidos_empatados, partidos_perdidos.
+### Configuracion inicial
 
-    *EQUIPOS*: id, nombre.
+- Renombrar y completar el `.env.example` a `.env`.
+- La base de datos toma el archivo `init.sql` como plantilla inicial al crearse el contenedor por   primera vez. Este archivo tiene todas las tablas y entidades vacias.
+- El proyecto tiene dos modos de despliegue, *dev* para desarollo local sin el tunel de Cloudflare, y *prod* para produccion incluyendo el tunel.
 
-    *CATEGORIA*: id, nombre.
 
-    *COMENTARIOS*: id, id_usuario, id_like, id_comentario, fecha, hora.
+## INSTRUCCIONES DE USO PARA PRODUCCION
 
+### Docker Compose
+- Cambiar los puertos del compose de `ip_loopback:puerto:puerto` para uso en localhost a 
+` expose:
+  \- "puerto" `
+
+  Con esto no podremos acceder en localhost pero queda seguro con el tunel al exterior.
+
+- Completar el token del tunel Cloudflared y levantar con perfil `prod`.
+
+### Instrucciones makefile
+
+**Desarrollo local:**
+- `make local` - Levantar frontend, API y base de datos
+- `make local-down` - Detener todos los servicios
+- `make local-restart` - Reiniciar servicios
+
+**Producción:**
+- `make prod` - Levantar todo con túnel Cloudflare (solo en servidor)
+- `make prod-down` - Detener contenedores de producción
+
+**Servicios individuales:**
+- `make nginx` - Levantar solo el frontend
+- `make postgres` - Levantar solo la base de datos
+- `make api` - Levantar solo la API
+
+**Utilidades:**
+- `make logs` - Ver logs en tiempo real
+- `make build` - Construir/reconstruir imágenes sin cache previo
+- `make ps` - Ver estado de los contenedores
+- `make clean` - Limpia la imagen antigua junto al volumen utilizado por la db
+
+### Acceso en local:
+- **Frontend**: http://localhost:80/
+- **API**: http://localhost:3000/
+- **Base de datos**: localhost:5432

@@ -3,214 +3,260 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
     <title>Perfil</title>
+
+    <!-- Estilos -->
     <link href="../css/styles.css" rel="stylesheet" />
     <link href="../css/perfil/perfil.css" rel="stylesheet" />
-
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
-  </head> 
-  <body>
+  </head>
 
-    <input type="checkbox" id="toggle-registrarse" hidden>
-    <input type="checkbox" id="toggle-iniciarSesion" hidden>
-    <input type="checkbox" id="toggle-borrarPerfil" hidden>
-
-    <nav class="navbar">
-      <a class="navbar-brand" href="./index.html">Home</a>
-
-      <form class="d-flex" role="search">
-        <input class="form-control" type="search" placeholder="Buscar en tus post" aria-label="Search"/>
-        <button class="btn btn-primary" type="submit">Buscar</button>
-      </form>
-      
-      <label for="toggle-borrarPerfil" class="navbar-brand">Eliminar Perfil</label>
-      <label for="toggle-registrarse" class="navbar-brand">Registrarse</label>
-      <label for="toggle-iniciarSesion" class="navbar-brand">Iniciar Sesion</label>
+    <nav class="navbar-container">
+      <div class="navbar"></div>
     </nav>
+      
+    <!-- MODAL REGISTRO -->
+        <div id="modalRegistro" class="modal">
+          <div class="modal-content">
+            <span id="closeRegistro" class="close">&times;</span>
+            <div class="card-body">
+                <div class="mb-3">
+                  <label class="form-label">Nombre</label>
+                  <input id = "nombre" type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Apellido</label>
+                  <input id = "apellido" type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Mail</label>
+                  <input id = "mail" type="email" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Pais</label>
+                  <input id = "pais" type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Equipo</label>
+                  <select id = "equipo" class="form-control">
+                    <option value="">Selecciona tu equipo</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Nombre de Usuario</label>
+                  <input id = "usuario" type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Contraseña</label>
+                  <input id = "contrasenia" type="password" class="form-control">
+                </div>
+                <button type="button" class="boton" onclick="registrarse()">Registrarse</button>
+            </div>
+          </div>
+        </div>
 
-    <label for="toggle-registrarse" class="overlay overlay-registrarse"></label>
-    <div class="registrarse-card">
-      <div class="card">
+    <!-- MODAL LOGIN -->
+    <div id="modalLogin" class="modal">
+      <div class="modal-content">
+        <span id="closeLogin" class="close">&times;</span>
         <div class="card-body">
-          <form>
-            <div class="mb-3">
-              <label class="form-label">Nombre</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Apellido</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Mail</label>
-              <input type="email" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Pais</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Equipo</label>
-              <select class="form-control">
-                <option value="">Selecciona tu equipo</option>
-                <option value="boca">Aldosivi</option>
-                <option value="river">Argentinos Juniors</option>
-                <option value="platense">Atletico Tucuman</option>
-                <option value="platense">Banfield</option>
-                <option value="platense">Barracas Central</option>
-                <option value="platense">Belgrano</option>
-                <option value="platense">Boca Juniors</option>
-                <option value="platense">Central Cordoba</option>
-                <option value="platense">Defensa y Justicia</option>
-                <option value="platense">Deportivo Riestra</option>
-                <option value="platense">Estudiantes de La Plata</option>
-                <option value="platense">Gimnasia y Esgrima de La PLata</option>
-                <option value="platense">Godoy Cruz</option>
-                <option value="platense">Huracan</option>
-                <option value="platense">Independiente</option>
-                <option value="platense">Independiente Rivadavia</option>
-                <option value="platense">Instituto</option>
-                <option value="platense">Lanus</option>
-                <option value="platense">Newell's Old Boys</option>
-                <option value="platense">Platense</option>
-                <option value="platense">Racing Club</option>
-                <option value="platense">River Plate</option>
-                <option value="platense">Rosario Central</option>
-                <option value="platense">San Lorenzo de Almagro</option>
-                <option value="platense">San Martin de San Juan</option>
-                <option value="platense">Sarmiento de Junin</option>
-                <option value="platense">Tigre</option>
-                <option value="platense">Union</option>
-                <option value="platense">Velez Sarfield</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Nombre de Usuario</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Contraseña</label>
-              <input type="password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary">Registrarse</button>
-          </form>
+          <div class="mb-3">
+            <label class="form-label">Nombre de Usuario</label>
+            <input id="usuarioLogin" type="text" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input id="contraLogin" type="password" class="form-control" />
+          </div>
+
+          <button
+            type="button"
+            class="boton"
+            onclick="login(
+              document.getElementById('usuarioLogin').value,
+              document.getElementById('contraLogin').value
+            )"
+          >
+            Iniciar Sesión
+          </button>
         </div>
       </div>
     </div>
 
-    <label for="toggle-iniciarSesion" class="overlay overlay-login"></label>
-    <div class="iniciarSesion-card">
-      <div class="card">
+    <!-- MODAL EDITAR -->
+    <div id="modalEditar" class="modal">
+      <div class="modal-content">
+        <span id="closeEditar" class="close">&times;</span>
         <div class="card-body">
-          <form>
-            <div class="mb-3">
-              <label class="form-label">Nombre de Usuario</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Contraseña</label>
-              <input type="password" class="form-control">
-            </div>
-            <button type="submit">Iniciar Sesion</button>
-          </form>
+          <div class="mb-3">
+            <label class="form-label">Editar Nombre</label>
+            <input type="text" id="editNombre" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Editar Apellido</label>
+            <input type="text" id="editApellido" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Editar Mail</label>
+            <input type="email" id="editMail" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Editar País</label>
+            <input type="text" id="editPais" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Editar Nombre de Usuario</label>
+            <input type="text" id="editUsuario" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Editar Contraseña</label>
+            <input type="password" id="editPass" class="form-control" />
+          </div>
+
+          <button type="button" class="boton" onclick="editarUsuario()">
+            Aplicar
+          </button>
         </div>
       </div>
     </div>
 
-    <input type="checkbox" id="toggle-editarPerfil" hidden>
-    <label for="toggle-editarPerfil" class="overlay-editar"></label>
-    <div class="editarPerfil-card">
-      <div class="card" style="width: 28rem;">
-        <div class="card-body">
-          <form>
-            <div class="mb-3">
-              <label class="form-label">Editar nombre</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar apellido</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar mail</label>
-              <input type="email" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar País</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar Nombre de Usuario</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Editar Contraseña</label>
-              <input type="password" class="form-control" />
-            </div>
-            <button type="submit" class="btnEditar">Aplicar</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <label for="toggle-borrarPerfil" class="overlay overlay-borrar"></label>
-    <div class="borrarPerfil-card">
-      <div class="card">
+    <!-- MODAL ELIMINAR -->
+    <div id="modalEliminar" class="modal">
+      <div class="modal-content">
+        <span id="closeEliminar" class="close">&times;</span>
         <div class="card-body">
           <h5 class="card-title">Confirmar borrado</h5>
-          <p class="card-text">Ingrese su contraseña para confirmar que desea eliminar el perfil.</p>
-          <form>
-            <div class="mb-3"><label class="form-label">Contraseña</label><input type="password" class="form-control"></div>
-            <div class="mb-3"><label class="form-label">Reingrese Contraseña</label><input type="password" class="form-control"></div>
-            <button type="submit" class="btnBorrar">BORRAR</button>
-          </form>
+          <p class="card-text">
+            Ingrese su contraseña para confirmar que desea eliminar el perfil.
+          </p>
+
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" id="contraElim" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Reingrese Contraseña</label>
+            <input type="password" id="contraConfirm" class="form-control" />
+          </div>
+
+          <button type="button" class="boton" onclick="eliminarUsuario()">
+            BORRAR
+          </button>
         </div>
       </div>
     </div>
 
-    <div class="datos-usuario">
+    <!-- DATOS USUARIO -->
+    <div class="datos-usuario" id="datosUsuario">
       <img
         class="foto-perfil"
-        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F360%2F247%2Foriginal%2Fdefault-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg&f=1&ipt=29b6572ccc8f6a9df4143312e9e00445fbf08fd153011442ebd1006f80e403cf"
+        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F360%2F247%2Foriginal%2Fdefault-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg"
         alt="foto perfil"
-        width="150px"
+        width="150"
       />
+
       <div class="datos">
         <h5 class="usuario">Nombre de Usuario</h5>
         <div class="info-extra">
           <h5>Equipo</h5>
           <h5>País</h5>
-          <label for="toggle-editarPerfil" class="navbar-brand">Editar perfil</label>
+          <button class="boton" id="openModalEditar">Editar Perfil</button>
         </div>
       </div>
     </div>
-    
+
+    <!-- POSTS -->
     <div class="post-usuario">
       <h1>Tus posts</h1>
     </div>
 
-    <div class="card w-75 mb-3">
-      <div class="card-body">
-        <h5 class="card-title">@nombredeusuario</h5>
-        <p class="card-text">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum quam
-          veniam a fuga, non doloremque eum, nisi fugit consequuntur autem
-          doloribus voluptas commodi aut iusto rem porro excepturi maiores
-          quasi.
-        </p>
+    <div class="post-usuario-container">
+    </div>
+        <!-- nuevo modal coment-->
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Nuevo comentario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <textarea id="modalCommentText" class="form-control" rows="3" placeholder="Escribí tu comentario..."></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="modalSubmitComment">Enviar</button>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!--CREAR POST-->
+    <button class="post-btn" id="openModal">+ Post</button>
+    <div class="crear-post">
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span id="closeModal" class="closeModal">&times;</span>
+          <h2>Nueva publicación</h2>
+          <textarea
+            id="postText"
+            placeholder="Escribí algo..."
+            rows="5"
+            class="textAreaPost"
+          ></textarea>
+          <div class="botones-modal">
+            <button id="postBtn" class="postBtn" type="button">Postear</button>
+            <div class="dropdown-center">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                id="categoria-btn"
+              >
+                Categoria
+              </button>
+              <ul class="dropdown-menu" id="categoria-btn">
+                <li>
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Libertadores</a>
+                </li>
+                <li>
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Liga profesional de futbol</a>
+                </li>
+                <li>
+                  <a class="dropdown-item categoria-opcion" id="data-categoria-id" href="#">Champions</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+
+    <script src="js/config.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/perfil.js"></script>
+    <script src="/js/createPost.js"></script>
+    <script>crearPostBox()</script>
 
   </body>
 </html>

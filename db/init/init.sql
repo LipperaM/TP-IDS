@@ -1,0 +1,184 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+SET default_table_access_method = heap;
+
+-- USUARIOS
+CREATE TABLE public.usuarios (
+    id SERIAL PRIMARY KEY,
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    nombre VARCHAR(100),
+    apellido VARCHAR(100),
+    mail VARCHAR(150) UNIQUE NOT NULL,
+    contrasenia VARCHAR(100) NOT NULL,
+    foto_url VARCHAR(255),
+    pais VARCHAR(100),
+    id_equipo INTEGER,
+    administrador INTEGER,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CATEGORIAS
+CREATE TABLE public.categorias (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- POSTS
+CREATE TABLE public.posts (
+    id SERIAL PRIMARY KEY,
+    id_usuario INTEGER NOT NULL,
+    texto TEXT NOT NULL,
+    imagen_url VARCHAR(255),
+    id_categoria INTEGER,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT posts_id_usuario_fkey
+      FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    CONSTRAINT posts_id_categoria_fkey
+      FOREIGN KEY (id_categoria) REFERENCES public.categorias(id) ON DELETE SET NULL
+);
+
+-- LIKES_POSTS
+CREATE TABLE public.likes_posts (
+    id SERIAL PRIMARY KEY,
+    id_post INTEGER NOT NULL,
+    id_usuario INTEGER NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(id_post, id_usuario),
+    CONSTRAINT likes_posts_id_post_fkey
+      FOREIGN KEY (id_post) REFERENCES public.posts(id) ON DELETE CASCADE,
+    CONSTRAINT likes_posts_id_usuario_fkey
+      FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id) ON DELETE CASCADE
+);
+
+-- COMENTARIOS
+CREATE TABLE public.comentarios (
+    id SERIAL PRIMARY KEY,
+    id_post INTEGER NOT NULL,
+    id_usuario INTEGER NOT NULL,
+    texto TEXT NOT NULL,
+    id_comentario_padre INTEGER,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT comentarios_id_post_fkey
+      FOREIGN KEY (id_post) REFERENCES public.posts(id) ON DELETE CASCADE,
+    CONSTRAINT comentarios_id_usuario_fkey
+      FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    CONSTRAINT comentarios_id_comentario_padre_fkey
+      FOREIGN KEY (id_comentario_padre) REFERENCES public.comentarios(id) ON DELETE CASCADE
+);
+
+-- LIKES_COMENTARIOS
+CREATE TABLE public.likes_comentarios (
+    id SERIAL PRIMARY KEY,
+    id_comentario INTEGER NOT NULL,
+    id_usuario INTEGER NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(id_comentario, id_usuario),
+    CONSTRAINT likes_comentarios_id_comentario_fkey
+      FOREIGN KEY (id_comentario) REFERENCES public.comentarios(id) ON DELETE CASCADE,
+    CONSTRAINT likes_comentarios_id_usuario_fkey
+      FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id) ON DELETE CASCADE
+);
+
+-- EQUIPOS
+CREATE TABLE public.equipos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    escudo_url VARCHAR(255),
+    zona VARCHAR(1),
+    activo BOOLEAN
+);
+
+-- TABLA_POSICIONES
+CREATE TABLE public.tabla_posiciones (
+    id SERIAL PRIMARY KEY,
+    id_equipo INTEGER NOT NULL,
+    posicion INTEGER NOT NULL,
+    partidos_jugados INTEGER DEFAULT 0,
+    partidos_ganados INTEGER DEFAULT 0,
+    partidos_empatados INTEGER DEFAULT 0,
+    partidos_perdidos INTEGER DEFAULT 0,
+    puntos INTEGER DEFAULT 0,
+    CONSTRAINT tabla_posiciones_id_equipo_fkey FOREIGN KEY (id_equipo) REFERENCES public.equipos(id)
+);
+
+-- Datos mock para pruebas
+
+-- Categorías
+INSERT INTO public.categorias (nombre) VALUES 
+('Champions'),
+('Libertadores'),
+('Liga Profesional');
+
+-- Usuarios mock
+INSERT INTO public.usuarios (usuario, nombre, apellido, mail, contrasenia, foto_url, pais, id_equipo, administrador) VALUES 
+('JorgeVarsky23', 'Jorge', 'Varsky', 'varsky@mail.com', 'pass12345', 'https://ejemplo.com/foto1.jpg', 'Argentina', 2, 1),
+('Ronaldo', 'Cristiano', 'Ronaldo', 'cr7@mail.com', 'pass12345', 'https://ejemplo.com/foto2.jpg', 'Portugal', 10, 0),
+('MoristeEnMadrid420', 'Juan', 'Perez', 'juan@mail.com', 'pass12345', 'https://ejemplo.com/foto3.jpg', 'Argentina', 20, 0);
+
+-- Posts mock
+INSERT INTO public.posts (id_usuario, texto, id_categoria, creado_en) VALUES 
+(1, 'Allí la tiene Messi... ¡Messi, Messi, Messi! ¡Se va Messi, se va Messi, se va Messi! ¡Qué grande sos, Messi! ¡Genio, genio, genio! ¡Ta-ta-ta-ta-ta-ta-ta-ta...! ¡Gooooool! ¡Gooooool! ¡Quiero llorar! ¡Dios santo, viva el fútbol! ¡Golaaazo! ¡Golaaazo! ¡Golaaazo!', 1, '2024-06-20 14:30:00'),
+(2, 'Losh dosh.', 1, '2024-01-22 10:30:00'),
+(3, 'Increíble partido hoy, no puedo creer que ganamos así en el último minuto. Este equipo tiene corazón!', 1, '2024-12-11 20:15:00'),
+(1, 'La final de la Libertadores va a ser épica, no me la pierdo por nada del mundo', 2, '2024-12-10 18:45:00'),
+(2, 'SIUUUUU! Otro gol más para la colección', 3, '2024-12-09 16:20:00');
+
+-- Equipos mock
+    INSERT INTO public.equipos (nombre, escudo_url, zona, activo) VALUES
+    ('Aldosivi','https://i.pinimg.com/originals/b1/0a/1a/b10a1ab67ae68da296c4a1d011193a41.png', 'B', true),
+    ('Argentinos Juniors','https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Asociacion_Atletica_Argentinos_Juniors.svg/1024px-Asociacion_Atletica_Argentinos_Juniors.svg.png', 'B', true),
+    ('Atletico Tucuman','https://logowik.com/content/uploads/images/atletico-tucuman1714.jpg', 'B', true),
+    ('Barracas Central','https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Barracas_central_logo.svg/800px-Barracas_central_logo.svg.png', 'B', true),
+    ('Banfield','https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/CA_Banfield_%282014%29.svg/800px-CA_Banfield_%282014%29.svg.png', 'B', true),
+    ('Belgrano','https://upload.wikimedia.org/wikipedia/commons/8/85/Escudo_Oficial_del_Club_Atl%C3%A9tico_Belgrano.png', 'B', true),
+    ('Boca Juniors','https://upload.wikimedia.org/wikipedia/commons/c/c9/Boca_escudo.png', 'A', true),
+    ('Central Cordoba','https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Central_Cordoba_SdE_crest_%282025%29.svg/1024px-Central_Cordoba_SdE_crest_%282025%29.svg.png', 'A', true),
+    ('Defensa y Justicia','https://www.ole.com.ar/images/2021/02/02/8fhP5QZ3T_720x0__1.jpg', 'A', true),
+    ('Deportivo Riestra','https://i.pinimg.com/564x/8a/f6/2e/8af62e56c320c4cdda7ceb3a5e8df70a.jpg', 'A', true),
+    ('Estudiantes La Plata','https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Estudiantes_de_la_Plata_crest_%282025%29.svg/1024px-Estudiantes_de_la_Plata_crest_%282025%29.svg.png', 'A', true),
+    ('Estudiantes Rio Cuarto','https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Escudo_Asociacion_Atl%C3%A9tica_Estudiantes_de_R%C3%ADo_Cuarto.svg/960px-Escudo_Asociacion_Atl%C3%A9tica_Estudiantes_de_R%C3%ADo_Cuarto.svg.png', 'B', true),
+    ('Gimnasia La Plata','https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9.png', 'B', true),
+    ('Gimnasia Mendoza','https://upload.wikimedia.org/wikipedia/commons/7/7e/Escudo_Gimnasia_y_Esgrima_Mendoza.png', 'A', true),
+    ('Huracan','https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Emblema_oficial_del_Club_Atl%C3%A9tico_Hurac%C3%A1n.svg/800px-Emblema_oficial_del_Club_Atl%C3%A9tico_Hurac%C3%A1n.svg.png', 'B', true),
+    ('Independiente','https://d22fxaf9t8d39k.cloudfront.net/ef5ba902bc4cb7d5d852f1938cdf252f647e222050a343dfdd8f53928840a258151491.jpg', 'A', true),
+    ('Independiente Rivadavia','https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Escudo_del_Club_Independiente_Rivadavia.svg/1024px-Escudo_del_Club_Independiente_Rivadavia.svg.png', 'B', true),
+    ('Instituto','https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Escudo_Instituto_Atletico_Central_Cordoba.svg/1200px-Escudo_Instituto_Atletico_Central_Cordoba.svg.png', 'A', true),
+    ('Lanus','https://i.pinimg.com/originals/2f/20/3a/2f203a027a20ccb98370b679300d8984.png', 'A', true),
+    ('Newells Old Boys','https://upload.wikimedia.org/wikipedia/commons/6/69/Escudo_del_Club_Atl%C3%A9tico_Newell%27s_Old_Boys_de_Rosario.svg', 'A', true),
+    ('Platense','https://upload.wikimedia.org/wikipedia/commons/d/d4/Escudo_De_Platense.png', 'A', true),
+    ('Racing','https://seekvectors.com/files/download/Racing%20Club%20Logo-01.png', 'B', true),
+    ('River Plate','https://images.seeklogo.com/logo-png/43/2/escudo-river-plate-2022-logo-png_seeklogo-435015.png', 'B', true),
+    ('Rosario Central','https://upload.wikimedia.org/wikipedia/commons/c/cc/Rosario_Central_shield.jpg', 'B', true),
+    ('San Lorenzo','https://acdn-us.mitiendanube.com/stores/001/915/482/products/efef-bf8ae0c17fb994ae9b17375034193887-480-0.webp', 'A', true),
+    ('Sarmiento','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_hWya5cJp6i4-jJxzy5kEp3u1_1EzhKbiTg&s', 'B', true),
+    ('Talleres','https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Escudo_Talleres_2015.svg/250px-Escudo_Talleres_2015.svg.png', 'A', true),
+    ('Tigre','https://logodownload.org/wp-content/uploads/2020/03/tigre-logo-argentina-0.png', 'B', true),
+    ('Union','https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg/1024px-Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg.png', 'A', true),
+    ('Velez Sarsfield','https://i.pinimg.com/474x/dc/a9/34/dca9342412ce267052168ecb9810341b.jpg', 'A', true);
+
+
+-- Eliminar este bloque de ALTERs (ya no es necesario al definir ON DELETE en CREATE)
+-- [REMOVIDO]
+-- ALTER TABLE public.posts DROP CONSTRAINT ..., ADD CONSTRAINT ... ON DELETE CASCADE;
+-- ALTER TABLE public.comentarios DROP CONSTRAINT ..., ADD CONSTRAINT ... ON DELETE CASCADE;
+-- ALTER TABLE public.likes_posts DROP CONSTRAINT ..., ADD CONSTRAINT ... ON DELETE CASCADE;
+-- ALTER TABLE public.likes_comentarios DROP CONSTRAINT ..., ADD CONSTRAINT ... ON DELETE CASCADE;
+
+--
+-- PostgreSQL database dump complete
+--

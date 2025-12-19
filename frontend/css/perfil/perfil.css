@@ -1,160 +1,137 @@
 @import url("../variables.css");
+
+.hidden {
+  display: none !important;
+}
+
+.boton {
+  display: flex;
+  background-color: var(--color-pricipal);
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: var(--color-secundario);
+    transition: 0.2s;
+    color: black;
+  }
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100px;
+  max-width: 50%;
+}
+
+.modal-content button {
+  display: block;
+  margin: 15px auto;
+  font-size: 20px;
+
+}
+
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+  display: none !important;
+}
+
 .datos-usuario {
   display: flex;
   align-items: center;
   gap: 32px;
   padding-left: 32px;
 }
-.foto-perfil { border-radius: 50%; }
-.datos { display: flex; flex-direction: column; }
-.usuario { margin-bottom: 8px; }
-.info-extra { display: flex; gap: 24px; }
-.info-extra h5 { margin: 0; font-weight: normal; }
-.post-usuario { padding: 10px; }
 
-.overlay-registrarse,
-.overlay-login,
-.overlay-borrar {
-  position: fixed;
-  top: 0; 
-  left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(4px);
-  z-index: 50;
-  cursor: pointer;
-  display: none;
+.foto-perfil {
+  border-radius: 50%;
 }
 
-.registrarse-card,
-.iniciarSesion-card,
-.borrarPerfil-card {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100;
-  display: none;
-  width: 400px;
+.datos {
+  display: flex;
+  flex-direction: column;
 }
 
-.registrarse-card input,
-.iniciarSesion-card input,
-.borrarPerfil-card input,
-.registrarse-card select {
-  display: block;
-  width: 100%;
+.usuario {
   margin-bottom: 8px;
-  padding: 8px;
-}
-.registrarse-card button,
-.iniciarSesion-card button {
-  width: 100%;
-  padding: 8px;
-  background-color: var(--color-pricipal, #0d6efd);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.registrarse-card button:hover,
-.iniciarSesion-card button:hover {
-  background-color: var(--color-primario-osc, #084298);
 }
 
-#toggle-registrarse:checked ~ .overlay-registrarse,
-#toggle-registrarse:checked ~ .registrarse-card {
-  display: block;
+.info-extra {
+  display: flex;
+  gap: 24px;
 }
 
-#toggle-iniciarSesion:checked ~ .overlay-login,
-#toggle-iniciarSesion:checked ~ .iniciarSesion-card {
-  display: block;
+.info-extra h5 {
+  margin: 0;
+  font-weight: normal;
 }
 
-#toggle-borrarPerfil:checked ~ .overlay-borrar,
-#toggle-borrarPerfil:checked ~ .borrarPerfil-card {
-  display: block;
-}
-
-.overlay-editar {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(4px);
-  z-index: 50;
-  cursor: pointer;
-  display: none;
-}
-
-.editarPerfil-card,
-.borrarPerfil-card {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100;
-  display: none; 
-  width: 448px;
-  max-width: 92%; 
-}
-
-.editarPerfil-card input {
-  display: block;
-  width: 100%;
-  margin-bottom: 8px;
-  padding: 8px;
-}
-
-.btnBorrar {
-  width: 100%;
-  padding: 8px;
-  background-color: #dc3545; 
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-.btnBorrar:hover {
-  background-color: red;
-}
-
-.editarPerfil-card .btnEditar {
-  width: 100%;
-  padding: 8px;
-  background-color: var(--color-pricipal, #0d6efd);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-.editarPerfil-card .btnEditar:hover {
-  background-color: var(--color-primario-osc, #084298);
-}
-
-#toggle-editarPerfil:checked ~ .overlay-editar,
-#toggle-editarPerfil:checked ~ .editarPerfil-card {
-  display: block;
+.post-usuario {
+  padding: 10px;
+  margin-top: 20px;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 25px;
   background-color: #b1b1b193;
   border-radius: 10px;
   margin: 10px;
 }
-.navbar-brand { color: white; text-decoration: none; font-weight: bold; }
-.navbar-brand:hover { text-decoration: underline; }
-.d-flex form { max-width: 400px; width: 100%; }
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.navbar-brand {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar-brand:hover {
+  text-decoration: underline;
+}
+
+.d-flex form {
+  max-width: 400px;
+  width: 100%;
+}
 
 .usuario-header {
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.post-usuario-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
