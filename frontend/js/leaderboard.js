@@ -1,7 +1,7 @@
 let todosLosEquipos = [];
 
 async function getEquipos(){
-    const url = `http://localhost:3000/equipos`;
+    const url = `${API_URL}/equipos`;
     const response = await fetch(url, { method: "GET" });
     todosLosEquipos = await response.json();  
     renderizarTablas(todosLosEquipos);
