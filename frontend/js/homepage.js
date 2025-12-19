@@ -207,7 +207,16 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("⚠️ Tenés que iniciar sesión para comentar");
       return;
     }
-    if (!texto || !currentPostId) return;
+
+    if (!texto) {
+      alert("⚠️ El comentario no puede estar vacío");
+      return;
+    }
+
+    if (!currentPostId) {
+      alert("Error: no se pudo identificar el post");
+      return;
+    }
 
     if (isEditingComment && currentCommentId) {
       await fetch(`http://localhost:3000/comentarios/${currentCommentId}`, {
