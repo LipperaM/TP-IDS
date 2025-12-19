@@ -1,38 +1,22 @@
 # TP Final de Introduccion al Desarrollo Software.
 ---------------------------------------------------
 
-## FORO DE FUTBOL
-  * *PAGINAS*: 
-    HOME, TABLA, USUARIO 
-  
-  * *ENTIDADES*:
+> **Que es Fydem?**
+> Es una red social que viene a suplir la necesidad de un foro de futbol, con libre expresión y sin distracciones. Cualquiera puede crear un usuario y dar su opinion (menos Moretti) así como también estar al tanto de las novedades de los partidos y puntajes de los torneos actuales.
 
-    *USUARIOS*: id, usuario, nombre, apellido, mail, contrasenia, foto_url, pais, equipo, creado_en.
+---------------------------------------------------
 
-    *POSTS*: id, id_usuario, texto, imagen_url, id_categoria, creado_en.
-
-    *LIKES_POSTS*: id, id_post, id_usuario, creado_en.
-
-    *LIKES_COMENTARIOS*: id, id_comentario, id_usuario, creado_en.
-
-    *EQUIPOS*: id, nombre, escudo_url.
-
-    *CATEGORIAS*: id, nombre.
-
-    *COMENTARIOS*: id, id_post, id_usuario, texto, id_comentario_padre, creado_en.
-
-    *TABLA_POSICIONES*: id, id_equipo, posicion, partidos_jugados, partidos_ganados, partidos_empatados, partidos_perdidos, puntos.
-
-## INSTRUCCIONES DE USO 
+## INSTRUCCIONES DE USO PARA DESARROLLO
 
 ### Requisitos previos
-- Docker y Docker Compose instalados
-- Make instalado
+- Tener Docker y Docker Compose instalados.
+- Tener Make instalado.
 
 ### Configuracion inicial
 
-- Renombrar y completar el .env.example a .env
-- La db toma el archivo init.sql como plantilla inicial al crearse el contenedor por   primera vez. Este archivo tiene todas las tablas y entidades vacias. La db guarda los datos en ./db/data.
+- Renombrar y completar el `.env.example` a `.env`.
+- La base de datos toma el archivo `init.sql` como plantilla inicial al crearse el contenedor por   primera vez. Este archivo tiene todas las tablas y entidades vacias.
+- El proyecto tiene dos modos de despliegue, *dev* para desarollo local sin el tunel de Cloudflare, y *prod* para produccion incluyendo el tunel.
 
 ### Instrucciones makefile
 
@@ -43,7 +27,7 @@
 
 **Producción:**
 - `make prod` - Levantar todo con túnel Cloudflare (solo en servidor)
-- `make prod-down` - Detener producción
+- `make prod-down` - Detener contenedores de producción
 
 **Servicios individuales:**
 - `make nginx` - Levantar solo el frontend
@@ -52,10 +36,11 @@
 
 **Utilidades:**
 - `make logs` - Ver logs en tiempo real
-- `make build` - Construir/reconstruir imágenes
+- `make build` - Construir/reconstruir imágenes sin cache previo
 - `make ps` - Ver estado de los contenedores
+- `make clean` - Limpia la imagen antigua junto al volumen utilizado por la db
 
 ### Acceso
-- **Frontend**: http://localhost/
+- **Frontend**: http://localhost:80/
 - **API**: http://localhost:3000/
 - **Base de datos**: localhost:5432
