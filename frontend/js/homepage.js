@@ -2,7 +2,7 @@ let todosLosPosts = [];
 
 
 async function cargarPosts() {
-  const response = await fetch("http://localhost:3000/posts");
+  const response = await fetch(`${API_URL}/posts`);
   todosLosPosts = await response.json();
   renderizarPosts(todosLosPosts);
 }
@@ -63,14 +63,13 @@ function renderizarPosts(posts) {
 
     const id_usuario = localStorage.getItem("idUsuario");
     
-    fetch(`http://localhost:3000/likes/posts/${post.id}`)
+    fetch(`${API_URL}/likes/posts/${post.id}`)
       .then(r => r.json())
       .then(d => {
         document.getElementById(`like-count-${post.id}`).textContent = `❤️ ${d.likes}`;
       });
 
-    
-    fetch(`http://localhost:3000/likes/posts/${post.id}/me?id_usuario=${id_usuario}`)
+    fetch(`${API_URL}/likes/posts/${post.id}/me?id_usuario=${id_usuario}`)
       .then(r => r.json())
       .then(d => {
         card.querySelector(".like-btn").textContent = d.like ? "Deslikear" : "Like";
@@ -92,16 +91,16 @@ function renderizarPosts(posts) {
       const postId = btn.dataset.postId;
 
       const me = await fetch(
-        `http://localhost:3000/likes/posts/${postId}/me?id_usuario=${id_usuario}`
+        `${API_URL}/likes/posts/${postId}/me?id_usuario=${id_usuario}`
       ).then(r => r.json());
 
-      await fetch(`http://localhost:3000/likes/posts/${postId}`, {
+      await fetch(`${API_URL}/likes/posts/${postId}`, {
         method: me.like ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_usuario })
       });
 
-      const d = await fetch(`http://localhost:3000/likes/posts/${postId}`).then(r => r.json());
+      const d = await fetch(`${API_URL}/likes/posts/${postId}`).then(r => r.json());
       document.getElementById(`like-count-${postId}`).textContent = `❤️ ${d.likes}`;
       btn.textContent = me.like ? "Like" : "Deslikear";
     });
@@ -109,7 +108,7 @@ function renderizarPosts(posts) {
 }
 
 async function cargarComentarios(postId) {
-  const res = await fetch(`http://localhost:3000/comentarios/post/${postId}`);
+  const res = await fetch(`${API_URL}/comentarios/post/${postId}`);
   const comentarios = await res.json();
   const container = document.getElementById(`comments-${postId}`);
   container.innerHTML = "";
@@ -219,13 +218,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (isEditingComment && currentCommentId) {
-      await fetch(`http://localhost:3000/comentarios/${currentCommentId}`, {
+      await fetch(`${API_URL}/comentarios/${currentCommentId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ texto, id_usuario })
       });
     } else {
-      await fetch("http://localhost:3000/comentarios", {
+      await fetch(`${API_URL}/comentarios`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_post: currentPostId, id_usuario, texto })
@@ -259,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.classList.contains("delete-comment")) {
       const id = e.target.dataset.id;
       const postId = e.target.closest(".card").querySelector(".comment-btn").dataset.postId;
-      await fetch(`http://localhost:3000/comentarios/${id}`, { 
+      await fetch(`${API_URL}/comentarios/${id}`, { 
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -325,7 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const id = e.target.dataset.id;
     const id_usuario = localStorage.getItem("idUsuario");
 
-    await fetch("http://localhost:3000/posts", {
+    await fetch(`${API_URL}/posts`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, id_usuario })

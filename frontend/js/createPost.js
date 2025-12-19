@@ -83,7 +83,7 @@ function crearPostBox() {
             let response;
             if (esEdicion) {
                 // PUT para editar
-                response = await fetch("http://localhost:3000/posts", {
+                response = await fetch(`${API_URL}/posts`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -95,7 +95,7 @@ function crearPostBox() {
                 });
             } else {
                 // POST para crear
-                response = await fetch("http://localhost:3000/posts", {
+                response = await fetch(`${API_URL}/posts`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
