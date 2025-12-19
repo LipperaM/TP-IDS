@@ -14,6 +14,9 @@ function irALogin() {
 
 if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
   navbarContainer.innerHTML = `
+      <a id="navbar-icon" class="navbar-brand">
+      <img src="./assets/android-chrome-192x192.png" alt="Fydem" width="32" height="32">
+      </a>
       <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
       <a class="navbar-brand" href="./profile.html">Perfil</a>
@@ -36,6 +39,9 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
   `
 } else if (currentPage.includes('leaderboard.html')) {
   navbarContainer.innerHTML = `
+      <a id="navbar-icon" class="navbar-brand">
+      <img src="./assets/android-chrome-192x192.png" alt="Fydem" width="32" height="32">
+      </a>
       <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
       ${esAdministrador ? `<a class="navbar-brand" href="./admin.html">ADMIN</a>` : ``}
@@ -48,6 +54,9 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
   `
 } else if (currentPage.includes('profile.html')) {
   navbarContainer.innerHTML = `
+      <a id="navbar-icon" class="navbar-brand">
+      <img src="./assets/android-chrome-192x192.png" alt="Fydem" width="32" height="32">
+      </a>
       <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
       <a class="navbar-brand" href="./profile.html">Perfil</a>
@@ -66,6 +75,9 @@ if (currentPage.includes('index.html') || currentPage.endsWith('/')) {
   `
 } else if (currentPage.includes('admin.html')) {
   navbarContainer.innerHTML = `
+      <a id="navbar-icon" class="navbar-brand">
+      <img src="./assets/android-chrome-192x192.png" alt="Fydem" width="32" height="32">
+      </a>
       <a class="navbar-brand" href="./index.html">Home</a>
       <a class="navbar-brand" href="./leaderboard.html">Tabla</a>
       <a class="navbar-brand" href="./profile.html">Perfil</a>
