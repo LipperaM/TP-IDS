@@ -46,8 +46,10 @@ CREATE TABLE public.posts (
     imagen_url VARCHAR(255),
     id_categoria INTEGER,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT posts_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id),
-    CONSTRAINT posts_id_categoria_fkey FOREIGN KEY (id_categoria) REFERENCES public.categorias(id)
+    CONSTRAINT posts_id_usuario_fkey
+      FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    CONSTRAINT posts_id_categoria_fkey
+      FOREIGN KEY (id_categoria) REFERENCES public.categorias(id) ON DELETE SET NULL
 );
 
 -- LIKES_POSTS
@@ -57,8 +59,10 @@ CREATE TABLE public.likes_posts (
     id_usuario INTEGER NOT NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(id_post, id_usuario),
-    CONSTRAINT likes_posts_id_post_fkey FOREIGN KEY (id_post) REFERENCES public.posts(id),
-    CONSTRAINT likes_posts_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id)
+    CONSTRAINT likes_posts_id_post_fkey
+      FOREIGN KEY (id_post) REFERENCES public.posts(id) ON DELETE CASCADE,
+    CONSTRAINT likes_posts_id_usuario_fkey
+      FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id) ON DELETE CASCADE
 );
 
 -- COMENTARIOS
@@ -69,9 +73,12 @@ CREATE TABLE public.comentarios (
     texto TEXT NOT NULL,
     id_comentario_padre INTEGER,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT comentarios_id_post_fkey FOREIGN KEY (id_post) REFERENCES public.posts(id),
-    CONSTRAINT comentarios_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id),
-    CONSTRAINT comentarios_id_comentario_padre_fkey FOREIGN KEY (id_comentario_padre) REFERENCES public.comentarios(id)
+    CONSTRAINT comentarios_id_post_fkey
+      FOREIGN KEY (id_post) REFERENCES public.posts(id) ON DELETE CASCADE,
+    CONSTRAINT comentarios_id_usuario_fkey
+      FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    CONSTRAINT comentarios_id_comentario_padre_fkey
+      FOREIGN KEY (id_comentario_padre) REFERENCES public.comentarios(id) ON DELETE CASCADE
 );
 
 -- LIKES_COMENTARIOS
@@ -81,8 +88,10 @@ CREATE TABLE public.likes_comentarios (
     id_usuario INTEGER NOT NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(id_comentario, id_usuario),
-    CONSTRAINT likes_comentarios_id_comentario_fkey FOREIGN KEY (id_comentario) REFERENCES public.comentarios(id),
-    CONSTRAINT likes_comentarios_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id)
+    CONSTRAINT likes_comentarios_id_comentario_fkey
+      FOREIGN KEY (id_comentario) REFERENCES public.comentarios(id) ON DELETE CASCADE,
+    CONSTRAINT likes_comentarios_id_usuario_fkey
+      FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id) ON DELETE CASCADE
 );
 
 -- EQUIPOS
@@ -162,6 +171,13 @@ INSERT INTO public.posts (id_usuario, texto, id_categoria, creado_en) VALUES
     ('Union','https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg/1024px-Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg.png', 'A', true),
     ('Velez Sarsfield','https://i.pinimg.com/474x/dc/a9/34/dca9342412ce267052168ecb9810341b.jpg', 'A', true);
 
+
+-- Eliminar este bloque de ALTERs (ya no es necesario al definir ON DELETE en CREATE)
+-- [REMOVIDO]
+-- ALTER TABLE public.posts DROP CONSTRAINT ..., ADD CONSTRAINT ... ON DELETE CASCADE;
+-- ALTER TABLE public.comentarios DROP CONSTRAINT ..., ADD CONSTRAINT ... ON DELETE CASCADE;
+-- ALTER TABLE public.likes_posts DROP CONSTRAINT ..., ADD CONSTRAINT ... ON DELETE CASCADE;
+-- ALTER TABLE public.likes_comentarios DROP CONSTRAINT ..., ADD CONSTRAINT ... ON DELETE CASCADE;
 
 --
 -- PostgreSQL database dump complete
