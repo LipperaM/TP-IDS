@@ -324,7 +324,16 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("⚠️ Tenés que iniciar sesión para comentar");
       return;
     }
-    if (!texto || !currentPostId) return;
+
+    if (!texto) {
+      alert("⚠️ El comentario no puede estar vacío");
+      return;
+    }
+
+    if (!currentPostId) {
+      alert("Error: no se pudo identificar el post");
+      return;
+    }
 
     if (isEditingComment && currentCommentId) {
       await fetch(`http://localhost:3000/comentarios/${currentCommentId}`, {
@@ -589,12 +598,24 @@ async function eliminarUsuario() {
   const confirmar = confirm(
     "⚠️¿Seguro que querés eliminar tu cuenta?"
   );
+  const contrasenia = document.getElementById("contraElim");
+  const confirmarContra = document.getElementById("contraConfirm");
+  const id = localStorage.getItem("idUsuario");
 
   if (!confirmar) return;
 
+  if (!contrasenia.value || !confirmarContra.value) {
+    alert("Todos los campos son obligatorios");
+    return;
+  }
+
+  if(contrasenia.value !== confirmarContra.value){
+      alert("Los datos no coinciden");
+      return;
+  }
+
   try {
-    const contrasenia = document.getElementById("contraElim");
-    const id = localStorage.getItem("idUsuario");
+    
     console.log(id);
     const response = await fetch("http://localhost:3000/usuarios", {
       method: "DELETE",

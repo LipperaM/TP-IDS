@@ -9,12 +9,19 @@ console.log("=> cargando router /comentarios");
 router.post("/", async (req, res) => {
   try {
     const { id_post, id_usuario, texto, id_comentario_padre } = req.body;
+
+    if(!texto){
+      return res.status(400).json("Por favor escribe algo en tu comentario");
+    }
+    
     const result = await pool.query(
       `INSERT INTO comentarios (id_post, id_usuario, texto, id_comentario_padre)
        VALUES ($1, $2, $3, $4) RETURNING *`,
       [id_post, id_usuario, texto, id_comentario_padre || null]
     );
+
     res.json(result.rows[0]);
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error creando comentario" });
